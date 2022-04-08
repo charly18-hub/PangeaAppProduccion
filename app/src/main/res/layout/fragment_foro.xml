@@ -3,12 +3,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Foro">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/UsuarioPublicacion2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Foro"
+                android:layout_marginBottom="20dp"
+                android:textAlignment="center"
+                android:textColor="#717070"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="16dp">
+
+
+                <EditText
+                    android:id="@+id/foroComentar"
+                    android:layout_width="246dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Escribe tu Pregunta" />
+
+                <Button
+                    android:id="@+id/publicarPreguntaBtn2"
+                    style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                    android:layout_width="117dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#C4C5C1"
+                    android:textSize="10sp"
+                    app:icon="@drawable/ic_baseline_comment_24"
+                    app:iconTint="#2196F3" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Preguntas Recientes"
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/common_google_signin_btn_text_light_pressed"
+                android:textSize="20dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerPreguntas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#802A2A">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </FrameLayout>

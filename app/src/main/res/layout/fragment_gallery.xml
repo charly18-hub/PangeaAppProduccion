@@ -6,17 +6,60 @@
     android:layout_height="match_parent"
     tools:context=".ui.gallery.GalleryFragment">
 
-    <TextView
-        android:id="@+id/text_gallery"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/publicacion2"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="80dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:text="¿Que estas pensando?"
+            android:textSize="10sp" />
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btnImagen2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="50dp"
+                android:src="@color/teal_200">
+
+            </Button>
+
+            <Button
+                android:id="@+id/publicar2"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="190dp"
+                android:layout_marginRight="40dp"
+                android:text="Publicar"
+                android:textColor="#2196F3"
+                app:backgroundTint="@color/white" />
+
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/imgFoto"
+            android:layout_width="match_parent"
+            android:layout_height="550dp"
+            >
+
+        </ImageView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

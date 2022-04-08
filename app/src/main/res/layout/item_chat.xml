@@ -1,6 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="394dp"
+        android:layout_height="123dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="68dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_user"
+            android:gravity="clip_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ic_baseline_person_24" />
+
+            <TextView
+                android:id="@+id/vistaUsuario"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="0dp"
+                android:autoSizeMaxTextSize="10sp"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeTextType="uniform"
+                android:gravity="center_horizontal"
+                android:text="TextView"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/vistaMensaje"
+                android:layout_width="277dp"
+                android:layout_height="77dp"
+                android:inputType="textMultiLine"
+                android:paddingStart="10dp"
+                android:singleLine="false"
+                android:text="TextView"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vistaMensaje" />
+
+            <TextView
+                android:id="@+id/fecha"
+                android:layout_width="231dp"
+                android:layout_height="27dp"
+                android:layout_marginTop="10dp"
+                android:textAlignment="textEnd" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="417dp"
+        android:layout_height="21dp"
+        android:text="________________________________________"
+        android:textAlignment="center"
+        android:textColor="#673AB7"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,14 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".videollamadas">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_gravity="center"
+        android:background="@drawable/classroom"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Salon de Clase"
+            android:textAlignment="center"
+            android:textColor="#ffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+        <EditText
+            android:id="@+id/etname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="50dp"
+            android:backgroundTint="#FFFFFF"
+            android:ems="10"
+            android:hint="Alumno"
+            android:inputType="textPersonName"
+            android:textColor="#FBFBFB" />
+
+        <EditText
+            android:id="@+id/eyNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="50dp"
+            android:backgroundTint="#FFFEFE"
+            android:ems="10"
+            android:hint="Clase"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="50dp"
+            android:backgroundTint="#F6F3F3"
+            android:ems="10"
+            android:hint="Contraseña Clase"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/zoom"
+            android:layout_width="208dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#857B7B"
+            android:text="Tomar Clase"
+            app:icon="@drawable/zm_sip_ic_new_chat" />
+
+    </LinearLayout>
 
 </FrameLayout>

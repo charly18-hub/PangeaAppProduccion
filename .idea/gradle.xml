@@ -11,6 +11,12 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/commonlib" />
+            <option value="$PROJECT_DIR$/commonlib0" />
+            <option value="$PROJECT_DIR$/commonlib1" />
+            <option value="$PROJECT_DIR$/commonlib2" />
+            <option value="$PROJECT_DIR$/mobilertc" />
+            <option value="$PROJECT_DIR$/mobilertc2" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

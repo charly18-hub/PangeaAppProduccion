@@ -3,6 +3,6 @@
 
 
     <solid
-        android:color="@color/colorPrimaryDark"></solid>
+        android:color="@color/colorPrimary"></solid>
 
 </shape>

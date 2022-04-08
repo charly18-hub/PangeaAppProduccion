@@ -5,18 +5,170 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.slideshow.SlideshowFragment">
-
-    <TextView
-        android:id="@+id/text_slideshow"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <EditText
+                    android:id="@+id/publicacion2"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:text="¿Que estas pensando?"
+                    android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/traducido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+
+                    <Button
+                        android:id="@+id/btnImagen2"
+                        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:layout_width="57dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="20dp"
+                        android:backgroundTint="#BAB6B6"
+                        app:icon="@drawable/ic_menu_camera"
+                        app:iconTint="#2196F3">
+
+                    </Button>
+
+                    <Button
+                        android:id="@+id/btnAudio"
+                        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:layout_width="52dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:backgroundTint="#BAB6B6"
+                        android:src="@color/teal_200"
+                        app:icon="@drawable/zm_menu_icon_plist_unmute"
+                        app:iconTint="#2196F3">
+
+                    </Button>
+
+                    <Button
+                        android:id="@+id/btnReproAudio"
+                        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:layout_width="55dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:backgroundTint="#BAB6B6"
+                        android:src="@color/teal_200"
+                        app:icon="@drawable/zm_chatto_voice_playing_f3"
+                        app:iconTint="#2196F3">
+
+                    </Button>
+
+                    <Button
+                        android:id="@+id/btnTraducir"
+                        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:layout_width="70dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:backgroundTint="@color/white"
+                        android:text="Traducir"
+                        android:textColor="#2196F3"
+                        android:textSize="6dp">
+
+                    </Button>
+
+                    <Button
+                        android:id="@+id/publicar2"
+                        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginRight="40dp"
+                        android:backgroundTint="@color/white"
+                        android:text="Publicar"
+                        android:textColor="#2196F3"
+                        android:textSize="6dp" />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="538dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginBottom="21dp"
+                android:background="@color/catalyst_redbox_background"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:id="@+id/main_content2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewpagerPublicaciones"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="clip_horizontal"
+                        android:background="@color/white"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                    <com.google.android.material.appbar.AppBarLayout
+                        android:id="@+id/appbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/result_tabsPublicaciones"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            app:tabIndicatorColor="@color/white"
+                            app:tabMode="scrollable"
+                            app:tabSelectedTextColor="@color/catalyst_redbox_background"
+                            app:tabTextColor="@color/black" />
+                    </com.google.android.material.appbar.AppBarLayout>
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,4 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".videoCall">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/conferenceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:visibility="invisible"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <Button
+            android:id="@+id/jitsiButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="Iniciar"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Cargando Llamada"
+            android:textSize="30dp"
+            android:textColor="@color/common_google_signin_btn_text_light_pressed"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            ></TextView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
