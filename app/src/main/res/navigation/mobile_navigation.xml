@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.pangeaapp.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.example.pangeaapp.ui.gallery.GalleryFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="com.example.pangeaapp.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/videollamadas"
+        android:name="com.example.pangeaapp.videollamadas"
+        android:label="fragment_videollamadas"
+        tools:layout="@layout/fragment_videollamadas" />
+
+    <fragment
+        android:id="@+id/traduccion"
+        android:name="com.example.pangeaapp.traduccion"
+        android:label="fragment_traduccion"
+        tools:layout="@layout/fragment_traduccion" />
+
+    <fragment
+        android:id="@+id/llamadas"
+        android:name="com.example.pangeaapp.llamadas"
+        android:label="fragment_llamadas"
+        tools:layout="@layout/fragment_llamadas" />
+
+
+    <fragment
+        android:id="@+id/calendario"
+        android:name="com.example.pangeaapp.CalendarioFragment"
+        android:label="fragment_calendario"
+        tools:layout="@layout/fragment_calendario" />
+
+    <fragment
+        android:id="@+id/foro"
+        android:name="com.example.pangeaapp.Foro"
+        android:label="fragment_foro"
+        tools:layout="@layout/fragment_foro" />
+
+
+    <fragment
+        android:id="@+id/jitsi"
+        android:name="com.example.pangeaapp.jitsimeet"
+        android:label="fragment_jitsimeet"
+        tools:layout="@layout/fragment_jitsimeet" />
+</navigation>

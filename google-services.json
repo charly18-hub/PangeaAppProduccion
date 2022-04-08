@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "824235185472",
+    "project_id": "pangea-daee0",
+    "storage_bucket": "pangea-daee0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824235185472:android:edc72f98851afa986096a5",
+        "android_client_info": {
+          "package_name": "com.example.pangeaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824235185472-pqbqhvr91oubda12p2dchoqmr17kebva.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pangeaapp",
+            "certificate_hash": "34ffe42612dbef11f17bf43dfc51c7d4da1a1123"
+          }
+        },
+        {
+          "client_id": "824235185472-72rqi20p4iriqvef1mj44413keutus2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZk_0u4fszpm_SPuyefKCvf1jvoHaNLYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824235185472-72rqi20p4iriqvef1mj44413keutus2s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
