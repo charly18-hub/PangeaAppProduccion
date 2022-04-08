@@ -6,4 +6,108 @@
     android:layout_height="match_parent"
     tools:context=".Buscador">
 
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal">
+
+
+                    <ImageButton
+                        android:id="@+id/btnSolicitudes"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="6dp"
+                        android:background="@drawable/bg_user"
+                        android:src="@drawable/ic_user"
+                        app:layout_constraintBottom_toTopOf="@+id/recyclerViewChat"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/remitenteChat"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UnknownId" />
+
+
+                    <TextView
+                        android:id="@+id/Solicitudes"
+                        android:layout_width="246dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:text="Solicitudes de Amistad" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/EdTextBuscador"
+                        android:layout_width="240dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Buscar"
+                        android:inputType="textPersonName" />
+
+                    <ImageButton
+                        android:id="@+id/btnFind"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="6dp"
+                        android:background="@drawable/bg_user"
+                        android:src="@drawable/search"
+                        app:layout_constraintBottom_toTopOf="@+id/recyclerViewChat"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/remitenteChat"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UnknownId" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerBuscador"
+                    android:layout_width="323dp"
+                    android:layout_height="577dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="50dp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

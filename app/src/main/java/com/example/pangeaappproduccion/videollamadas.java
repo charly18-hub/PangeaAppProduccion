@@ -1,12 +1,24 @@
 package com.example.pangeaappproduccion;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-
+/*
+import us.zoom.sdk.JoinMeetingOptions;
+import us.zoom.sdk.JoinMeetingParams;
+import us.zoom.sdk.MeetingService;
+import us.zoom.sdk.ZoomSDK;
+import us.zoom.sdk.ZoomSDKInitParams;
+import us.zoom.sdk.ZoomSDKInitializeListener;
+*/
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +35,10 @@ public class videollamadas extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    EditText Name,MW,MP;
+
+    Button joing,create;
 
     public videollamadas() {
         // Required empty public constructor
@@ -59,6 +75,87 @@ public class videollamadas extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_videollamadas, container, false);
+
+       // zoomInit(getContext());
+
+
+
+        View view = inflater.inflate(R.layout.fragment_videollamadas, container, false);
+
+        Name = view.findViewById(R.id.etname);
+        MW = view.findViewById(R.id.eyNumber);
+        MP = view.findViewById(R.id.etPass);
+        joing = view.findViewById(R.id.zoom);
+
+
+        joing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                String MeetingNumber =MW.getText().toString();
+                String MeetingPassword = MP.getText().toString();
+                String UserName = Name.getText().toString();
+
+
+         /*       if(MeetingNumber.trim().length()>0 && MeetingPassword.trim().length()>0 && UserName.trim().length()>0){
+                    joingMeeting(getActivity(),MeetingNumber,MeetingPassword,UserName);
+                }else{
+                    Toast.makeText(getActivity(),"no existe",Toast.LENGTH_LONG).show();
+                }*/
+            }
+        });
+
+
+
+
+        return view;
     }
+
+    /*private void  zoomInit(Context context){
+
+        ZoomSDK sdk = ZoomSDK.getInstance();
+
+        ZoomSDKInitParams params = new ZoomSDKInitParams();
+
+
+
+        params.appKey="MZHQRtwDo0zCfF7puUrSnFiqubmfMPF0A6mS";
+        params.appSecret="tLttzxgpHjyEzfkLyzyBOXUkPk5OVU5yDb8M";
+        params.domain="zoom.us";
+        params.enableLog = true;
+
+
+        ZoomSDKInitializeListener listener = new ZoomSDKInitializeListener(){
+
+
+            @Override
+            public void onZoomSDKInitializeResult(int i, int i1) {
+
+            }
+
+            @Override
+            public void onZoomAuthIdentityExpired() {
+
+            }
+        };
+
+        sdk.initialize(context,listener,params);
+
+
+    }
+
+    private void joingMeeting(Context context,String meetingNumber,String meetingPassword,String username){
+
+        MeetingService meetingService = ZoomSDK.getInstance().getMeetingService();
+        JoinMeetingOptions options = new JoinMeetingOptions();
+        JoinMeetingParams params = new JoinMeetingParams();
+        params.displayName = username;
+        params.meetingNo = meetingNumber;
+        params.password = meetingPassword;
+
+        meetingService.joinMeetingWithParams(context,params,options);
+    }*/
+
+
 }

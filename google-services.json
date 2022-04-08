@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "824235185472",
+    "firebase_url": "https://pangea-daee0-default-rtdb.firebaseio.com",
     "project_id": "pangea-daee0",
     "storage_bucket": "pangea-daee0.appspot.com"
   },
@@ -37,6 +38,49 @@
             {
               "client_id": "824235185472-72rqi20p4iriqvef1mj44413keutus2s.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "824235185472-9bhsjcqm2uv7cskr9fbtgmmnh6uhffki.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "Ibloom.PangeaApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824235185472:android:52630b35bd130b7f6096a5",
+        "android_client_info": {
+          "package_name": "com.example.pangeaappproduccion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824235185472-72rqi20p4iriqvef1mj44413keutus2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZk_0u4fszpm_SPuyefKCvf1jvoHaNLYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824235185472-72rqi20p4iriqvef1mj44413keutus2s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "824235185472-9bhsjcqm2uv7cskr9fbtgmmnh6uhffki.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "Ibloom.PangeaApp"
+              }
             }
           ]
         }

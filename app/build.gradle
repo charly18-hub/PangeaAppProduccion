@@ -1,18 +1,29 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
+
 }
 
 android {
     compileSdkVersion 31
+    compileOptions.encoding = 'ISO-8859-1'
+    useLibrary 'org.apache.http.legacy'
+
+
 
     defaultConfig {
+        configurations.all {
+            resolutionStrategy { force 'androidx.core:core:1.6.0' }
+        }
         applicationId "com.example.pangeaappproduccion"
-        minSdkVersion 21
-        targetSdkVersion 31
+        minSdkVersion 23
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
     }
 
     buildTypes {
@@ -27,6 +38,10 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+    packagingOptions {
+        pickFirst '**/*.so'
+
     }
 }
 
@@ -100,3 +115,4 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:3.1.2'
 }
+apply plugin: 'com.google.gms.google-services'
