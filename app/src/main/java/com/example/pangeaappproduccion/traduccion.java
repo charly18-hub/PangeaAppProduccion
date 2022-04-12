@@ -1,10 +1,16 @@
 package com.example.pangeaappproduccion;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Constraints;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,10 +21,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
+import com.example.pangeaappproduccion.ui.gallery.GalleryFragment;
+import com.example.pangeaappproduccion.ui.slideshow.SlideshowFragment;
+import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage;
 import com.google.firebase.ml.naturallanguage.languageid.FirebaseLanguageIdentification;
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage;
@@ -29,7 +45,12 @@ import com.google.mlkit.nl.translate.Translator;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +58,17 @@ import static android.content.ContentValues.TAG;
  * create an instance of this fragment.
  */
 public class traduccion extends Fragment {
+
+    private List<com.example.pangeaappproduccion.listTraducciones> listTraducciones;
+    private AdapterTraducciones adapterTraducciones;
+
+    private SlideshowViewModel slideshowViewModel;
+    private FragmentSlideshowBinding binding;
+    private RecyclerView recyclerViewTraducciones;
+
+
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -92,6 +124,14 @@ public class traduccion extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_traduccion, container, false);
 
+        // Setting ViewPager for each Tabs
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpagerTraductores);
+        setupViewPager(viewPager);
+        // Set Tabs inside Toolbar
+        TabLayout tabs = (TabLayout) view.findViewById(R.id.result_tabsTraductores);
+        tabs.setupWithViewPager(viewPager);
+
+
 
 
         text = (EditText)view.findViewById(R.id.textoNativo);
@@ -109,21 +149,14 @@ public class traduccion extends Fragment {
         identificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //identificaIdioma(); si sirve
-
-               /* String string = text.getText().toString();
 
 
-                TranslatorOptions options =
-                        new TranslatorOptions.Builder()
-                                .setSourceLanguage(TranslateLanguage.ENGLISH)
-                                .setTargetLanguage(TranslateLanguage.SPANISH)
-                                .build();
-                englishGermanTranslator2 =
-                        Translation.getClient(options);
 
 
-                downloadModal(string);*/
+                listTraducciones listTraducciones = new listTraducciones();
+                listTraducciones.setTraduccion(text.getText().toString());
+                listTraducciones.setUsuario("angel");
+                FirebaseFirestore.getInstance().collection("traducciones").add(listTraducciones);
 
                 translate_api translate=new translate_api();
                 translate.setOnTranslationCompleteListener(new translate_api.OnTranslationCompleteListener() {
@@ -136,6 +169,7 @@ public class traduccion extends Fragment {
                     public void onCompleted(String text) {
 
                         textView10.setText(text);
+
                     }
 
                     @Override
@@ -226,70 +260,59 @@ public class traduccion extends Fragment {
     }
 
 
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
-
-    public void identificaIdioma(){
-
-        try (FirebaseLanguageIdentification languageIdentifier = FirebaseNaturalLanguage.getInstance().getLanguageIdentification()) {
-            languageIdentifier.identifyLanguage(text.getText().toString())
-                    .addOnSuccessListener(
-                            new OnSuccessListener<String>() {
-                                @Override
-                                public void onSuccess(@Nullable String languageCode) {
-                                    if (languageCode != "und") {
-                                        Log.i(TAG, "texto: " + text.getText().toString());
-
-                                        Log.i(TAG, "Language: " + languageCode);
-
-
-                                        FirebaseTranslatorOptions options =
-                                                new FirebaseTranslatorOptions.Builder()
-                                                        .setSourceLanguage(FirebaseTranslateLanguage.ES)
-                                                        .setTargetLanguage(FirebaseTranslateLanguage.EN)
-                                                        .build();
-                                        FirebaseTranslator translator =
-                                                FirebaseNaturalLanguage.getInstance().getTranslator(options);
-
-                                        translator.translate(text.getText().toString())
-                                                .addOnSuccessListener(
-                                                        new OnSuccessListener<String>() {
-                                                            @Override
-                                                            public void onSuccess(@NonNull String translatedText) {
-                                                                Log.i(TAG, "trsduccion: " + translatedText);
-
-                                                            }
-                                                        })
-                                                .addOnFailureListener(
-                                                        new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Log.i(TAG, "error: " + e);
-
-                                                            }
-                                                        });
-
-
-
-
-
-                                    } else {
-
-                                        Log.i(TAG, "Can't identify language.");
-                                    }
-                                }
-                            })
-                    .addOnFailureListener(
-                            new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-
-                                    Toast.makeText(getActivity(),"error interno",Toast.LENGTH_LONG);
-
-                                    // Model couldn?t be loaded or other internal error.
-                                    // ...
-                                }
-                            });
+        public Adapter(FragmentManager manager) {
+            super(manager);
         }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    // Add Fragments to Tabs
+    private void setupViewPager(ViewPager viewPager) {
+
+
+        traduccion.Adapter adapter = new traduccion.Adapter(getChildFragmentManager());
+        Fragment miFragment = null;
+        Bundle datos_a_fragment = new Bundle();
+
+        miFragment = new GalleryFragment();
+        miFragment.setArguments(datos_a_fragment);
+
+
+
+
+        adapter.addFragment(new PangeaTraducciones(), "Traducciones");
+        adapter.addFragment(new MisTraducciones(), "Mis Traducciones");
+
+
+
+
+        viewPager.setAdapter(adapter);
+
+
 
     }
 }

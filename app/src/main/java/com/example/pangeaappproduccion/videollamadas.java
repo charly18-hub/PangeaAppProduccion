@@ -4,14 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-/*
-import us.zoom.sdk.JoinMeetingOptions;
-import us.zoom.sdk.JoinMeetingParams;
-import us.zoom.sdk.MeetingService;
-import us.zoom.sdk.ZoomSDK;
-import us.zoom.sdk.ZoomSDKInitParams;
-import us.zoom.sdk.ZoomSDKInitializeListener;
-*/
+
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,17 +88,22 @@ public class videollamadas extends Fragment {
                 String MeetingNumber = MW.getText().toString();
                 String MeetingPassword = MP.getText().toString();
                 String UserName = Name.getText().toString();
-                if (MeetingNumber.trim().length() > 0 && MeetingPassword.trim().length() > 0 && UserName.trim().length() > 0) {
+
+              if (MeetingNumber.trim().length() > 0 && MeetingPassword.trim().length() > 0 && UserName.trim().length() > 0) {
                     joingMeeting(getActivity(), MeetingNumber, MeetingPassword, UserName);
                 } else {
                     Toast.makeText(getActivity(), "Introduce datos validos", Toast.LENGTH_LONG).show();
                 }
+
             }
         });
         return view;
     }
 
     private void zoomInit(Context context) {
+    /* Descomentar y probar funcionalidad
+
+    private void  zoomInit(Context context){
 
         ZoomSDK sdk = ZoomSDK.getInstance();
 
@@ -136,7 +135,7 @@ public class videollamadas extends Fragment {
         params.meetingNo = meetingNumber;
         params.password = meetingPassword;
         meetingService.joinMeetingWithParams(context, params, options);
-    }
+    }*/
 
 
 }

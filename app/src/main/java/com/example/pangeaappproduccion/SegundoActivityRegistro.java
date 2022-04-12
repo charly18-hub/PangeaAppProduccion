@@ -38,7 +38,7 @@ public class SegundoActivityRegistro extends AppCompatActivity {
 
 
     TextView textUser;
-    EditText pass, UserPerfil;
+    EditText  UserPerfil;
     Button register;
     ImageView imageView;
     private static final int GALLERY_PICKER =1;
@@ -68,7 +68,6 @@ public class SegundoActivityRegistro extends AppCompatActivity {
 
         textUser.setText(usuario_registrado);
 
-        pass = (EditText)findViewById(R.id.editTextPassword);
         UserPerfil = (EditText)findViewById(R.id.editTextTextPersonName3);
         imageView = findViewById(R.id.imageView3);
 
@@ -110,7 +109,6 @@ public class SegundoActivityRegistro extends AppCompatActivity {
                                         dateUpdate.put("multimedia",imgPerfil);
                                         dateUpdate.put("usuario",textUser.getText().toString());
                                         dateUpdate.put("user",textUser.getText().toString());
-                                        dateUpdate.put("password",pass.getText().toString());
 
                                         db2.collection("users").document(email_register_obtenido).update(dateUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override

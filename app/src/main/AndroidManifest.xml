@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PangeaAppProduccion"
         android:usesCleartextTraffic="false">
+
+        <activity android:name=".ActivityComentariosTraduccion"></activity>
+        <activity android:name=".RecuperarContrasena" />
         <activity android:name=".WeekViewActivity" />
         <activity android:name=".videoCall" />
         <activity android:name=".Traductor" />
@@ -44,7 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".videollamadas"
             tools:ignore="Instantiatable" />
@@ -53,6 +55,29 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.PangeaAppProduccion.NoActionBar" />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" /> <!-- Facebook -->
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
 
         <service
             android:name=".FCM"
@@ -71,6 +96,9 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove" />
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 

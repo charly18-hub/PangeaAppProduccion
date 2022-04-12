@@ -36,6 +36,15 @@
 
 
     <string name="forward"><![CDATA[->]]></string>
+    <string name="facebook_app_id">443299894223330</string>
+
+
+    <string name="fb_login_protocol_scheme">fb1234</string>
+
+
+    <!--facebook-->
+
+    <string name="facebook_client_token">b191b544abfc108b3c41f27387865b22</string>
     <string-array name="idiomas_array">
         <item>Ingles</item>
         <item>Español</item>
@@ -45,13 +54,12 @@
         <item>Japones</item>
         <item>Chino</item>
     </string-array>
-
-
     <string-array name="motivos_rray">
         <item>Trabajo</item>
         <item>Viajes</item>
         <item>Eduacion</item>
         <item>Familia/Amigos</item>
     </string-array>
+
 
 </resources>

@@ -1,10 +1,13 @@
 package com.example.pangeaappproduccion;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,14 +18,21 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.jetbrains.annotations.NotNull;
 
 public class Registro extends AppCompatActivity {
 
 
     TextView profesores;
     Button RegistrarAlumno;
-    EditText edTextPrimerNombre,edTextSegundoNombre,edTextPaterno,edTextMaterno,edtMotivosAprendizaje,editTextIntereses,editTextEmail,edtCiudad,edtTelefono;
+    EditText edTextPrimerNombre,pass,edTextSegundoNombre,edTextPaterno,edTextMaterno,edtMotivosAprendizaje,editTextIntereses,editTextEmail,edtCiudad,edtTelefono;
     RadioGroup radioGroupSex;
     RadioButton masculino, femenino,otro,noDecir;
     Spinner idiomaInteres,idiomaNativo,spinnerMotivosAprendizaje;
@@ -52,7 +62,7 @@ public class Registro extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        pass = (EditText)findViewById(R.id.editTextPassword);
         edTextPrimerNombre = (EditText)findViewById(R.id.edTextPrimerNombreProfe);
         edTextSegundoNombre = (EditText)findViewById(R.id.edTextSegundoNombreProfe);
         editTextIntereses = (EditText)findViewById(R.id.editTextIntereses);
@@ -204,18 +214,42 @@ public class Registro extends AppCompatActivity {
                 registroAlumno.setMotivo(motivo);
                 registroAlumno.setciudad(edtCiudad.getText().toString());
                 registroAlumno.setMultimedia("");
+                registroAlumno.setpassword(pass.getText().toString());
 
-                FirebaseFirestore.getInstance().collection("users").document(editTextEmail.getText().toString()).set(registroAlumno);
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(editTextEmail.getText().toString(),pass.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                                FirebaseFirestore.getInstance().collection("users").document(editTextEmail.getText().toString()).set(registroAlumno);
 
 
-                Intent intent = new Intent(getApplicationContext(),SegundoActivityRegistro.class);
-                intent.putExtra("user_name",edTextSegundoNombre.getText().toString());
-                intent.putExtra("email_register",editTextEmail.getText().toString());
-                startActivity(intent);
+                                Intent intent = new Intent(getApplicationContext(),SegundoActivityRegistro.class);
+                                intent.putExtra("user_name",edTextSegundoNombre.getText().toString());
+                                intent.putExtra("email_register",editTextEmail.getText().toString());
+                                startActivity(intent);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("FileManager","Error en uploadImg ==>"+e);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                        builder.setTitle("Error");
+                        builder.setMessage("Error de registro");
+                        builder.setPositiveButton("Aceptar", null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                    }
+                });
 
             }
         });
 
 
+
     }
-}
+
+    }
+
+
