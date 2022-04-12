@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Adapters;
 
 
 import android.content.Context;
@@ -18,6 +18,10 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.pangeaappproduccion.ChatActivity;
+import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.UsuarioVideo;
 
 public class AdapterUsuariosVideo extends RecyclerView.Adapter<AdapterUsuariosVideo.UsuariosHolder>
         implements View.OnClickListener{
@@ -94,7 +98,7 @@ public class AdapterUsuariosVideo extends RecyclerView.Adapter<AdapterUsuariosVi
         usuariosHolder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(),ChatActivity.class);
+                Intent intent = new Intent(view.getContext(), ChatActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("destinaraio", destinatario);
                 intent.putExtra("usuario",usuario_recibido_chat1);

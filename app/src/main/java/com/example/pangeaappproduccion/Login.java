@@ -48,6 +48,7 @@ import com.facebook.appevents.AppEventsLogger;
 public class Login extends AppCompatActivity {
 
     EditText editTextTextPersonName, editTextTextPassword;
+
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
@@ -76,6 +77,7 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(editTextTextPersonName.getText().toString(), editTextTextPassword.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -117,6 +119,7 @@ public class Login extends AppCompatActivity {
                 ingreso();
             }
         });
+
 
 
 

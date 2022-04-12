@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Adapters;
 
 
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.SolicitudesList;
 
 import org.jetbrains.annotations.NotNull;
 

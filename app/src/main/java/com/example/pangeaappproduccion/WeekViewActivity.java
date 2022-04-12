@@ -17,10 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.example.pangeaappproduccion.CalendarUtils.daysInWeekArray;
-import static com.example.pangeaappproduccion.CalendarUtils.monthYearFromDate;
-import static com.example.pangeaappproduccion.CalendarUtils.daysInWeekArray;
-import static com.example.pangeaappproduccion.CalendarUtils.monthYearFromDate;
+import static com.example.pangeaappproduccion.Calendarios.CalendarUtils.daysInWeekArray;
+import static com.example.pangeaappproduccion.Calendarios.CalendarUtils.monthYearFromDate;
+
+import com.example.pangeaappproduccion.Calendarios.CalendarAdapter;
+import com.example.pangeaappproduccion.Calendarios.CalendarUtils;
+import com.example.pangeaappproduccion.Eventos.Event;
+import com.example.pangeaappproduccion.Eventos.EventAdapter;
+import com.example.pangeaappproduccion.Eventos.EventEditActivity;
 
 public class WeekViewActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener
 {

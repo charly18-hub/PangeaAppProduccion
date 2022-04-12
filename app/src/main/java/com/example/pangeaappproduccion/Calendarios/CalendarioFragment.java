@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Calendarios;
 
 import android.content.Intent;
 import android.os.Build;
@@ -18,8 +18,11 @@ import android.widget.TextView;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import static com.example.pangeaappproduccion.CalendarUtils.daysInMonthArray;
-import static com.example.pangeaappproduccion.CalendarUtils.monthYearFromDate;
+import static com.example.pangeaappproduccion.Calendarios.CalendarUtils.daysInMonthArray;
+import static com.example.pangeaappproduccion.Calendarios.CalendarUtils.monthYearFromDate;
+
+import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.WeekViewActivity;
 
 /**
  * A simple {@link Fragment} subclass.
