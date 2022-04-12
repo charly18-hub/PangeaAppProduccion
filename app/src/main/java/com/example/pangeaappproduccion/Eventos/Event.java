@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Eventos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

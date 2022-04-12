@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Eventos;
 
 
 import android.os.Build;
@@ -11,6 +11,9 @@ import java.time.LocalTime;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.pangeaappproduccion.Calendarios.CalendarUtils;
+import com.example.pangeaappproduccion.R;
 
 public class EventEditActivity extends AppCompatActivity
 {

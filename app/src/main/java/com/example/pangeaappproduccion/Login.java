@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Login extends AppCompatActivity {
 
-    EditText editTextTextPersonName,editTextTextPassword;
+    EditText editTextTextPersonName, editTextTextPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,59 +30,44 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        editTextTextPersonName=(EditText)findViewById(R.id.editTextTextPersonName);
-        editTextTextPassword = (EditText)findViewById(R.id.editTextTextPassword);
+        editTextTextPersonName = (EditText) findViewById(R.id.editTextTextPersonName);
+        editTextTextPassword = (EditText) findViewById(R.id.editTextTextPassword);
 
 
-
-        Button login = (Button)findViewById(R.id.buttonLogin);
+        Button login = (Button) findViewById(R.id.buttonLogin);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                db2.collection("users").whereEqualTo("email",editTextTextPersonName.getText().toString()).whereEqualTo("password",editTextTextPassword.getText().toString()).get()
+                db2.collection("users").whereEqualTo("email", editTextTextPersonName.getText().toString()).whereEqualTo("password", editTextTextPassword.getText().toString()).get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
 
-                                if(task.isSuccessful()){
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                                         SharedPreferences.Editor editor = getSharedPreferences("accesos", MODE_PRIVATE).edit();
                                         editor.putString("email", editTextTextPersonName.getText().toString());
                                         editor.putString("password", editTextTextPersonName.getText().toString());
-
                                         editor.apply();
-
-                                        Intent intent = new Intent(Login.this,MainActivity.class);
+                                        Intent intent = new Intent(Login.this, MainActivity.class);
                                         startActivity(intent);
-
                                     }
                                 }
-
-                                if(task.isCanceled()){
-
-                                    Toast.makeText(getApplicationContext(),"Verifique Usuario y Contraseña",Toast.LENGTH_LONG).show();
-
+                                if (task.isCanceled()) {
+                                    Toast.makeText(getApplicationContext(), "Verifique Usuario y Contraseña", Toast.LENGTH_LONG).show();
                                 }
-
                             }
-
                         });
-
-
-
             }
         });
 
 
-        Button registro = (Button)findViewById(R.id.buttonRegistro);
+        Button registro = (Button) findViewById(R.id.buttonRegistro);
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this,Registro.class);
+                Intent intent = new Intent(Login.this, Registro.class);
                 startActivity(intent);
 
             }

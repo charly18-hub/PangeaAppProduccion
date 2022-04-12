@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Eventos;
 
 
 import android.content.Context;
@@ -12,6 +12,9 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.pangeaappproduccion.Calendarios.CalendarUtils;
+import com.example.pangeaappproduccion.R;
 
 public class EventAdapter extends ArrayAdapter<Event>
 {

@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/calendario"
-        android:name="com.example.pangeaappproduccion.CalendarioFragment"
+        android:name="com.example.pangeaappproduccion.Calendarios.CalendarioFragment"
         android:label="fragment_calendario"
         tools:layout="@layout/fragment_calendario" />
 

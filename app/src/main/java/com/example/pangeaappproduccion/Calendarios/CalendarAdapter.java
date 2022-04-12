@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Calendarios;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.pangeaappproduccion.R;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 

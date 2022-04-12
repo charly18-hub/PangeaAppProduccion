@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Adapters;
 
 
 import android.content.Context;
@@ -14,6 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.pangeaappproduccion.ChatActivity;
+import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.UsuarioVideo;
+import com.example.pangeaappproduccion.videoCall;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -86,7 +90,7 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
         usuariosHolder.video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context.getApplicationContext(),videoCall.class);
+                Intent intent = new Intent(context.getApplicationContext(), videoCall.class);
                 intent.putExtra("destinaraio", destinatario);
                 intent.putExtra("usuario",email_perfil);
                 context.startActivity(intent);
@@ -116,7 +120,7 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
         usuariosHolder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context.getApplicationContext(),ChatActivity.class);
+                Intent intent = new Intent(context.getApplicationContext(), ChatActivity.class);
                 intent.putExtra("destinaraio", destinatario);
                 Toast.makeText(context,"se envio destinatario"+destinatario, Toast.LENGTH_LONG).show();
                 intent.putExtra("usuario",email_perfil);
