@@ -98,7 +98,8 @@ public class videollamadas extends Fragment {
                 String UserName = Name.getText().toString();
 
 
-         /*       if(MeetingNumber.trim().length()>0 && MeetingPassword.trim().length()>0 && UserName.trim().length()>0){
+         /*  implementando modulos solo descomenta las partes comentadas
+             if(MeetingNumber.trim().length()>0 && MeetingPassword.trim().length()>0 && UserName.trim().length()>0){
                     joingMeeting(getActivity(),MeetingNumber,MeetingPassword,UserName);
                 }else{
                     Toast.makeText(getActivity(),"no existe",Toast.LENGTH_LONG).show();
@@ -112,7 +113,9 @@ public class videollamadas extends Fragment {
         return view;
     }
 
-    /*private void  zoomInit(Context context){
+    /* Descomentar y probar funcionalidad
+
+    private void  zoomInit(Context context){
 
         ZoomSDK sdk = ZoomSDK.getInstance();
 
