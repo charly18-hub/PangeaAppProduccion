@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pangeaappproduccion.ActivityComentarios;
+import com.example.pangeaappproduccion.ui.ActivityComentarios;
 import com.example.pangeaappproduccion.R;
-import com.example.pangeaappproduccion.listPublicaciones;
+import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AdapterPublicacionText  extends RecyclerView.Adapter<AdapterPublicacionText.PublicacionHolder> {
 
-    private List<com.example.pangeaappproduccion.listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private Context context;
 
     public AdapterPublicacionText(Context context1,List<listPublicaciones> listPublicaciones)

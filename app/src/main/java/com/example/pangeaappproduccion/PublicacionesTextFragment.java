@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacionText;
+import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.firebase.firestore.DocumentChange;
@@ -38,7 +39,7 @@ public class PublicacionesTextFragment extends Fragment {
 
 
 
-    private List<com.example.pangeaappproduccion.listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private AdapterPublicacionText adapterPublicacion;
 
     private SlideshowViewModel slideshowViewModel;

@@ -15,6 +15,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.pangeaappproduccion.ui.register.Registro;
+import com.example.pangeaappproduccion.ui.register.RegistroProfe;
+import com.example.pangeaappproduccion.ui.register.SegundoActivityRegistroProfe;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Profesores extends AppCompatActivity {
@@ -201,7 +204,7 @@ public class Profesores extends AppCompatActivity {
                 FirebaseFirestore.getInstance().collection("users").document(editTextEmail.getText().toString()).set(registroProfe);
 
 
-                Intent intent = new Intent(getApplicationContext(),SegundoActivityRegistroProfe.class);
+                Intent intent = new Intent(getApplicationContext(), SegundoActivityRegistroProfe.class);
                 intent.putExtra("user_name",edTextSegundoNombre.getText().toString());
                 intent.putExtra("email_register",editTextEmail.getText().toString());
                 startActivity(intent);

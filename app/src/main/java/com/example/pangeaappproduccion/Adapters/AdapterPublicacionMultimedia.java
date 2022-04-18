@@ -2,18 +2,21 @@ package com.example.pangeaappproduccion.Adapters;
 
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.pangeaappproduccion.R;
-import com.example.pangeaappproduccion.listPublicaciones;
+import com.example.pangeaappproduccion.Listas.listPublicaciones;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -21,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPublicacionMultimedia.PublicacionHolder> {
 
-    private List<com.example.pangeaappproduccion.listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private Context context;
 
     public AdapterPublicacionMultimedia(List<listPublicaciones> listPublicaciones)
@@ -47,8 +50,23 @@ public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPu
 
         publicacionHolder.nombre2.setText(listPublicaciones.get(i).getUsuario());
         publicacionHolder.publicacion2.setText(listPublicaciones.get(i).getMensaje());
-        Glide.with(publicacionHolder.itemView.getContext()).load(listPublicaciones.get(i).getMultimedia()).into(publicacionHolder.imgPublicacion);
-
+        publicacionHolder.reproducir.setOnClickListener(view -> {
+            MediaPlayer mediaPlayer;
+            Uri myUri = Uri.parse(listPublicaciones.get(i).getMultimedia());
+            mediaPlayer = new MediaPlayer();
+            try {
+                // mediaPlayer.setDataSource(String.valueOf(myUri));
+                mediaPlayer.setDataSource(publicacionHolder.imgPublicacion.getContext(),myUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                mediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mediaPlayer.start();
+        });
 
 
     }
@@ -67,6 +85,7 @@ public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPu
         private TextView nombre2;
         private TextView publicacion2;
         private ImageView imgPublicacion;
+        private Button reproducir;
 
 
         public PublicacionHolder(@NonNull View itemView){
@@ -75,6 +94,7 @@ public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPu
             nombre2 = itemView.findViewById(R.id.usuarioForo);
             publicacion2 = itemView.findViewById(R.id.pregunta);
             imgPublicacion = itemView.findViewById(R.id.imgPublicacion);
+            reproducir = itemView.findViewById(R.id.button7);
 
 
         }

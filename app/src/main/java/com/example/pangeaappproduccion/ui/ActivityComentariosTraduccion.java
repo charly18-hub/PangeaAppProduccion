@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +16,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pangeaappproduccion.Adapters.AdapterComentarios;
+import com.example.pangeaappproduccion.AdapterComentariosTraduccion;
+import com.example.pangeaappproduccion.Listas.listTraducciones;
+import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,42 +34,40 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ActivityComentarios extends AppCompatActivity {
+public class ActivityComentariosTraduccion extends AppCompatActivity {
+
+    TextView Usuario,Pregunta;
+    Button ComentarPregunta;
+    EditText CajaComentarioPregunta;
 
 
-    TextView Usuario,Publicacion;
-    Button Comentar;
-    EditText CajaComentario;
-
-
-    private List<com.example.pangeaappproduccion.listPublicaciones> listPublicaciones;
-    private AdapterComentarios adapterComentarios;
+    private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
+    private AdapterComentariosTraduccion adapterComentariosTraduccion;
 
     private SlideshowViewModel slideshowViewModel;
     private FragmentSlideshowBinding binding;
-    private RecyclerView recyclerViewComentarios;
-
-
+    private RecyclerView recyclerViewComentarioTraduccion;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comentarios);
-
+        setContentView(R.layout.activity_comentarios_traduccion);
 
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("accesos", Context.MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
 
 
-        String idPublicacion = getIntent().getExtras().getString("id");
 
-        Usuario = (TextView) findViewById(R.id.UsuarioPublicacion2);
-        Publicacion = (TextView) findViewById(R.id.publicacionForo);
+        String idPregunta = getIntent().getExtras().getString("id");
+        Toast.makeText(getApplicationContext(), "llego a activityComentarios" + idPregunta, Toast.LENGTH_LONG).show();
+
+        Usuario = (TextView) findViewById(R.id.UsuarioPublicacionTraduccion);
+        Pregunta = (TextView) findViewById(R.id.publicacionTraduccion);
+
 
 
         FirebaseFirestore dbDataUserPerfil = FirebaseFirestore.getInstance();
@@ -81,25 +81,22 @@ public class ActivityComentarios extends AppCompatActivity {
 
                                 String usuarioEmisor = documentSnapshot.getString("usuario");
 
-                                Toast.makeText(getApplicationContext(), "el usuario existe en la base" + usuarioEmisor, Toast.LENGTH_LONG).show();
 
-
-                                SharedPreferences.Editor editor1 = getSharedPreferences("usuario_recibido_chat2", MODE_PRIVATE).edit();
-                                editor1.putString("usuario_recibido_chat2", usuarioEmisor);
+                                SharedPreferences.Editor editor1 = getSharedPreferences("usuario_recibido_chat1", MODE_PRIVATE).edit();
+                                editor1.putString("usuario_recibido_chat1", usuarioEmisor);
                                 editor1.apply();
                             }
                         }
                     }
                 });
 
-        SharedPreferences preferencesusuario = getSharedPreferences("usuario_recibido_chat2", Context.MODE_PRIVATE);
-        String usuario_pangea = preferencesusuario.getString("usuario_recibido_chat2", "No existe idioma");
+        SharedPreferences preferencesusuario = getSharedPreferences("usuario_recibido_chat1", Context.MODE_PRIVATE);
+        String usuario_foro = preferencesusuario.getString("usuario_recibido_chat1", "No existe idioma");
 
-        Toast.makeText(getApplicationContext(), "el usuario de pangea es" + usuario_pangea, Toast.LENGTH_LONG).show();
 
 
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("redSocial").whereEqualTo("id", idPublicacion).get()
+        dbDataPerfil.collection("traducciones").whereEqualTo("id", idPregunta).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -107,26 +104,24 @@ public class ActivityComentarios extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
 
                                 Usuario.setText(documentSnapshot.getString("usuario"));
-                                Publicacion.setText(documentSnapshot.getString("mensaje"));
+                                Pregunta.setText(documentSnapshot.getString("traduccion"));
 
                             }
                         }
                     }
                 });
 
-        recyclerViewComentarios = findViewById(R.id.recyclerPreguntas);
+        recyclerViewComentarioTraduccion = findViewById(R.id.recyclerTraducciones);
 
 
-        listPublicaciones = new ArrayList<>();
-        adapterComentarios = new AdapterComentarios(listPublicaciones);
-        recyclerViewComentarios.setAdapter(adapterComentarios);
-        recyclerViewComentarios.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerViewComentarios.setHasFixedSize(true);
-
-        String clave = UUID.randomUUID().toString().toUpperCase();
+        listTraducciones = new ArrayList<>();
+        adapterComentariosTraduccion = new AdapterComentariosTraduccion(listTraducciones);
+        recyclerViewComentarioTraduccion.setAdapter(adapterComentariosTraduccion);
+        recyclerViewComentarioTraduccion.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerViewComentarioTraduccion.setHasFixedSize(true);
 
 
-        FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("traducciones"+"/"+idPregunta+"/"+"comentario").addSnapshotListener(new EventListener<QuerySnapshot>() {
 
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
@@ -138,9 +133,9 @@ public class ActivityComentarios extends AppCompatActivity {
 
                     for (DocumentChange documentChange : value.getDocumentChanges()) {
                         if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                            listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
-                            adapterComentarios.notifyDataSetChanged();
-                            recyclerViewComentarios.smoothScrollToPosition(listPublicaciones.size());
+                            listTraducciones.add(documentChange.getDocument().toObject(listTraducciones.class));
+                            adapterComentariosTraduccion.notifyDataSetChanged();
+                            recyclerViewComentarioTraduccion.smoothScrollToPosition(listTraducciones.size());
                         }
                     }
                 }
@@ -148,23 +143,22 @@ public class ActivityComentarios extends AppCompatActivity {
         });
 
 
-        CajaComentario=(EditText)findViewById(R.id.foroComentar);
-        Comentar=(Button) findViewById(R.id.publicarPreguntaBtn2);
+        CajaComentarioPregunta=(EditText)findViewById(R.id.traduccionComentar);
+        ComentarPregunta=(Button) findViewById(R.id.publicarTraduccion);
 
-        Comentar.setOnClickListener(new View.OnClickListener() {
+        ComentarPregunta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(idPublicacion.length() == 0 || CajaComentario.length() == 0)
-                    return;
 
-                com.example.pangeaappproduccion.listPublicaciones listPublicaciones1 = new listPublicaciones();
-                listPublicaciones1.setMensaje(CajaComentario.getText().toString());
-                listPublicaciones1.setUsuario(usuario_pangea);
-                FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").add(listPublicaciones1);
-                CajaComentario.setText("");
+                com.example.pangeaappproduccion.Listas.listTraducciones listTraducciones = new listTraducciones();
+                listTraducciones.setTraduccion(CajaComentarioPregunta.getText().toString());
+                listTraducciones.setUsuario(usuario_foro);
+                FirebaseFirestore.getInstance().collection("traducciones"+"/"+idPregunta+"/"+"comentario").add(listTraducciones);
+                CajaComentarioPregunta.setText("");
             }
         });
+
 
 
 

@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacion;
+import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
@@ -39,7 +40,7 @@ public class PerfilBuscado extends AppCompatActivity {
     TextView Perfil,PaisUsuario,Nivel,Idioma,Intereses;
     ImageView FotoPerfil,FotoHead;
 
-    private List<listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
     private RecyclerView recyclerViewPublicaciones;
 

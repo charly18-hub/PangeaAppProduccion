@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterComentarioForo;
+import com.example.pangeaappproduccion.Listas.listForo;
+import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,7 +45,7 @@ public class ActivityComentariosForo extends AppCompatActivity {
     EditText CajaComentarioPregunta;
 
 
-    private List<com.example.pangeaappproduccion.listForo> listForo;
+    private List<com.example.pangeaappproduccion.Listas.listForo> listForo;
     private AdapterComentarioForo adapterForo;
 
     private SlideshowViewModel slideshowViewModel;
@@ -150,7 +152,7 @@ public class ActivityComentariosForo extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                com.example.pangeaappproduccion.listForo listForo1 = new listForo();
+                com.example.pangeaappproduccion.Listas.listForo listForo1 = new listForo();
                 listForo1.setMensaje(CajaComentarioPregunta.getText().toString());
                 listForo1.setUsuario(usuario_foro);
                 FirebaseFirestore.getInstance().collection("comentariosForo"+"/"+idPregunta+"/"+"comentario").add(listForo1);

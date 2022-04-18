@@ -13,10 +13,12 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pangeaappproduccion.Listas.listTraducciones;
+
 public class AdapterComentariosTraduccion extends RecyclerView.Adapter<AdapterComentariosTraduccion.ComentariosTraduccionHolder> {
 
 
-    private List<listTraducciones> listTraducciones;
+    private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
     private Context context;
 
     public AdapterComentariosTraduccion(List<listTraducciones> listTraducciones)

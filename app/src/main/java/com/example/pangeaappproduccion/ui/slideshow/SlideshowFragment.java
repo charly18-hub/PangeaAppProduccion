@@ -1,11 +1,24 @@
 package com.example.pangeaappproduccion.ui.slideshow;
 
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -16,22 +29,41 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacion;
 import com.example.pangeaappproduccion.ImagenesPublicacion;
 import com.example.pangeaappproduccion.MultimediaFragment;
+import com.example.pangeaappproduccion.Publicaciones;
 import com.example.pangeaappproduccion.PublicacionesTextFragment;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.gallery.GalleryFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SlideshowFragment extends Fragment {
-    private List<com.example.pangeaappproduccion.listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
 
     private SlideshowViewModel slideshowViewModel;
     private FragmentSlideshowBinding binding;
     private RecyclerView recyclerViewPublicaciones;
+    private Button buttonChat, buttonImagen, buttonAudio,buttonReproAudio,buttonTraducir;
+    private TextView etMensaje;
+    StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+
+    private static final int IMG_Header = 0;
+    private static final int GALLERY_PICKER =1;
+    private static final  int AudioSend = 2;
+    private static final  int ACTION_POST = 3;
+    Uri urlAudio;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +73,6 @@ public class SlideshowFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_slideshow, container, false);
 
-
         // Setting ViewPager for each Tabs
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpagerPublicaciones);
         setupViewPager(viewPager);
@@ -49,6 +80,54 @@ public class SlideshowFragment extends Fragment {
         TabLayout tabs = (TabLayout) view.findViewById(R.id.result_tabsPublicaciones);
         tabs.setupWithViewPager(viewPager);
 
+        buttonChat = view.findViewById(R.id.publicar2);
+        buttonImagen = view.findViewById(R.id.btnImagen2);
+        etMensaje = view.findViewById(R.id.publicacion2);
+        buttonAudio = view.findViewById(R.id.btnAudio);
+        buttonReproAudio = view.findViewById(R.id.btnReproAudio);
+
+        SharedPreferences preferences = getActivity().getSharedPreferences("accesos", MODE_PRIVATE);
+        String email_perfil = preferences.getString("email", "No name defined");
+
+
+        String usuario_recibido = email_perfil;
+        buttonChat.setOnClickListener(view1 -> {
+            String clave = UUID.randomUUID().toString().toUpperCase();
+            if(usuario_recibido.length() == 0 || etMensaje.length() == 0)
+                return;
+            SharedPreferences preferencess = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
+            String usuario_post_final = preferencess.getString("usuario_post", "No name defined");
+            Publicaciones publicaciones = new Publicaciones();
+            publicaciones.setMensaje(etMensaje.getText().toString());
+            publicaciones.setUsuario(usuario_post_final);
+            publicaciones.setid(clave);
+            publicaciones.setStatus("0");
+            FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
+        });
+        buttonImagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentImagen = new Intent(Intent.ACTION_PICK);
+                intentImagen.setType("image/*");
+                startActivityForResult(intentImagen,ACTION_POST);
+
+            }
+        });
+        buttonAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                startActivityForResult(intent,AudioSend);
+            }
+        });
+
+        buttonReproAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(),urlAudio);
+                mediaPlayer.start();
+            }
+        });
         return view;
     }
 
@@ -64,7 +143,6 @@ public class SlideshowFragment extends Fragment {
 
         miFragment = new GalleryFragment();
         miFragment.setArguments(datos_a_fragment);
-
 
 
 
@@ -124,6 +202,93 @@ public class SlideshowFragment extends Fragment {
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        SharedPreferences preferences = getActivity().getSharedPreferences("accesos", MODE_PRIVATE);
+        String email_perfil = preferences.getString("email", "No name defined");
+
+        SharedPreferences preferences1 = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
+        String usuario_post_final = preferences1.getString("usuario_post", "No name defined");
+
+        if(requestCode == AudioSend && resultCode == RESULT_OK) {
+            urlAudio = data.getData();
+
+            StorageReference filePath = mStorage.child("audios").child(urlAudio.getLastPathSegment());
+
+            filePath.putFile(urlAudio).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getContext(),"se subio el archivo",Toast.LENGTH_LONG).show();
+
+
+                    Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uiriTask.isSuccessful());
+                    Uri dowloadUri = uiriTask.getResult();
+
+                    String clave = UUID.randomUUID().toString().toUpperCase();
+
+
+                    Publicaciones publicaciones = new Publicaciones();
+                    publicaciones.setMensaje(etMensaje.getText().toString());
+                    publicaciones.setMultimedia(dowloadUri.toString());
+                    publicaciones.setUsuario(usuario_post_final);
+                    publicaciones.setStatus("2");
+                    publicaciones.setid(clave);
+                    FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
+                    etMensaje.setText("");
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("FileManager","Error en uploadImg ==>"+e);
+                }
+            });
+
+        }
+        if(requestCode == ACTION_POST &&  resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+
+            StorageMetadata metadata = new StorageMetadata.Builder()
+                    .setCustomMetadata("descripcion","Esta es una Prueba")
+                    .setCustomMetadata("usuario",usuario_post_final)
+                    .build();
+
+            StorageReference filePath = mStorage.child("redSocial").child(uri.getLastPathSegment());
+
+
+
+            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getContext(),"se subio el archivo",Toast.LENGTH_LONG).show();
+
+
+                    Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uiriTask.isSuccessful());
+                    Uri dowloadUri = uiriTask.getResult();
+
+                    String clave = UUID.randomUUID().toString().toUpperCase();
+
+
+                    Publicaciones PublicacionesImagenes = new Publicaciones();
+                    PublicacionesImagenes.setMultimedia(dowloadUri.toString());
+                    PublicacionesImagenes.setUsuario(usuario_post_final);
+                    PublicacionesImagenes.setid(clave);
+                    PublicacionesImagenes.setStatus("1");
+
+                    FirebaseFirestore.getInstance().collection("redSocial").add(PublicacionesImagenes);
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("FileManager","Error en uploadImg ==>"+e);
+                }
+            });
+        }
+    }
 
 }

@@ -33,7 +33,7 @@ import com.example.pangeaappproduccion.FotoPerfil;
 import com.example.pangeaappproduccion.Publicaciones;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.databinding.FragmentHomeBinding;
-import com.example.pangeaappproduccion.listPublicaciones;
+import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.translate_api;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -304,18 +304,12 @@ public class HomeFragment extends Fragment {
         buttonChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String clave = UUID.randomUUID().toString().toUpperCase();
-
                 if(usuario_recibido.length() == 0 || etMensaje.length() == 0)
-
                     return;
 
                 SharedPreferences preferences = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
                 String usuario_post_final = preferences.getString("usuario_post", "No name defined");
-
-
-
                 Publicaciones publicaciones = new Publicaciones();
                 publicaciones.setMensaje(etMensaje.getText().toString());
                 publicaciones.setUsuario(usuario_post_final);
@@ -521,8 +515,6 @@ public class HomeFragment extends Fragment {
             Uri uri = data.getData();
             imgPerfil.setImageURI(uri);
 
-
-
             StorageMetadata metadata = new StorageMetadata.Builder()
                     .setCustomMetadata("descripcion","Esta es una Prueba")
                     .setCustomMetadata("usuario",usuario_post_final)
@@ -576,7 +568,7 @@ public class HomeFragment extends Fragment {
 
 
         FirebaseUser fuser;
-        private List<com.example.pangeaappproduccion.listPublicaciones> listPublicaciones;
+        private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
 
         public  AdapterPublicaciones(List<listPublicaciones> listPublicaciones){
             this.listPublicaciones = listPublicaciones;

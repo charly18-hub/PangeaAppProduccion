@@ -1,15 +1,15 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.ui.register;
 
-public class RegistroAlumno {
+public class RegistroProfe {
 
-
-    private String Intereses;
     private String ciudad;
     private String email;
     private String firts_name;
     private String last_name;
     private String nivel;
     private String sexo;
+    private String costoHora;
+    private String fechaNacimiento;
     private String password;
     private String telefono;
     private String usuario;
@@ -18,17 +18,18 @@ public class RegistroAlumno {
     private String idioma_interes;
     private String idioma_nativo;
     private String user;
-    private String motivo;
     private String multimedia;
+    private String idioma_certificado;
+    private String Certificado;
+    private String ExpedidoPor;
+    private String anosStudio;
+    private String Disponibilidad;
+    private String zonaHoraria;
+    private String CuentaBancaria;
 
 
 
-    public String getIntereses() {
-        return Intereses;
-    }
-    public void setIntereses(String Intereses) {
-        this.Intereses = Intereses;
-    }
+
 
     public String getciudad() {
         return ciudad;
@@ -114,14 +115,56 @@ public class RegistroAlumno {
     }
     public void setidioma_nativo(String idioma_nativo) { this.idioma_nativo = idioma_nativo; }
 
-
-    public String getMotivo() {
-        return motivo;
-    }
-    public void setMotivo(String motivo) { this.motivo = motivo; }
-
     public String getMultimedia() {
         return multimedia;
     }
     public void setMultimedia(String multimedia) { this.multimedia = multimedia; }
+
+    public String getzonaHoraria() {
+        return zonaHoraria;
+    }
+    public void setzonaHoraria(String zonaHoraria) { this.zonaHoraria = zonaHoraria; }
+
+    public String getDisponibilidad() {
+        return Disponibilidad;
+    }
+    public void setDisponibilidad(String Disponibilidad) { this.Disponibilidad = Disponibilidad; }
+
+    public String getanosStudio() {
+        return anosStudio;
+    }
+    public void setanosStudio(String anosStudio) { this.anosStudio = anosStudio; }
+
+    public String getExpedidoPor() {
+        return ExpedidoPor;
+    }
+    public void setExpedidoPor(String ExpedidoPor) { this.ExpedidoPor = ExpedidoPor; }
+
+    public String getCuentaBancaria() {
+        return CuentaBancaria;
+    }
+    public void setCuentaBancaria(String CuentaBancaria) { this.CuentaBancaria = CuentaBancaria; }
+
+    public String getCertificado() {
+        return Certificado;
+    }
+    public void setCertificado(String Certificado) { this.Certificado = Certificado; }
+
+    public String getcostoHora() {
+        return costoHora;
+    }
+    public void setcostoHora(String costoHora) { this.costoHora = costoHora; }
+
+    public String getidioma_certificado() {
+        return idioma_certificado;
+    }
+    public void setidioma_certificado(String idioma_certificado) { this.idioma_certificado = idioma_certificado; }
+
+    public String getfechaNacimiento() {
+        return fechaNacimiento;
+    }
+    public void setfechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+
+
+
 }

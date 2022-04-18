@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.pangeaappproduccion.Listas.listTraducciones;
+import com.example.pangeaappproduccion.ui.ActivityComentariosTraduccion;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AdapterTraducciones extends RecyclerView.Adapter<AdapterTraducciones.TraduccionesHolder> {
 
-    private List<listTraducciones> listTraducciones;
+    private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
     private Context context;
 
     public AdapterTraducciones(Context context2, List<listTraducciones> listTraducciones)

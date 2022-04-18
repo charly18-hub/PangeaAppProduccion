@@ -13,7 +13,7 @@
         android:theme="@style/Theme.PangeaAppProduccion"
         android:usesCleartextTraffic="false">
 
-        <activity android:name=".ActivityComentariosTraduccion"></activity>
+        <activity android:name=".ui.ActivityComentariosTraduccion"></activity>
         <activity android:name=".RecuperarContrasena" />
         <activity android:name=".WeekViewActivity" />
         <activity android:name=".videoCall" />
@@ -26,17 +26,17 @@
         <activity android:name=".EnviarSolicitud" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".Buscador" />
-        <activity android:name=".ActivitySolicitudesRegistradas" />
-        <activity android:name=".ActivitySolicitudes" />
-        <activity android:name=".ActivityComentariosForo" />
-        <activity android:name=".ActivityComentarios" />
+        <activity android:name=".ui.ActivitySolicitudesRegistradas" />
+        <activity android:name=".ui.ActivitySolicitudes" />
+        <activity android:name=".ui.ActivityComentariosForo" />
+        <activity android:name=".ui.ActivityComentarios" />
         <activity android:name=".ActivityAmistad" />
         <activity android:name=".AceptarRechazarSolicitud" />
         <activity android:name=".Profesores" />
-        <activity android:name=".TercerActivityProfe" />
-        <activity android:name=".SegundoActivityRegistroProfe" />
-        <activity android:name=".SegundoActivityRegistro" />
-        <activity android:name=".Registro" />
+        <activity android:name=".ui.register.TercerActivityProfe" />
+        <activity android:name=".ui.register.SegundoActivityRegistroProfe" />
+        <activity android:name=".ui.register.SegundoActivityRegistro" />
+        <activity android:name=".ui.register.Registro" />
         <activity
             android:name=".SplashScreen"
             android:exported="true"
