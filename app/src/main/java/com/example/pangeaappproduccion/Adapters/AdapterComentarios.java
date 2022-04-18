@@ -15,11 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pangeaappproduccion.R;
-import com.example.pangeaappproduccion.listPublicaciones;
+import com.example.pangeaappproduccion.Listas.listPublicaciones;
 
 public class AdapterComentarios extends RecyclerView.Adapter<AdapterComentarios.ComentariosHolder> {
 
-    private List<com.example.pangeaappproduccion.listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private Context context;
 
     public AdapterComentarios(List<listPublicaciones> listPublicaciones)

@@ -1,12 +1,13 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Listas;
 
-public class listPublicaciones {
+public class listForo {
 
 
     private String usuario;
     private String mensaje;
     private String multimedia;
 
+    private String id;
 
 
     public String getUsuario() {
@@ -31,4 +32,14 @@ public class listPublicaciones {
     public void setMultimedia(String  multimedia) {
         this.multimedia = multimedia;
     }
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }
+
+

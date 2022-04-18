@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.pangeaappproduccion.ActivityComentariosForo;
+import com.example.pangeaappproduccion.ui.ActivityComentariosForo;
 import com.example.pangeaappproduccion.R;
-import com.example.pangeaappproduccion.listForo;
+import com.example.pangeaappproduccion.Listas.listForo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AdapterPublicacionForo  extends RecyclerView.Adapter<AdapterPublicacionForo.ForoHolder> {
 
-    private List<com.example.pangeaappproduccion.listForo> listForo;
+    private List<com.example.pangeaappproduccion.Listas.listForo> listForo;
     private Context context;
 
     public AdapterPublicacionForo(Context context1,List<listForo> listForo)

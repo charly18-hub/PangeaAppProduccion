@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.ui.register;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,6 +18,8 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.pangeaappproduccion.Profesores;
+import com.example.pangeaappproduccion.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -58,7 +60,7 @@ public class Registro extends AppCompatActivity {
         profesores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Registro.this,Profesores.class);
+                Intent intent = new Intent(Registro.this, Profesores.class);
                 startActivity(intent);
             }
         });

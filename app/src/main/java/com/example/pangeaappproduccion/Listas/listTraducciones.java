@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion;
+package com.example.pangeaappproduccion.Listas;
 
 public class listTraducciones {
 

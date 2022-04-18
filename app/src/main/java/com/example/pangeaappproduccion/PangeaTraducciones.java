@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.pangeaappproduccion.Listas.listTraducciones;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.firebase.firestore.DocumentChange;
@@ -40,7 +41,7 @@ public class PangeaTraducciones extends Fragment {
 
 
 
-    private List<com.example.pangeaappproduccion.listTraducciones> listTraducciones;
+    private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
     private AdapterTraducciones adapterTraducciones;
 
     private SlideshowViewModel slideshowViewModel;
