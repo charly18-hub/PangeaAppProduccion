@@ -42,6 +42,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -54,10 +56,12 @@ import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -77,14 +81,7 @@ public class HomeFragment extends Fragment {
     private List<listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
     private RecyclerView recyclerViewPublicaciones;
-
-
-
-
-
-
-
-
+    private String username;
     private static final int IMG_Header = 0;
     private static final int GALLERY_PICKER =1;
     private static final  int AudioSend = 2;
@@ -301,22 +298,29 @@ public class HomeFragment extends Fragment {
         });
 
 
-        buttonChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String clave = UUID.randomUUID().toString().toUpperCase();
-                if(usuario_recibido.length() == 0 || etMensaje.length() == 0)
-                    return;
+        buttonChat.setOnClickListener(view1 -> {
 
-                SharedPreferences preferences = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
-                String usuario_post_final = preferences.getString("usuario_post", "No name defined");
-                Publicaciones publicaciones = new Publicaciones();
-                publicaciones.setMensaje(etMensaje.getText().toString());
-                publicaciones.setUsuario(usuario_post_final);
-                publicaciones.setid(clave);
-                publicaciones.setStatus("0");
-                FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
-            }
+            String clave = UUID.randomUUID().toString().toUpperCase();
+
+            DocumentReference docRef = db.collection("users").document(usuario_recibido);
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        username = document.getString("user");
+                        Publicaciones publicaciones = new Publicaciones();
+                        publicaciones.setMensaje(etMensaje.getText().toString());
+                        publicaciones.setUsuario(username);
+                        publicaciones.setid(clave);
+                        publicaciones.setStatus("0");
+                        FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            });
         });
 
         buttonTraducir.setOnClickListener(new View.OnClickListener() {

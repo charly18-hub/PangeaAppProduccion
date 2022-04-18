@@ -51,10 +51,13 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
 
         publicacionHolder.nombre2.setText(listPublicaciones.get(i).getUsuario());
         publicacionHolder.publicacion2.setText(listPublicaciones.get(i).getMensaje());
-        Glide.with(publicacionHolder.itemView.getContext()).load(listPublicaciones.get(i).getMultimedia()).into(publicacionHolder.imgPublicacion);
         if(listPublicaciones.get(i).getStatus().equals("2")){
             publicacionHolder.audioLayout.setVisibility(View.VISIBLE);
             publicacionHolder.publicacionLayout.setVisibility(View.GONE);
+            publicacionHolder.imgPublicacion.setImageResource(R.drawable.audio);
+            Glide.with(publicacionHolder.itemView.getContext())
+                    .load("https://flyclipart.com/thumb2/reproducir-en-634570.png")
+                    .into(publicacionHolder.imgPublicacion);
             publicacionHolder.reproducir.setOnClickListener(view -> {
                 MediaPlayer mediaPlayer;
                 Uri myUri = Uri.parse(listPublicaciones.get(i).getMultimedia());
