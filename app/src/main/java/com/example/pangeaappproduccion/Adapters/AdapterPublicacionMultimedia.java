@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
 
@@ -47,9 +48,11 @@ public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPu
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull AdapterPublicacionMultimedia.PublicacionHolder publicacionHolder, int i) {
-
         publicacionHolder.nombre2.setText(listPublicaciones.get(i).getUsuario());
         publicacionHolder.publicacion2.setText(listPublicaciones.get(i).getMensaje());
+        Glide.with(publicacionHolder.nombre2.getContext())
+                .load("https://www.nicepng.com/png/detail/7-75606_play-button-png-image-instagram.png")
+                .into(publicacionHolder.imgPublicacion);
         publicacionHolder.reproducir.setOnClickListener(view -> {
             MediaPlayer mediaPlayer;
             Uri myUri = Uri.parse(listPublicaciones.get(i).getMultimedia());

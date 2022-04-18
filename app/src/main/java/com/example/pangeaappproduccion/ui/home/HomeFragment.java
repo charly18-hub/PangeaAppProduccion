@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment {
 
     private TextView traducidoTexto;
 
-    private TextView etMensaje ,userPerfil,PaisPerfil,CursoPerfil,nivelPerfil;
+    private TextView etMensaje ,userPerfil,PaisPerfil,CursoPerfil,nivelPerfil,nombreUsuario;
     private Button buttonChat, buttonImagen, buttonAudio,buttonReproAudio,buttonTraducir;
     private ImageView imgPerfil,imgHeader;
     private List<listPublicaciones> listPublicaciones;
@@ -86,6 +86,7 @@ public class HomeFragment extends Fragment {
     private static final int GALLERY_PICKER =1;
     private static final  int AudioSend = 2;
     private static final  int ACTION_POST = 3;
+    private String imagenUsuario;
 
     Uri urlAudio;
 
@@ -99,13 +100,9 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        SharedPreferences preferences = getActivity().getSharedPreferences("accesos", MODE_PRIVATE);
+        SharedPreferences preferences = requireActivity().getSharedPreferences("accesos", MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
 
-
-        String usuario_recibido = email_perfil;
-
-        Toast.makeText(getActivity(), usuario_recibido+"perfil", Toast.LENGTH_LONG).show();
 
         recyclerViewPublicaciones = view.findViewById(R.id.recyclerViewChat);
         etMensaje = view.findViewById(R.id.pregunta);
@@ -121,6 +118,7 @@ public class HomeFragment extends Fragment {
         userPerfil = view.findViewById(R.id.userPerfil);
         PaisPerfil = view.findViewById(R.id.PaisPerfil);
         CursoPerfil =  view.findViewById(R.id.CursoPerfil);
+        nombreUsuario =  view.findViewById(R.id.nombreUsuario);
 
 
         Context context = view.getContext();
@@ -133,29 +131,50 @@ public class HomeFragment extends Fragment {
         recyclerViewPublicaciones.setHasFixedSize(true);
 
 
-
-
-
-
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("fotoPerfil").whereEqualTo("usuario",usuario_recibido).get()
+        DocumentReference docRef = db.collection("users").document(email_perfil);
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    username = document.getString("user");
+                    nombreUsuario.setText(document.getString("user"));
+                    FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario",username).addSnapshotListener((value, error) -> {
+                        if (error != null) {
+                            Log.d(TAG, "Error:" + error.getMessage());
+                        } else {
+                            for (DocumentChange documentChange : value.getDocumentChanges()) {
+                                if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                                    listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
+                                    adapterPublicacion.notifyDataSetChanged();
+                                    recyclerViewPublicaciones.smoothScrollToPosition(listPublicaciones.size());
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "No such document");
+                }
+            } else {
+                Log.d(TAG, "get failed with ", task.getException());
+            }
+        });
+
+
+
+        db.collection("fotoPerfil").whereEqualTo("usuario", email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
-
-                                Log.d("imagen", documentSnapshot.getId()+"la imagen es"+ documentSnapshot.get("multimedia"));
                                 RequestOptions requestOptions = new RequestOptions();
                                 requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
-
                                 Glide.with(context)
                                         .load(documentSnapshot.get("multimedia"))
                                         .apply(requestOptions)
+                                        .circleCrop()
                                         .into(imgPerfil);
-
                             }
                         }
                     }
@@ -165,7 +184,7 @@ public class HomeFragment extends Fragment {
 
 
         FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-        db2.collection("fotosHeader").whereEqualTo("usuario",usuario_recibido).get()
+        db2.collection("fotosHeader").whereEqualTo("usuario", email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -194,7 +213,7 @@ public class HomeFragment extends Fragment {
 
 
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("users").whereEqualTo("email",usuario_recibido).get()
+        dbDataPerfil.collection("users").whereEqualTo("email", email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -221,30 +240,12 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 });
-
-
         SharedPreferences preferences1 = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
         String usuario_post_final = preferences1.getString("usuario_post", "No name defined");
 
 
 
 
-        FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario", usuario_post_final).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.d(TAG, "Error:" + error.getMessage());
-                } else {
-                    for (DocumentChange documentChange : value.getDocumentChanges()) {
-                        if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                            listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
-                            adapterPublicacion.notifyDataSetChanged();
-                            recyclerViewPublicaciones.smoothScrollToPosition(listPublicaciones.size());
-                        }
-                    }
-                }
-            }
-        });
 
 
 
@@ -252,7 +253,6 @@ public class HomeFragment extends Fragment {
         imgPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intentImagen = new Intent(Intent.ACTION_PICK);
                 intentImagen.setType("image/*");
                 startActivityForResult(intentImagen,GALLERY_PICKER);
@@ -299,28 +299,13 @@ public class HomeFragment extends Fragment {
 
 
         buttonChat.setOnClickListener(view1 -> {
-
             String clave = UUID.randomUUID().toString().toUpperCase();
-
-            DocumentReference docRef = db.collection("users").document(usuario_recibido);
-            docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        username = document.getString("user");
-                        Publicaciones publicaciones = new Publicaciones();
-                        publicaciones.setMensaje(etMensaje.getText().toString());
-                        publicaciones.setUsuario(username);
-                        publicaciones.setid(clave);
-                        publicaciones.setStatus("0");
-                        FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            });
+            Publicaciones publicaciones = new Publicaciones();
+            publicaciones.setMensaje(etMensaje.getText().toString());
+            publicaciones.setUsuario(username);
+            publicaciones.setid(clave);
+            publicaciones.setStatus("0");
+            FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
         });
 
         buttonTraducir.setOnClickListener(new View.OnClickListener() {
@@ -377,22 +362,12 @@ public class HomeFragment extends Fragment {
         SharedPreferences preferences1 = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
         String usuario_post_final = preferences1.getString("usuario_post", "No name defined");
 
-        Toast.makeText(getActivity(), email_perfil+"perfil2", Toast.LENGTH_LONG).show();
-
         if(requestCode == AudioSend && resultCode == RESULT_OK){
             urlAudio = data.getData();
-
-
-
-
             StorageReference filePath = mStorage.child("audios").child(urlAudio.getLastPathSegment());
-
             filePath.putFile(urlAudio).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(),"se subio el archivo",Toast.LENGTH_LONG).show();
-
-
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uiriTask.isSuccessful());
                     Uri dowloadUri = uiriTask.getResult();
@@ -403,7 +378,7 @@ public class HomeFragment extends Fragment {
                     Publicaciones publicaciones = new Publicaciones();
                     publicaciones.setMensaje(etMensaje.getText().toString());
                     publicaciones.setMultimedia(dowloadUri.toString());
-                    publicaciones.setUsuario(usuario_post_final);
+                    publicaciones.setUsuario(username);
                     publicaciones.setStatus("2");
                     publicaciones.setid(clave);
                     FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
@@ -430,8 +405,6 @@ public class HomeFragment extends Fragment {
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(),"se subio el archivo",Toast.LENGTH_LONG).show();
-
 
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uiriTask.isSuccessful());
@@ -456,39 +429,33 @@ public class HomeFragment extends Fragment {
 
 
         if(requestCode == GALLERY_PICKER &&  resultCode == RESULT_OK) {
+
+
+
+
+
+
             Uri uri = data.getData();
             imgPerfil.setImageURI(uri);
-
-
 
             StorageMetadata metadata = new StorageMetadata.Builder()
                     .setCustomMetadata("descripcion","Esta es una Prueba")
                     .setCustomMetadata("usuario",email_perfil)
                     .build();
-
-            StorageReference filePath = mStorage.child("fotosPerfil").child(uri.getLastPathSegment());
-
-
-
+            StorageReference filePath = mStorage.child("fotoPerfil").child(uri.getLastPathSegment());
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(),"se subio el archivo",Toast.LENGTH_LONG).show();
-
 
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uiriTask.isSuccessful());
                     Uri dowloadUri = uiriTask.getResult();
 
-
-
                     FirebaseFirestore db2 = FirebaseFirestore.getInstance();
 
                     Map<String, Object> fotoPerfil = new HashMap<>();
                     fotoPerfil.put("multimedia",dowloadUri.toString());
-                    fotoPerfil.put("usuario",usuario_post_final);
-
-
+                    fotoPerfil.put("usuario",username);
                     db2.collection("fotoPerfil").document(email_perfil).update(fotoPerfil).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
@@ -504,6 +471,11 @@ public class HomeFragment extends Fragment {
                     });
 
 
+                    FotoPerfil fotoPerfils = new FotoPerfil();
+                    fotoPerfils.setMultimedia(dowloadUri.toString());
+                    fotoPerfils.setUsuario(email_perfil);
+                    FirebaseFirestore.getInstance().collection("fotoPerfil").add(fotoPerfils);
+                    etMensaje.setText("");
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -521,29 +493,23 @@ public class HomeFragment extends Fragment {
 
             StorageMetadata metadata = new StorageMetadata.Builder()
                     .setCustomMetadata("descripcion","Esta es una Prueba")
-                    .setCustomMetadata("usuario",usuario_post_final)
+                    .setCustomMetadata("usuario",username)
                     .build();
 
             StorageReference filePath = mStorage.child("redSocial").child(uri.getLastPathSegment());
-
-
-
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(),"se subio el archivo",Toast.LENGTH_LONG).show();
-
-
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uiriTask.isSuccessful());
                     Uri dowloadUri = uiriTask.getResult();
 
                     String clave = UUID.randomUUID().toString().toUpperCase();
 
-
                     Publicaciones PublicacionesImagenes = new Publicaciones();
                     PublicacionesImagenes.setMultimedia(dowloadUri.toString());
-                    PublicacionesImagenes.setUsuario(usuario_post_final);
+                    PublicacionesImagenes.setUsuario(username);
+                    PublicacionesImagenes.setMensaje(etMensaje.getText().toString());
                     PublicacionesImagenes.setid(clave);
                     PublicacionesImagenes.setStatus("1");
 

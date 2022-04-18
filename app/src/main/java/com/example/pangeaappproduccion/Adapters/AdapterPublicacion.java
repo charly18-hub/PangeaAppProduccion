@@ -51,12 +51,16 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
 
         publicacionHolder.nombre2.setText(listPublicaciones.get(i).getUsuario());
         publicacionHolder.publicacion2.setText(listPublicaciones.get(i).getMensaje());
-        if(listPublicaciones.get(i).getStatus().equals("2")){
+        if(listPublicaciones.get(i).getStatus().equals("0")){
+
+        }else if(listPublicaciones.get(i).getStatus().equals("1")){
+            Glide.with(publicacionHolder.itemView.getContext()).load(listPublicaciones.get(i).getMultimedia()).into(publicacionHolder.imgPublicacion);
+        }else if(listPublicaciones.get(i).getStatus().equals("2")){
             publicacionHolder.audioLayout.setVisibility(View.VISIBLE);
             publicacionHolder.publicacionLayout.setVisibility(View.GONE);
             publicacionHolder.imgPublicacion.setImageResource(R.drawable.audio);
             Glide.with(publicacionHolder.itemView.getContext())
-                    .load("https://flyclipart.com/thumb2/reproducir-en-634570.png")
+                    .load("https://www.nicepng.com/png/detail/7-75606_play-button-png-image-instagram.png")
                     .into(publicacionHolder.imgPublicacion);
             publicacionHolder.reproducir.setOnClickListener(view -> {
                 MediaPlayer mediaPlayer;
