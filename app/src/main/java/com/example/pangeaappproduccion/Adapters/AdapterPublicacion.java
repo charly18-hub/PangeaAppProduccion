@@ -1,6 +1,7 @@
 package com.example.pangeaappproduccion.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -14,6 +15,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.ui.ActivityComentarios;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -51,10 +58,50 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
 
         publicacionHolder.nombre2.setText(listPublicaciones.get(i).getUsuario());
         publicacionHolder.publicacion2.setText(listPublicaciones.get(i).getMensaje());
-        Glide.with(publicacionHolder.itemView.getContext()).load(listPublicaciones.get(i).getMultimedia()).into(publicacionHolder.imgPublicacion);
-        if(listPublicaciones.get(i).getStatus().equals("2")){
+        if(listPublicaciones.get(i).getStatus().equals("0")){
+            publicacionHolder.imgPublicacion.setVisibility(View.GONE);
+            publicacionHolder.btnComentario.setOnClickListener(view -> {
+                FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
+                dbDataPerfil.collection("redSocial").whereEqualTo("mensaje", listPublicaciones.get(i).getMensaje()).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                        Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
+                                        intent.putExtra("id", documentSnapshot.getString("id"));
+                                        publicacionHolder.imgPublicacion.getContext().startActivity(intent);
+                                    }
+                                }
+                            }
+                        });
+            });
+        }else if(listPublicaciones.get(i).getStatus().equals("1")){
+            Glide.with(publicacionHolder.itemView.getContext()).load(listPublicaciones.get(i).getMultimedia()).into(publicacionHolder.imgPublicacion);
+            publicacionHolder.btnComentario.setOnClickListener(view -> {
+                FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
+                dbDataPerfil.collection("redSocial").whereEqualTo("mensaje", listPublicaciones.get(i).getMensaje()).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                        Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
+                                        intent.putExtra("id", documentSnapshot.getString("id"));
+                                        intent.putExtra("multimedia", 1);
+                                        publicacionHolder.imgPublicacion.getContext().startActivity(intent);
+                                    }
+                                }
+                            }
+                        });
+            });
+        }else if(listPublicaciones.get(i).getStatus().equals("2")){
             publicacionHolder.audioLayout.setVisibility(View.VISIBLE);
             publicacionHolder.publicacionLayout.setVisibility(View.GONE);
+            publicacionHolder.imgPublicacion.setImageResource(R.drawable.audio);
+            Glide.with(publicacionHolder.itemView.getContext())
+                    .load("https://www.nicepng.com/png/detail/7-75606_play-button-png-image-instagram.png")
+                    .into(publicacionHolder.imgPublicacion);
             publicacionHolder.reproducir.setOnClickListener(view -> {
                 MediaPlayer mediaPlayer;
                 Uri myUri = Uri.parse(listPublicaciones.get(i).getMultimedia());
@@ -71,6 +118,23 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
                     e.printStackTrace();
                 }
                 mediaPlayer.start();
+            });
+            publicacionHolder.btnComentario.setOnClickListener(view -> {
+                FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
+                dbDataPerfil.collection("redSocial").whereEqualTo("mensaje", listPublicaciones.get(i).getMensaje()).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                        Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
+                                        intent.putExtra("id", documentSnapshot.getString("id"));
+                                        intent.putExtra("multimedia", 2);
+                                        publicacionHolder.imgPublicacion.getContext().startActivity(intent);
+                                    }
+                                }
+                            }
+                        });
             });
         }
     }
@@ -91,6 +155,7 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
         private ImageView imgPublicacion;
         private LinearLayout audioLayout,publicacionLayout;
         private Button reproducir;
+        private Button btnComentario;
 
 
         public PublicacionHolder(@NonNull View itemView){
@@ -102,6 +167,7 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
             audioLayout = itemView.findViewById(R.id.audioLayout);
             publicacionLayout = itemView.findViewById(R.id.publicacionLayout);
             reproducir = itemView.findViewById(R.id.button77);
+            btnComentario = itemView.findViewById(R.id.btnComentario);
 
 
         }

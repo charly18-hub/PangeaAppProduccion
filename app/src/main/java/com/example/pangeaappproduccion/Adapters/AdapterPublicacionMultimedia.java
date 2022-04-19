@@ -2,6 +2,7 @@ package com.example.pangeaappproduccion.Adapters;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -11,8 +12,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.ui.ActivityComentarios;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,8 +35,7 @@ public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPu
     private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private Context context;
 
-    public AdapterPublicacionMultimedia(List<listPublicaciones> listPublicaciones)
-    {
+    public AdapterPublicacionMultimedia(List<listPublicaciones> listPublicaciones) {
         this.listPublicaciones = listPublicaciones;
 
     }
@@ -38,25 +45,24 @@ public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPu
     @NotNull
     @Override
     public AdapterPublicacionMultimedia.PublicacionHolder onCreateViewHolder(@NonNull @NotNull ViewGroup viewGroup, int i) {
-
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_publicaciones_multimedia,viewGroup,false);
-
-
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_publicaciones_multimedia, viewGroup, false);
         return new AdapterPublicacionMultimedia.PublicacionHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull AdapterPublicacionMultimedia.PublicacionHolder publicacionHolder, int i) {
-
         publicacionHolder.nombre2.setText(listPublicaciones.get(i).getUsuario());
         publicacionHolder.publicacion2.setText(listPublicaciones.get(i).getMensaje());
+        Glide.with(publicacionHolder.nombre2.getContext())
+                .load("https://www.nicepng.com/png/detail/7-75606_play-button-png-image-instagram.png")
+                .into(publicacionHolder.imgPublicacion);
         publicacionHolder.reproducir.setOnClickListener(view -> {
             MediaPlayer mediaPlayer;
             Uri myUri = Uri.parse(listPublicaciones.get(i).getMultimedia());
             mediaPlayer = new MediaPlayer();
             try {
                 // mediaPlayer.setDataSource(String.valueOf(myUri));
-                mediaPlayer.setDataSource(publicacionHolder.imgPublicacion.getContext(),myUri);
+                mediaPlayer.setDataSource(publicacionHolder.imgPublicacion.getContext(), myUri);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -67,10 +73,27 @@ public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPu
             }
             mediaPlayer.start();
         });
+        publicacionHolder.btnComentario.setOnClickListener(view -> {
+
+            FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
+            dbDataPerfil.collection("redSocial").whereEqualTo("mensaje", listPublicaciones.get(i).getMensaje()).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                    Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
+                                    intent.putExtra("id", documentSnapshot.getString("id"));
+                                    intent.putExtra("multimedia", 2);
+                                    publicacionHolder.imgPublicacion.getContext().startActivity(intent);
+                                }
+                            }
+                        }
+                    });
+        });
 
 
     }
-
 
 
     @Override
@@ -80,21 +103,23 @@ public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPu
 
     }
 
-    class  PublicacionHolder extends  RecyclerView.ViewHolder{
+    class PublicacionHolder extends RecyclerView.ViewHolder {
 
         private TextView nombre2;
         private TextView publicacion2;
         private ImageView imgPublicacion;
         private Button reproducir;
+        private Button btnComentario;
 
 
-        public PublicacionHolder(@NonNull View itemView){
+        public PublicacionHolder(@NonNull View itemView) {
             super(itemView);
 
             nombre2 = itemView.findViewById(R.id.usuarioForo);
             publicacion2 = itemView.findViewById(R.id.pregunta);
             imgPublicacion = itemView.findViewById(R.id.imgPublicacion);
             reproducir = itemView.findViewById(R.id.button7);
+            btnComentario = itemView.findViewById(R.id.btnComentario);
 
 
         }

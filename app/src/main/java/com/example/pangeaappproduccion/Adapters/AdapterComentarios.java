@@ -14,53 +14,55 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pangeaappproduccion.Model.Comentario;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
 
 public class AdapterComentarios extends RecyclerView.Adapter<AdapterComentarios.ComentariosHolder> {
 
-    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
+    private List<listPublicaciones> listPublicaciones;
+    private List<Comentario> listPublicacionesMultimedia;
+    private String multimedia;
     private Context context;
 
-    public AdapterComentarios(List<listPublicaciones> listPublicaciones)
-    {
-
+    public AdapterComentarios(List<listPublicaciones> listPublicaciones){
         this.listPublicaciones = listPublicaciones;
-
+    }
+    public AdapterComentarios(List<Comentario> listPublicacionesMultimedia,String multimedia){
+        this.listPublicacionesMultimedia = listPublicacionesMultimedia;
+        this.multimedia = multimedia;
     }
 
-
-    @NonNull
     @NotNull
     @Override
     public AdapterComentarios.ComentariosHolder onCreateViewHolder(@NonNull @NotNull ViewGroup viewGroup, int i) {
-
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_comentarios,viewGroup,false);
-
-
         return new AdapterComentarios.ComentariosHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull AdapterComentarios.ComentariosHolder comentariosHolder, int i) {
 
-        comentariosHolder.nombreComentario.setText(listPublicaciones.get(i).getUsuario());
-        comentariosHolder.publicacionComentario.setText(listPublicaciones.get(i).getMensaje());
-
-
-
-
-
-
+        if(multimedia!=null){
+            if(multimedia.equals("audio")||multimedia.equals("imagen")){
+                comentariosHolder.nombreComentario.setText(listPublicacionesMultimedia.get(i).getUsuario());
+                comentariosHolder.publicacionComentario.setText(listPublicacionesMultimedia.get(i).getComentario());
+            }
+        }else{
+            comentariosHolder.nombreComentario.setText(listPublicaciones.get(i).getUsuario());
+            comentariosHolder.publicacionComentario.setText(listPublicaciones.get(i).getMensaje());
+        }
     }
 
 
 
     @Override
     public int getItemCount() {
-        return listPublicaciones.size();
-
-
+        if(multimedia!=null){
+            return listPublicacionesMultimedia.size();
+        }else{
+            return listPublicaciones.size();
+        }
     }
 
     class  ComentariosHolder extends  RecyclerView.ViewHolder{

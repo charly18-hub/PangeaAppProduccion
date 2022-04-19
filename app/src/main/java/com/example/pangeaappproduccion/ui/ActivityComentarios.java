@@ -16,8 +16,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.pangeaappproduccion.Adapters.AdapterComentarios;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Model.Comentario;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
@@ -33,7 +38,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -44,13 +52,14 @@ public class ActivityComentarios extends AppCompatActivity {
     TextView Usuario,Publicacion;
     Button Comentar;
     EditText CajaComentario;
+    String urlFotoPerfil;
 
 
-    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
+    private List<listPublicaciones> listPublicaciones;
+    private List<Comentario> listPublicacionesMultimedia;
     private AdapterComentarios adapterComentarios;
 
     private SlideshowViewModel slideshowViewModel;
-    private FragmentSlideshowBinding binding;
     private RecyclerView recyclerViewComentarios;
 
 
@@ -64,14 +73,13 @@ public class ActivityComentarios extends AppCompatActivity {
 
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("accesos", Context.MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
-
-
         String idPublicacion = getIntent().getExtras().getString("id");
+        int multimedia = getIntent().getExtras().getInt("multimedia",0);
 
-        Usuario = (TextView) findViewById(R.id.UsuarioPublicacion2);
-        Publicacion = (TextView) findViewById(R.id.publicacionForo);
+        Usuario = findViewById(R.id.UsuarioPublicacion2);
+        Publicacion = findViewById(R.id.publicacionForo);
 
-
+    //obtenemos el usuario activo (no id ni key) con una busqueda de su correo
         FirebaseFirestore dbDataUserPerfil = FirebaseFirestore.getInstance();
         dbDataUserPerfil.collection("users").whereEqualTo("email",email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -79,13 +87,7 @@ public class ActivityComentarios extends AppCompatActivity {
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
-
                                 String usuarioEmisor = documentSnapshot.getString("usuario");
-
-                                Toast.makeText(getApplicationContext(), "el usuario existe en la base" + usuarioEmisor, Toast.LENGTH_LONG).show();
-
-
                                 SharedPreferences.Editor editor1 = getSharedPreferences("usuario_recibido_chat2", MODE_PRIVATE).edit();
                                 editor1.putString("usuario_recibido_chat2", usuarioEmisor);
                                 editor1.apply();
@@ -95,11 +97,25 @@ public class ActivityComentarios extends AppCompatActivity {
                 });
 
         SharedPreferences preferencesusuario = getSharedPreferences("usuario_recibido_chat2", Context.MODE_PRIVATE);
+
+        //ahora con el usuario activo (no id ni key), lo guardamos
         String usuario_pangea = preferencesusuario.getString("usuario_recibido_chat2", "No existe idioma");
 
-        Toast.makeText(getApplicationContext(), "el usuario de pangea es" + usuario_pangea, Toast.LENGTH_LONG).show();
+        //obtenemos la url de la foto del que esta comentando
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("fotoPerfil").whereEqualTo("usuario", email_perfil).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                urlFotoPerfil = Objects.requireNonNull(documentSnapshot.get("multimedia")).toString();
+                            }
+                        }
+                    }
+                });
 
-
+        //ahora con el id, buscamos la publicacion
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
         dbDataPerfil.collection("redSocial").whereEqualTo("id", idPublicacion).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -107,55 +123,88 @@ public class ActivityComentarios extends AppCompatActivity {
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-
                                 Usuario.setText(documentSnapshot.getString("usuario"));
                                 Publicacion.setText(documentSnapshot.getString("mensaje"));
-
                             }
                         }
                     }
                 });
 
         recyclerViewComentarios = findViewById(R.id.recyclerPreguntas);
-
-
-        listPublicaciones = new ArrayList<>();
-        adapterComentarios = new AdapterComentarios(listPublicaciones);
-        recyclerViewComentarios.setAdapter(adapterComentarios);
-        recyclerViewComentarios.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerViewComentarios.setHasFixedSize(true);
-
-        String clave = UUID.randomUUID().toString().toUpperCase();
-
-
-        FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").addSnapshotListener(new EventListener<QuerySnapshot>() {
-
-            @Override
-            public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.d(TAG, "Error:" + error.getMessage());
-                    Toast.makeText(getApplicationContext(), "Error" + error.getMessage(), Toast.LENGTH_LONG).show();
-
-                } else {
-
-                    for (DocumentChange documentChange : value.getDocumentChanges()) {
-                        if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                            listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
-                            adapterComentarios.notifyDataSetChanged();
-                            recyclerViewComentarios.smoothScrollToPosition(listPublicaciones.size());
-                        }
-                    }
-                }
-            }
-        });
-
-
         CajaComentario=(EditText)findViewById(R.id.foroComentar);
         Comentar=(Button) findViewById(R.id.publicarPreguntaBtn2);
 
-        Comentar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+
+        if(multimedia==1 || multimedia==2){
+            listPublicacionesMultimedia = new ArrayList<>();
+            adapterComentarios = new AdapterComentarios(listPublicacionesMultimedia,"audio");
+            recyclerViewComentarios.setAdapter(adapterComentarios);
+            recyclerViewComentarios.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            recyclerViewComentarios.setHasFixedSize(true);
+            String haber="comentarios"+"/"+idPublicacion+"/"+"comentarios";
+            haber=haber+"";
+            //obtenemos los comentarios de la publicacion
+            FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+                    if (error != null) {
+                        Log.d(TAG, "Error:" + error.getMessage());
+
+                    } else {
+                        for (DocumentChange documentChange : value.getDocumentChanges()) {
+                            if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                                listPublicacionesMultimedia.add(documentChange.getDocument().toObject(Comentario.class));
+                                adapterComentarios.notifyDataSetChanged();
+                                recyclerViewComentarios.smoothScrollToPosition(listPublicacionesMultimedia.size());
+                            }
+                        }
+                    }
+                }
+            });
+
+            Comentar.setOnClickListener(view -> {
+                if(idPublicacion.length() == 0 || CajaComentario.length() == 0)
+                    return;
+                Date currentTime = Calendar.getInstance().getTime();
+                String clave = UUID.randomUUID().toString().toUpperCase();
+                Comentario listPublicaciones1 = new Comentario();
+                listPublicaciones1.setFecha(currentTime.toString());
+                listPublicaciones1.setId(clave);
+                listPublicaciones1.setComentario(CajaComentario.getText().toString());
+                listPublicaciones1.setMultimedia(urlFotoPerfil);
+                listPublicaciones1.setUsuario(usuario_pangea);
+                FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").add(listPublicaciones1);
+                CajaComentario.setText("");
+            });
+        }else{
+            listPublicaciones = new ArrayList<>();
+            adapterComentarios = new AdapterComentarios(listPublicaciones);
+            recyclerViewComentarios.setAdapter(adapterComentarios);
+            recyclerViewComentarios.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            recyclerViewComentarios.setHasFixedSize(true);
+
+            String haber="comentarios"+"/"+idPublicacion+"/"+"comentarios";
+            haber=haber+"";
+            //obtenemos los comentarios de la publicacion
+            FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+                    if (error != null) {
+                        Log.d(TAG, "Error:" + error.getMessage());
+
+                    } else {
+                        for (DocumentChange documentChange : value.getDocumentChanges()) {
+                            if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                                listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
+                                adapterComentarios.notifyDataSetChanged();
+                                recyclerViewComentarios.smoothScrollToPosition(listPublicaciones.size());
+                            }
+                        }
+                    }
+                }
+            });
+
+            Comentar.setOnClickListener(view -> {
 
                 if(idPublicacion.length() == 0 || CajaComentario.length() == 0)
                     return;
@@ -165,8 +214,9 @@ public class ActivityComentarios extends AppCompatActivity {
                 listPublicaciones1.setUsuario(usuario_pangea);
                 FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").add(listPublicaciones1);
                 CajaComentario.setText("");
-            }
-        });
+            });
+        }
+
 
 
 

@@ -47,15 +47,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
 
                     <Button
                         android:id="@+id/btnImagen2"
                         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-                        android:layout_width="57dp"
+                        android:layout_width="47dp"
+                        android:layout_marginStart="-15dp"
                         android:layout_height="40dp"
-                        android:layout_marginStart="20dp"
                         android:backgroundTint="#BAB6B6"
                         app:icon="@drawable/ic_menu_camera"
                         app:iconTint="#2196F3">
@@ -88,30 +89,33 @@
 
                     </Button>
 
+
                     <Button
                         android:id="@+id/btnTraducir"
                         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-                        android:layout_width="70dp"
+                        android:layout_width="60dp"
+                        android:padding="3sp"
                         android:layout_height="40dp"
                         android:layout_marginStart="10dp"
                         android:backgroundTint="@color/white"
                         android:text="Traducir"
                         android:textColor="#2196F3"
-                        android:textSize="6dp">
+                        android:textSize="9dp">
 
                     </Button>
 
                     <Button
                         android:id="@+id/publicar2"
                         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-                        android:layout_width="70dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:padding="3sp"
+                        android:layout_height="40dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginRight="40dp"
                         android:backgroundTint="@color/white"
                         android:text="Publicar"
                         android:textColor="#2196F3"
-                        android:textSize="6dp" />
+                        android:textSize="9dp" />
 
                 </LinearLayout>
 
@@ -123,7 +127,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="538dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="21dp"
                 android:background="@color/catalyst_redbox_background"
                 android:gravity="center_horizontal"
@@ -146,6 +150,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="clip_horizontal"
                         android:background="@color/white"
+                        android:padding="10sp"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                     <com.google.android.material.appbar.AppBarLayout

@@ -9,18 +9,24 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_chat.xml" value="0.3307291666666667" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_comentarios.xml" value="0.31354166666666666" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_login.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_main.xml" value="0.3307291666666667" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_segundo_registro_profe.xml" value="0.5541666666666667" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_solicitudes_registradas.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_splash_screen.xml" value="0.3307291666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/app_bar_main.xml" value="0.33" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/content_main.xml" value="0.3203125" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_home.xml" value="0.33697916666666666" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_imagenes_publicacion.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_multimedia.xml" value="0.3203125" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_publicaciones_text.xml" value="0.5541666666666667" />
-        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_slideshow.xml" value="0.5541666666666667" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_slideshow.xml" value="0.33" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_videollamadas.xml" value="0.3307291666666667" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_comentarios.xml" value="0.3484375" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_publicaciones.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_publicaciones_multimedia.xml" value="0.3203125" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_publicaciones_text.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/menu/activity_main_drawer.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/menu/main.xml" value="0.5541666666666667" />
       </map>

@@ -3,6 +3,8 @@ package com.example.pangeaappproduccion.ui.slideshow;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -28,6 +30,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacion;
 import com.example.pangeaappproduccion.ImagenesPublicacion;
+import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.MultimediaFragment;
 import com.example.pangeaappproduccion.Publicaciones;
 import com.example.pangeaappproduccion.PublicacionesTextFragment;
@@ -38,6 +41,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
@@ -64,6 +70,7 @@ public class SlideshowFragment extends Fragment {
     private static final  int AudioSend = 2;
     private static final  int ACTION_POST = 3;
     Uri urlAudio;
+    String username;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -90,16 +97,27 @@ public class SlideshowFragment extends Fragment {
         String email_perfil = preferences.getString("email", "No name defined");
 
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("users").document(email_perfil);
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    username = document.getString("user");
+                } else {
+                    Log.d(TAG, "No such document");
+                }
+            } else {
+                Log.d(TAG, "get failed with ", task.getException());
+            }
+        });
+
         String usuario_recibido = email_perfil;
         buttonChat.setOnClickListener(view1 -> {
             String clave = UUID.randomUUID().toString().toUpperCase();
-            if(usuario_recibido.length() == 0 || etMensaje.length() == 0)
-                return;
-            SharedPreferences preferencess = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
-            String usuario_post_final = preferencess.getString("usuario_post", "No name defined");
             Publicaciones publicaciones = new Publicaciones();
             publicaciones.setMensaje(etMensaje.getText().toString());
-            publicaciones.setUsuario(usuario_post_final);
+            publicaciones.setUsuario(username);
             publicaciones.setid(clave);
             publicaciones.setStatus("0");
             FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
@@ -233,7 +251,7 @@ public class SlideshowFragment extends Fragment {
                     Publicaciones publicaciones = new Publicaciones();
                     publicaciones.setMensaje(etMensaje.getText().toString());
                     publicaciones.setMultimedia(dowloadUri.toString());
-                    publicaciones.setUsuario(usuario_post_final);
+                    publicaciones.setUsuario(username);
                     publicaciones.setStatus("2");
                     publicaciones.setid(clave);
                     FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
@@ -271,11 +289,10 @@ public class SlideshowFragment extends Fragment {
                     Uri dowloadUri = uiriTask.getResult();
 
                     String clave = UUID.randomUUID().toString().toUpperCase();
-
-
                     Publicaciones PublicacionesImagenes = new Publicaciones();
                     PublicacionesImagenes.setMultimedia(dowloadUri.toString());
-                    PublicacionesImagenes.setUsuario(usuario_post_final);
+                    PublicacionesImagenes.setUsuario(username);
+                    PublicacionesImagenes.setMensaje(etMensaje.getText().toString());
                     PublicacionesImagenes.setid(clave);
                     PublicacionesImagenes.setStatus("1");
 
