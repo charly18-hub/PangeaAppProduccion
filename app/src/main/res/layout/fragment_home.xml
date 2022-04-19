@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="411dp"
-        android:layout_height="728dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,12 +35,12 @@
                     android:id="@+id/imgHeader"
                     android:layout_width="match_parent"
                     android:background="#808080"
-                    android:layout_height="200dp" />
+                    android:layout_height="180dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="648dp"
-                    android:layout_marginTop="-112dp"
+                    android:layout_marginTop="-92dp"
                     android:layout_marginBottom="-2dp"
                     android:orientation="vertical"
                     android:padding="10dp">
@@ -48,7 +48,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:background="@color/white"
                         android:padding="10sp"
                         android:orientation="vertical">
                         <com.google.android.material.card.MaterialCardView
@@ -62,7 +61,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:foregroundGravity="center"
-                                app:civ_border_color="#2AACBD"
+                                app:civ_border_color="#FFFFFF"
                                 app:civ_border_width="3dp"
                                 android:id="@+id/foto_perfil"
                                 android:background="#AAAAAA"
@@ -112,11 +111,10 @@
                                 style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
                                 android:layout_width="57dp"
                                 android:layout_height="40dp"
-                                android:layout_marginStart="20dp"
+                                android:layout_marginStart="30dp"
                                 android:backgroundTint="#BAB6B6"
                                 app:icon="@drawable/ic_menu_camera"
                                 app:iconTint="#2196F3">
-
                             </Button>
 
                             <Button
@@ -142,33 +140,33 @@
                                 android:src="@color/teal_200"
                                 app:icon="@drawable/zm_chatto_voice_playing_f3"
                                 app:iconTint="#2196F3">
-
                             </Button>
 
                             <Button
                                 android:id="@+id/btnTraducir"
                                 style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-                                android:layout_width="70dp"
+                                android:layout_width="60dp"
+                                android:padding="3sp"
                                 android:layout_height="40dp"
                                 android:layout_marginStart="10dp"
                                 android:backgroundTint="@color/white"
                                 android:text="Traducir"
                                 android:textColor="#2196F3"
-                                android:textSize="6dp">
-
+                                android:textSize="9dp">
                             </Button>
 
                             <Button
                                 android:id="@+id/publicar"
                                 style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-                                android:layout_width="70dp"
-                                android:layout_height="wrap_content"
+                                android:layout_width="60dp"
+                                android:padding="3sp"
+                                android:layout_height="40dp"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginRight="40dp"
                                 android:backgroundTint="@color/white"
                                 android:text="Publicar"
                                 android:textColor="#2196F3"
-                                android:textSize="6dp" />
+                                android:textSize="9dp" />
 
                         </LinearLayout>
 
@@ -223,7 +221,6 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="20dp"
-                        android:background="#C8C6C6"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.137"
                         app:layout_constraintStart_toStartOf="parent"
