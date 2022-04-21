@@ -4,8 +4,17 @@ public class Comentario {
     private String comentario;
     private String fecha;
     private String id;
+    private String clave;
     private String multimedia;
     private String usuario;
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
 
     public String getComentario() {
         return comentario;
