@@ -18,11 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.FotoPerfil;
+import com.example.pangeaappproduccion.MainActivity;
 import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -44,13 +48,13 @@ public class SegundoActivityRegistro extends AppCompatActivity {
     Button register;
     ImageView imageView;
     private static final int GALLERY_PICKER =1;
+    String correo;
     StorageReference mStorage = FirebaseStorage.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segundo_registro);
-
 
 
 
@@ -74,10 +78,13 @@ public class SegundoActivityRegistro extends AppCompatActivity {
         imageView = findViewById(R.id.imageView3);
 
 
+        SharedPreferences prefs = getSharedPreferences("correo", MODE_PRIVATE);
+        correo = prefs.getString("correo", "");
+
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intentImagen = new Intent(Intent.ACTION_PICK);
                 intentImagen.setType("image/*");
                 startActivityForResult(intentImagen,GALLERY_PICKER);
@@ -90,51 +97,83 @@ public class SegundoActivityRegistro extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
+                Bundle extras = getIntent().getExtras();
+                String uid;
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("fotoPerfil").whereEqualTo("usuario",email_register_obtenido).get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()){
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                if (extras != null) {
+                    uid = extras.getString("uid","");
+                    if(!uid.equals("")){
 
-                                        String imgPerfil = (String) documentSnapshot.get("multimedia");
+                        db.collection("fotoPerfil").whereEqualTo("usuario",correo).get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                        if(task.isSuccessful()){
+                                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
-                                        Toast.makeText(getApplicationContext(),imgPerfil,Toast.LENGTH_LONG).show();
+                                                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                                                db2.collection("users").document(uid).update("userName",UserPerfil.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Toast.makeText(getApplicationContext(),"Se actualizo el nombre de usuario",Toast.LENGTH_LONG).show();
+                                                        Intent intent = new Intent(SegundoActivityRegistro.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull @NotNull Exception e) {
+                                                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
 
-
-
-                                        FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-
-                                        Map<String, Object> dateUpdate = new HashMap<>();
-                                        dateUpdate.put("multimedia",imgPerfil);
-                                        dateUpdate.put("usuario",textUser.getText().toString());
-                                        dateUpdate.put("user",textUser.getText().toString());
-
-                                        db2.collection("users").document(email_register_obtenido).update(dateUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Toast.makeText(getApplicationContext(),"seActualizaron los datos",Toast.LENGTH_LONG).show();
-
+                                                    }
+                                                });
                                             }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull @NotNull Exception e) {
-                                                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-
-                                            }
-                                        });
+                                        }
+                                    }
+                                });
 
 
+
+                    }
+                }else{
+                    db.collection("fotoPerfil").whereEqualTo("usuario",email_register_obtenido).get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+
+                                            String imgPerfil = (String) documentSnapshot.get("multimedia");
+                                            Toast.makeText(getApplicationContext(),imgPerfil,Toast.LENGTH_LONG).show();
+
+
+
+                                            FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+
+                                            Map<String, Object> dateUpdate = new HashMap<>();
+                                            dateUpdate.put("multimedia",imgPerfil);
+                                            dateUpdate.put("usuario",textUser.getText().toString());
+                                            dateUpdate.put("user",textUser.getText().toString());
+
+                                            db2.collection("users").document(email_register_obtenido).update(dateUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Toast.makeText(getApplicationContext(),"se Actualizaron los datos",Toast.LENGTH_LONG).show();
+
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull @NotNull Exception e) {
+                                                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+
+                                                }
+                                            });
+
+
+                                        }
                                     }
                                 }
-                            }
-                        });
-
-                SharedPreferences preferences = getApplicationContext().getSharedPreferences("img_perfil", Context.MODE_PRIVATE);
-                String imagenPerfil = preferences.getString("imagen", "No name defined");
-
+                            });
+                }
 
 
             }
@@ -151,45 +190,58 @@ public class SegundoActivityRegistro extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences("email_recibido", Context.MODE_PRIVATE);
-        String email_perfil = preferences.getString("email_register", "No name defined");
-
-
 
         if(requestCode == GALLERY_PICKER &&  resultCode == RESULT_OK) {
+            Toast.makeText(getApplicationContext(),"SUBIENDO, NO CIERRE LA APLICACION!",Toast.LENGTH_LONG).show();
+
             Uri uri = data.getData();
             imageView.setImageURI(uri);
 
 
-
             StorageMetadata metadata = new StorageMetadata.Builder()
                     .setCustomMetadata("descripcion","Esta es una Prueba")
-                    .setCustomMetadata("usuario",email_perfil)
+                    .setCustomMetadata("usuario",correo)
                     .build();
 
             StorageReference filePath = mStorage.child("fotosPerfil").child(uri.getLastPathSegment());
-
-
-
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uiriTask.isSuccessful());
                     Uri dowloadUri = uiriTask.getResult();
 
 
-                    FotoPerfil fotoPerfil = new FotoPerfil();
-                    fotoPerfil.setMultimedia(dowloadUri.toString());
-                    fotoPerfil.setUsuario(email_perfil);
-                    //FirebaseFirestore.getInstance().collection("fotoPerfil").add(fotoPerfil);
-                    FirebaseFirestore.getInstance().collection("fotoPerfil").document(email_perfil).set(fotoPerfil);
+                    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                    Map<String, Object> fotoPerfil = new HashMap<>();
+                    fotoPerfil.put("multimedia",dowloadUri.toString());
+                    fotoPerfil.put("usuario",correo);
+                    db2.collection("fotoPerfil").document(correo).update(fotoPerfil).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(getApplicationContext(),"Se actualizo la imagen de perfil",Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull @NotNull Exception e) {
+
+                        }
+                    });
 
 
 
                 }
+
+
+
+
+
+
+
+
+
+
+
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {

@@ -17,27 +17,42 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.pangeaappproduccion.MainActivity;
+import com.example.pangeaappproduccion.Model.Registro.Accounts;
+import com.example.pangeaappproduccion.Model.Registro.ImagenPerfil;
+import com.example.pangeaappproduccion.Model.Registro.Interests;
+import com.example.pangeaappproduccion.Model.Registro.Language;
+import com.example.pangeaappproduccion.Model.Registro.RegistroRedesSociales;
 import com.example.pangeaappproduccion.Profesores;
 import com.example.pangeaappproduccion.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Registro extends AppCompatActivity {
 
 
     TextView profesores;
     Button RegistrarAlumno;
-    EditText edTextPrimerNombre,pass,edTextSegundoNombre,edTextPaterno,edTextMaterno,edtMotivosAprendizaje,editTextIntereses,editTextEmail,edtCiudad,edtTelefono;
+    EditText edTextPrimerNombre, pass, edTextSegundoNombre, edTextPaterno, edTextMaterno, edtMotivosAprendizaje, editTextIntereses, editTextEmail, edtCiudad, edtTelefono;
     RadioGroup radioGroupSex;
-    RadioButton masculino, femenino,otro,noDecir;
-    Spinner idiomaInteres,idiomaNativo,spinnerMotivosAprendizaje;
+    RadioButton masculino, femenino, otro, noDecir;
+    Spinner idiomaInteres, idiomaNativo, spinnerMotivosAprendizaje;
 
 
     @Override
@@ -48,15 +63,9 @@ public class Registro extends AppCompatActivity {
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.idiomas_array, android.R.layout.simple_spinner_item);
-
-
         ArrayAdapter<CharSequence> adapter_motivos = ArrayAdapter.createFromResource(this,
                 R.array.motivos_rray, android.R.layout.simple_spinner_item);
-
-
-
-        profesores = (TextView)findViewById(R.id.profesores);
-
+        profesores = (TextView) findViewById(R.id.profesores);
         profesores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,34 +73,39 @@ public class Registro extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        pass = (EditText)findViewById(R.id.editTextPassword);
-        edTextPrimerNombre = (EditText)findViewById(R.id.edTextPrimerNombreProfe);
-        edTextSegundoNombre = (EditText)findViewById(R.id.edTextSegundoNombreProfe);
-        editTextIntereses = (EditText)findViewById(R.id.editTextIntereses);
-        editTextEmail = (EditText)findViewById(R.id.editTextEmail);
-        edTextMaterno = (EditText)findViewById(R.id.edTextMaternoProfe);
-        edTextPaterno = (EditText)findViewById(R.id.edTextPaternoProfe);
-        //edtMotivosAprendizaje =(EditText)findViewById(R.id.edtMotivosAprendizaje);
-        masculino = (RadioButton)findViewById(R.id.radioHomre);
-        femenino = (RadioButton)findViewById(R.id.radioMujer);
-        otro = (RadioButton)findViewById(R.id.radioOtro);
-        noDecir = (RadioButton)findViewById(R.id.sinDato);
-        idiomaInteres = (Spinner)findViewById(R.id.idiomaInteres);
-        idiomaNativo = (Spinner)findViewById(R.id.spinnerIdiomas);
-        spinnerMotivosAprendizaje = (Spinner)findViewById(R.id.spinnerMotivosAprendizaje);
-        edtCiudad = (EditText)findViewById(R.id.edtCiudad);
-        edtTelefono=(EditText)findViewById(R.id.edtTelefono);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Intent intent = new Intent(Registro.this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            // No user is signed in
+        }
+        pass = findViewById(R.id.editTextPassword);
+        edTextPrimerNombre = findViewById(R.id.edTextPrimerNombreProfe);
+        edTextSegundoNombre = findViewById(R.id.edTextSegundoNombreProfe);
+        editTextIntereses = findViewById(R.id.editTextIntereses);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        edTextMaterno = findViewById(R.id.edTextMaternoProfe);
+        edTextPaterno = findViewById(R.id.edTextPaternoProfe);
+        //edtMotivosAprendizaje =findViewById(R.id.edtMotivosAprendizaje);
+        masculino = findViewById(R.id.radioHomre);
+        femenino = findViewById(R.id.radioMujer);
+        otro = findViewById(R.id.radioOtro);
+        noDecir = findViewById(R.id.sinDato);
+        idiomaInteres = findViewById(R.id.idiomaInteres);
+        idiomaNativo = findViewById(R.id.spinnerIdiomas);
+        spinnerMotivosAprendizaje = findViewById(R.id.spinnerMotivosAprendizaje);
+        edtCiudad = findViewById(R.id.edtCiudad);
+        edtTelefono = findViewById(R.id.edtTelefono);
 
         idiomaNativo.setAdapter(adapter);
         idiomaNativo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
                 SharedPreferences.Editor editor = getSharedPreferences("idiomaNativo", MODE_PRIVATE).edit();
                 editor.putString("idiomaNativo", (String) adapterView.getItemAtPosition(i));
                 editor.apply();
-
-
             }
 
             @Override
@@ -106,7 +120,7 @@ public class Registro extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 SharedPreferences.Editor editor = getSharedPreferences("motivo_aprender", MODE_PRIVATE).edit();
-                editor.putString("motivo", (String) adapterView.getItemAtPosition(i) );
+                editor.putString("motivo", (String) adapterView.getItemAtPosition(i));
                 editor.apply();
             }
 
@@ -135,12 +149,11 @@ public class Registro extends AppCompatActivity {
         });
 
 
-
-        radioGroupSex = (RadioGroup)findViewById(R.id.rg_sex);
+        radioGroupSex = (RadioGroup) findViewById(R.id.rg_sex);
         radioGroupSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if (masculino.isChecked()== true){
+                if (masculino.isChecked() == true) {
 
                     String valorButton = "Hombre";
 
@@ -149,7 +162,7 @@ public class Registro extends AppCompatActivity {
                     editor.apply();
 
                 }
-                if(femenino.isChecked()== true){
+                if (femenino.isChecked() == true) {
 
                     String valorButton = "Mujer";
 
@@ -158,7 +171,7 @@ public class Registro extends AppCompatActivity {
                     editor.apply();
 
                 }
-                if(otro.isChecked()== true){
+                if (otro.isChecked() == true) {
 
                     String valorButton = "Otro";
 
@@ -167,7 +180,7 @@ public class Registro extends AppCompatActivity {
                     editor.apply();
 
                 }
-                if(noDecir.isChecked()== true){
+                if (noDecir.isChecked() == true) {
 
                     String valorButton = "Sin Dato";
 
@@ -180,8 +193,7 @@ public class Registro extends AppCompatActivity {
         });
 
 
-
-        RegistrarAlumno = (Button)findViewById(R.id.btnRegistrarProfe3);
+        RegistrarAlumno = (Button) findViewById(R.id.btnRegistrarProfe3);
         RegistrarAlumno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -196,62 +208,113 @@ public class Registro extends AppCompatActivity {
                 String idiomaNativo = prefsNativo.getString("idiomaNativo", "No name defined");
 
                 SharedPreferences prefsMotivo = getSharedPreferences("motivo_aprender", MODE_PRIVATE);
-                String  motivo = prefsMotivo.getString("motivo", "No name defined");
+                String motivo = prefsMotivo.getString("motivo", "No name defined");
 
 
+                Bundle extras = getIntent().getExtras();
+                String uid;
 
-                RegistroAlumno registroAlumno = new RegistroAlumno();
-                registroAlumno.setapellido_materno(edTextMaterno.getText().toString());
-                registroAlumno.setapellido_paterno(edTextPaterno.getText().toString());
-                registroAlumno.setfirts_name(edTextPrimerNombre.getText().toString());
-                registroAlumno.setlast_name(edTextSegundoNombre.getText().toString());
-                registroAlumno.setIntereses(editTextIntereses.getText().toString());
-                registroAlumno.setemail(editTextEmail.getText().toString());
-                registroAlumno.setpassword("");
-                registroAlumno.setidioma_interes(idioma);
-                registroAlumno.setsexo(sexoObtenido);
-                registroAlumno.setidioma_nativo(idiomaNativo);
-                registroAlumno.settelefono(edtTelefono.getText().toString());
-                registroAlumno.setuser("");
-                registroAlumno.setMotivo(motivo);
-                registroAlumno.setciudad(edtCiudad.getText().toString());
-                registroAlumno.setMultimedia("");
-                registroAlumno.setpassword(pass.getText().toString());
+                if (extras != null) {
 
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(editTextEmail.getText().toString(),pass.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                                FirebaseFirestore.getInstance().collection("users").document(editTextEmail.getText().toString()).set(registroAlumno);
+                    SharedPreferences.Editor editor = getSharedPreferences("correo", MODE_PRIVATE).edit();
+                    editor.putString("correo", editTextEmail.getText().toString());
+                    editor.apply();
+
+                    RegistroRedesSociales usuario = new RegistroRedesSociales();
+                    usuario.setLastName(edTextPaterno.getText().toString() + edTextMaterno.getText().toString());
+                    usuario.setFirstName(edTextPrimerNombre.getText().toString());
+                    usuario.setInterests(new Interests(editTextIntereses.getText().toString()));
+                    usuario.setEmailAddress(editTextEmail.getText().toString());
+                    usuario.setLanguage(new Language("" + idioma, idiomaNativo));
+                    usuario.setGender(sexoObtenido);
+                    usuario.setTelephoneNumber(edtTelefono.getText().toString());
+                    usuario.setCountryResidence(edtCiudad.getText().toString());
+                    usuario.setUserName("");
+                    uid = extras.getString("uid", "");
+                    usuario.setAccounts(new Accounts("" + uid, "", "", ""));
+                    // and get whatever type user account id is
+                    if (!uid.equals("")) {
+
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-                                Intent intent = new Intent(getApplicationContext(),SegundoActivityRegistro.class);
-                                intent.putExtra("user_name",edTextSegundoNombre.getText().toString());
-                                intent.putExtra("email_register",editTextEmail.getText().toString());
-                                startActivity(intent);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("FileManager","Error en uploadImg ==>"+e);
+                        db.collection("fotoPerfil").document(uid)
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                        builder.setTitle("Error");
-                        builder.setMessage("Error de registro");
-                        builder.setPositiveButton("Aceptar", null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                                        ImagenPerfil imagen=new ImagenPerfil();
+                                        imagen.setUsuario(editTextEmail.getText().toString());
+                                        FirebaseFirestore.getInstance().collection("fotoPerfil").document(editTextEmail.getText().toString()).set(imagen);
+
+                                        db.collection("users").
+                                                document(uid).set(usuario)
+                                                .addOnSuccessListener(avoide -> {
+                                                    Intent intent = new Intent(getApplicationContext(), SegundoActivityRegistro.class);
+                                                    intent.putExtra("uid", uid);
+                                                    startActivity(intent);
+                                                })
+                                                .addOnFailureListener(e -> Log.w("Error!!!!", "Error updating document", e));
+
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
 
                     }
-                });
+                } else {
+                    RegistroAlumno registroAlumno = new RegistroAlumno();
+                    registroAlumno.setapellido_materno(edTextMaterno.getText().toString());
+                    registroAlumno.setapellido_paterno(edTextPaterno.getText().toString());
+                    registroAlumno.setfirts_name(edTextPrimerNombre.getText().toString());
+                    registroAlumno.setlast_name(edTextSegundoNombre.getText().toString());
+                    registroAlumno.setIntereses(editTextIntereses.getText().toString());
+                    registroAlumno.setemail(editTextEmail.getText().toString());
+                    registroAlumno.setpassword("");
+                    registroAlumno.setidioma_interes(idioma);
+                    registroAlumno.setsexo(sexoObtenido);
+                    registroAlumno.setidioma_nativo(idiomaNativo);
+                    registroAlumno.settelefono(edtTelefono.getText().toString());
+                    registroAlumno.setuser("");
+                    registroAlumno.setMotivo(motivo);
+                    registroAlumno.setciudad(edtCiudad.getText().toString());
+                    registroAlumno.setMultimedia("");
+                    registroAlumno.setpassword(pass.getText().toString());
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(editTextEmail.getText().toString(), pass.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                                    FirebaseFirestore.getInstance().collection("users").document(editTextEmail.getText().toString()).set(registroAlumno);
+                                    Intent intent = new Intent(getApplicationContext(), SegundoActivityRegistro.class);
+                                    intent.putExtra("user_name", edTextSegundoNombre.getText().toString());
+                                    intent.putExtra("email_register", editTextEmail.getText().toString());
+                                    startActivity(intent);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("FileManager", "Error en uploadImg ==>" + e);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                            builder.setTitle("Error");
+                            builder.setMessage("Error de registro");
+                            builder.setPositiveButton("Aceptar", null);
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                        }
+                    });
+                }
 
             }
         });
 
 
-
     }
 
-    }
+}
 
 

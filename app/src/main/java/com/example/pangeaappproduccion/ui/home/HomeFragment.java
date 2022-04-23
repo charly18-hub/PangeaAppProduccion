@@ -101,7 +101,11 @@ public class HomeFragment extends Fragment {
 
 
         SharedPreferences preferences = requireActivity().getSharedPreferences("accesos", MODE_PRIVATE);
-        String email_perfil = preferences.getString("email", "No name defined");
+        String email_perfil = preferences.getString("email", "");
+        if(email_perfil.equals("")){
+            SharedPreferences prefs = requireActivity().getSharedPreferences("correo", MODE_PRIVATE);
+            email_perfil = prefs.getString("correo", "");
+        }
 
 
         recyclerViewPublicaciones = view.findViewById(R.id.recyclerViewChat);
@@ -219,23 +223,14 @@ public class HomeFragment extends Fragment {
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
-
-
-
                                 userPerfil.setText(documentSnapshot.getString("usuario"));
                                 PaisPerfil.setText(documentSnapshot.getString("ciudad"));
                                 nivelPerfil.setText(documentSnapshot.getString("nivel"));
                                 CursoPerfil.setText(documentSnapshot.getString("idioma_interes"));
-
-
                                 String usuarioFinal = userPerfil.getText().toString();
-
                                 SharedPreferences.Editor editor =  getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE).edit();
                                 editor.putString("usuario_post", usuarioFinal );
                                 editor.apply();
-
-
                             }
                         }
                     }
@@ -299,13 +294,18 @@ public class HomeFragment extends Fragment {
 
 
         buttonChat.setOnClickListener(view1 -> {
-            String clave = UUID.randomUUID().toString().toUpperCase();
+            FirebaseFirestore dbDataPerfils = FirebaseFirestore.getInstance();
+            DocumentReference publicacion = dbDataPerfils.collection("redSocial").document();
+            String clave = publicacion.getId();
+            String id = UUID.randomUUID().toString().toUpperCase();
             Publicaciones publicaciones = new Publicaciones();
             publicaciones.setMensaje(etMensaje.getText().toString());
             publicaciones.setUsuario(username);
-            publicaciones.setid(clave);
+            publicaciones.setId(id);
+            publicaciones.setClave(clave);
             publicaciones.setStatus("0");
-            FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
+            FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(publicaciones);
+
         });
 
         buttonTraducir.setOnClickListener(new View.OnClickListener() {
@@ -372,7 +372,10 @@ public class HomeFragment extends Fragment {
                     while (!uiriTask.isSuccessful());
                     Uri dowloadUri = uiriTask.getResult();
 
-                    String clave = UUID.randomUUID().toString().toUpperCase();
+                    FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
+                    DocumentReference publicacion = dbDataPerfil.collection("redSocial").document();
+                    String clave = publicacion.getId();
+                    String id = UUID.randomUUID().toString().toUpperCase();
 
 
                     Publicaciones publicaciones = new Publicaciones();
@@ -380,8 +383,9 @@ public class HomeFragment extends Fragment {
                     publicaciones.setMultimedia(dowloadUri.toString());
                     publicaciones.setUsuario(username);
                     publicaciones.setStatus("2");
-                    publicaciones.setid(clave);
-                    FirebaseFirestore.getInstance().collection("redSocial").add(publicaciones);
+                    publicaciones.setId(id);
+                    publicaciones.setClave(clave);
+                    FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(publicaciones);
                     etMensaje.setText("");
 
                 }
@@ -427,7 +431,6 @@ public class HomeFragment extends Fragment {
             });
         }
 
-
         if(requestCode == GALLERY_PICKER &&  resultCode == RESULT_OK) {
 
 
@@ -446,7 +449,6 @@ public class HomeFragment extends Fragment {
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uiriTask.isSuccessful());
                     Uri dowloadUri = uiriTask.getResult();
@@ -504,18 +506,20 @@ public class HomeFragment extends Fragment {
                     while (!uiriTask.isSuccessful());
                     Uri dowloadUri = uiriTask.getResult();
 
-                    String clave = UUID.randomUUID().toString().toUpperCase();
+                    FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
+                    DocumentReference publicacion = dbDataPerfil.collection("redSocial").document();
+                    String clave = publicacion.getId();
+                    String id = UUID.randomUUID().toString().toUpperCase();
 
                     Publicaciones PublicacionesImagenes = new Publicaciones();
                     PublicacionesImagenes.setMultimedia(dowloadUri.toString());
                     PublicacionesImagenes.setUsuario(username);
                     PublicacionesImagenes.setMensaje(etMensaje.getText().toString());
-                    PublicacionesImagenes.setid(clave);
+                    PublicacionesImagenes.setId(id);
+                    PublicacionesImagenes.setClave(clave);
                     PublicacionesImagenes.setStatus("1");
 
-                    FirebaseFirestore.getInstance().collection("redSocial").add(PublicacionesImagenes);
-
-
+                    FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(PublicacionesImagenes);
 
                 }
             }).addOnFailureListener(new OnFailureListener() {

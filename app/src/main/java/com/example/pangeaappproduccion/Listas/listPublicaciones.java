@@ -8,6 +8,24 @@ public class listPublicaciones {
     private String multimedia;
     private String status;
     private String id;
+    private String comentario;
+    private String clave;
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
 
     public String getId() {
         return id;

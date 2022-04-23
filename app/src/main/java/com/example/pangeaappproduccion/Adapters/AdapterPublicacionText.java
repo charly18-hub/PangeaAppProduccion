@@ -15,6 +15,7 @@ import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -55,20 +56,20 @@ public class AdapterPublicacionText extends RecyclerView.Adapter<AdapterPublicac
             public void onClick(View view) {
 
                 FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-                dbDataPerfil.collection("redSocial").whereEqualTo("mensaje", listPublicaciones.get(i).getMensaje()).get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                dbDataPerfil.collection("redSocial").document(listPublicaciones.get(i).getClave()).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                            public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
                                         Intent intent = new Intent(context.getApplicationContext(), ActivityComentarios.class);
-                                        intent.putExtra("id", documentSnapshot.getString("id"));
+                                        intent.putExtra("clave", document.getId());
                                         context.startActivity(intent);
                                     }
                                 }
                             }
                         });
-
             }
         });
 

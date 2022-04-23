@@ -18,6 +18,7 @@ import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.ui.ActivityComentarios;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -46,10 +47,7 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
     @NotNull
     @Override
     public PublicacionHolder onCreateViewHolder(@NonNull @NotNull ViewGroup viewGroup, int i) {
-
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_publicaciones,viewGroup,false);
-
-
         return new PublicacionHolder(view);
     }
 
@@ -62,14 +60,17 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
             publicacionHolder.imgPublicacion.setVisibility(View.GONE);
             publicacionHolder.btnComentario.setOnClickListener(view -> {
                 FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-                dbDataPerfil.collection("redSocial").whereEqualTo("mensaje", listPublicaciones.get(i).getMensaje()).get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                dbDataPerfil.collection("redSocial").document(listPublicaciones.get(i).getClave()).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                            public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
                                         Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
-                                        intent.putExtra("id", documentSnapshot.getString("id"));
+
+                                        intent.putExtra("clave", document.getId());
+
                                         publicacionHolder.imgPublicacion.getContext().startActivity(intent);
                                     }
                                 }
@@ -80,14 +81,17 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
             Glide.with(publicacionHolder.itemView.getContext()).load(listPublicaciones.get(i).getMultimedia()).into(publicacionHolder.imgPublicacion);
             publicacionHolder.btnComentario.setOnClickListener(view -> {
                 FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-                dbDataPerfil.collection("redSocial").whereEqualTo("mensaje", listPublicaciones.get(i).getMensaje()).get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                dbDataPerfil.collection("redSocial").document(listPublicaciones.get(i).getClave()).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                            public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
                                         Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
-                                        intent.putExtra("id", documentSnapshot.getString("id"));
+
+                                        intent.putExtra("clave", document.getId());
+
                                         intent.putExtra("multimedia", 1);
                                         publicacionHolder.imgPublicacion.getContext().startActivity(intent);
                                     }
@@ -121,14 +125,17 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
             });
             publicacionHolder.btnComentario.setOnClickListener(view -> {
                 FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-                dbDataPerfil.collection("redSocial").whereEqualTo("mensaje", listPublicaciones.get(i).getMensaje()).get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                dbDataPerfil.collection("redSocial").document(listPublicaciones.get(i).getClave()).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                            public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
                                         Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
-                                        intent.putExtra("id", documentSnapshot.getString("id"));
+
+                                        intent.putExtra("clave", document.getId());
+
                                         intent.putExtra("multimedia", 2);
                                         publicacionHolder.imgPublicacion.getContext().startActivity(intent);
                                     }

@@ -50,7 +50,7 @@ public class AdapterComentarios extends RecyclerView.Adapter<AdapterComentarios.
             }
         }else{
             comentariosHolder.nombreComentario.setText(listPublicaciones.get(i).getUsuario());
-            comentariosHolder.publicacionComentario.setText(listPublicaciones.get(i).getMensaje());
+            comentariosHolder.publicacionComentario.setText(listPublicaciones.get(i).getComentario());
         }
     }
 

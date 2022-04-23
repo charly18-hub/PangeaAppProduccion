@@ -29,6 +29,7 @@ import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -73,7 +74,7 @@ public class ActivityComentarios extends AppCompatActivity {
 
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("accesos", Context.MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
-        String idPublicacion = getIntent().getExtras().getString("id");
+        String idPublicacion = getIntent().getExtras().getString("clave","");
         int multimedia = getIntent().getExtras().getInt("multimedia",0);
 
         Usuario = findViewById(R.id.UsuarioPublicacion2);
@@ -87,7 +88,7 @@ public class ActivityComentarios extends AppCompatActivity {
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                                String usuarioEmisor = documentSnapshot.getString("usuario");
+                                String usuarioEmisor = documentSnapshot.getString("user");
                                 SharedPreferences.Editor editor1 = getSharedPreferences("usuario_recibido_chat2", MODE_PRIVATE).edit();
                                 editor1.putString("usuario_recibido_chat2", usuarioEmisor);
                                 editor1.apply();
@@ -117,15 +118,14 @@ public class ActivityComentarios extends AppCompatActivity {
 
         //ahora con el id, buscamos la publicacion
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("redSocial").whereEqualTo("id", idPublicacion).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                Usuario.setText(documentSnapshot.getString("usuario"));
-                                Publicacion.setText(documentSnapshot.getString("mensaje"));
-                            }
+        dbDataPerfil.collection("redSocial").document(idPublicacion).get()
+                .addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Usuario.setText(document.getString("usuario"));
+                            Publicacion.setText(document.getString("mensaje"));
+                        } else {
                         }
                     }
                 });
@@ -133,8 +133,6 @@ public class ActivityComentarios extends AppCompatActivity {
         recyclerViewComentarios = findViewById(R.id.recyclerPreguntas);
         CajaComentario=(EditText)findViewById(R.id.foroComentar);
         Comentar=(Button) findViewById(R.id.publicarPreguntaBtn2);
-
-
         if(multimedia==1 || multimedia==2){
             listPublicacionesMultimedia = new ArrayList<>();
             adapterComentarios = new AdapterComentarios(listPublicacionesMultimedia,"audio");
@@ -182,11 +180,10 @@ public class ActivityComentarios extends AppCompatActivity {
             recyclerViewComentarios.setAdapter(adapterComentarios);
             recyclerViewComentarios.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
             recyclerViewComentarios.setHasFixedSize(true);
-
-            String haber="comentarios"+"/"+idPublicacion+"/"+"comentarios";
+            String haber="redSocial"+"/"+idPublicacion+"/"+"comentarios";
             haber=haber+"";
             //obtenemos los comentarios de la publicacion
-            FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            FirebaseFirestore.getInstance().collection("redSocial"+"/"+idPublicacion+"/"+"comentarios").addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
                     if (error != null) {
@@ -203,16 +200,20 @@ public class ActivityComentarios extends AppCompatActivity {
                     }
                 }
             });
-
             Comentar.setOnClickListener(view -> {
-
                 if(idPublicacion.length() == 0 || CajaComentario.length() == 0)
                     return;
-
-                com.example.pangeaappproduccion.Listas.listPublicaciones listPublicaciones1 = new listPublicaciones();
-                listPublicaciones1.setMensaje(CajaComentario.getText().toString());
+                String clave = dbDataPerfil.collection("redSocial").document().getId();
+                Date currentTime = Calendar.getInstance().getTime();
+                String id = UUID.randomUUID().toString().toUpperCase();
+                Comentario listPublicaciones1 = new Comentario();
+                listPublicaciones1.setFecha(currentTime.toString());
+                listPublicaciones1.setId(id);
+                listPublicaciones1.setClave(clave);
+                listPublicaciones1.setComentario(CajaComentario.getText().toString());
+                listPublicaciones1.setMultimedia(urlFotoPerfil);
                 listPublicaciones1.setUsuario(usuario_pangea);
-                FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").add(listPublicaciones1);
+                FirebaseFirestore.getInstance().collection("redSocial"+"/"+idPublicacion+"/"+"comentarios").add(listPublicaciones1);
                 CajaComentario.setText("");
             });
         }
