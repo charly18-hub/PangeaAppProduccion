@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.pangeaappproduccion.Model.Registro.ImagenPerfil;
+import com.example.pangeaappproduccion.Model.Registro.RegistroRedesSociales;
+import com.example.pangeaappproduccion.Model.RegistroUsuarioRedesSociales;
 import com.example.pangeaappproduccion.ui.register.Registro;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -33,6 +36,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -103,10 +107,6 @@ public class Login extends AppCompatActivity {
         google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
-
                 ingreso();
             }
         });
@@ -262,11 +262,17 @@ public class Login extends AppCompatActivity {
         // [START check_current_user]
         FirebaseUser users = FirebaseAuth.getInstance().getCurrentUser();
         if (users != null) {
+            RegistroRedesSociales usuario=new RegistroRedesSociales();
+            usuario.setId(users.getUid());
+            FirebaseFirestore.getInstance().collection("users").document(users.getUid()).set(usuario);
+            ImagenPerfil imagen=new ImagenPerfil();
+            imagen.setUsuario(users.getUid());
+            FirebaseFirestore.getInstance().collection("fotoPerfil").document(users.getUid()).set(imagen);
+
             // User is signed in
-            Intent i = new Intent(Login.this, MainActivity.class);
+            Intent i = new Intent(Login.this, Registro.class);
+            i.putExtra("uid",usuario.getId());
             startActivity(i);
-            finish();
-            Toast.makeText(Login.this, "Ingreso", Toast.LENGTH_SHORT).show();
         } else {
 
             // No user is signed in

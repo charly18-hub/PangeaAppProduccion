@@ -78,17 +78,14 @@ public class AdapterPublicacionMultimedia extends RecyclerView.Adapter<AdapterPu
 
             FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
             dbDataPerfil.collection("redSocial").document(listPublicaciones.get(i).getClave()).get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
-                                    intent.putExtra("clave", document.getId());
-                                    intent.putExtra("multimedia", 2);
-                                    publicacionHolder.imgPublicacion.getContext().startActivity(intent);
-                                }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
+                                intent.putExtra("clave", document.getId());
+                                intent.putExtra("multimedia", 2);
+                                publicacionHolder.imgPublicacion.getContext().startActivity(intent);
                             }
                         }
                     });

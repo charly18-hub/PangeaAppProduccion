@@ -90,51 +90,97 @@ public class SegundoActivityRegistro extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
+                Bundle extras = getIntent().getExtras();
+                String uid;
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("fotoPerfil").whereEqualTo("usuario",email_register_obtenido).get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()){
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                if (extras != null) {
+                    uid = extras.getString("uid","");
+                    if(!uid.equals("")){
+                        db.collection("fotoPerfil").whereEqualTo("usuario",uid).get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                        if(task.isSuccessful()){
+                                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                                String imgPerfil = (String) documentSnapshot.get("multimedia");
+                                                Toast.makeText(getApplicationContext(),imgPerfil,Toast.LENGTH_LONG).show();
 
-                                        String imgPerfil = (String) documentSnapshot.get("multimedia");
+                                                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
 
-                                        Toast.makeText(getApplicationContext(),imgPerfil,Toast.LENGTH_LONG).show();
+                                                Map<String, Object> dateUpdate = new HashMap<>();
+                                                dateUpdate.put("multimedia",imgPerfil);
+                                                dateUpdate.put("usuario",textUser.getText().toString());
+                                                dateUpdate.put("user",textUser.getText().toString());
 
+                                                db2.collection("users").document(uid).update(dateUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Toast.makeText(getApplicationContext(),"se Actualizaron los datos",Toast.LENGTH_LONG).show();
 
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull @NotNull Exception e) {
+                                                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
 
-                                        FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                                                    }
+                                                });
 
-                                        Map<String, Object> dateUpdate = new HashMap<>();
-                                        dateUpdate.put("multimedia",imgPerfil);
-                                        dateUpdate.put("usuario",textUser.getText().toString());
-                                        dateUpdate.put("user",textUser.getText().toString());
-
-                                        db2.collection("users").document(email_register_obtenido).update(dateUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Toast.makeText(getApplicationContext(),"seActualizaron los datos",Toast.LENGTH_LONG).show();
 
                                             }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull @NotNull Exception e) {
-                                                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
 
-                                            }
-                                        });
+                        SharedPreferences preferences = getApplicationContext().getSharedPreferences("img_perfil", Context.MODE_PRIVATE);
+                        String imagenPerfil = preferences.getString("imagen", "No name defined");
+
+                    }
+                }else{
+                    db.collection("fotoPerfil").whereEqualTo("usuario",email_register_obtenido).get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+
+                                            String imgPerfil = (String) documentSnapshot.get("multimedia");
+
+                                            Toast.makeText(getApplicationContext(),imgPerfil,Toast.LENGTH_LONG).show();
 
 
+
+                                            FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+
+                                            Map<String, Object> dateUpdate = new HashMap<>();
+                                            dateUpdate.put("multimedia",imgPerfil);
+                                            dateUpdate.put("usuario",textUser.getText().toString());
+                                            dateUpdate.put("user",textUser.getText().toString());
+
+                                            db2.collection("users").document(email_register_obtenido).update(dateUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Toast.makeText(getApplicationContext(),"se Actualizaron los datos",Toast.LENGTH_LONG).show();
+
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull @NotNull Exception e) {
+                                                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+
+                                                }
+                                            });
+
+
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
 
-                SharedPreferences preferences = getApplicationContext().getSharedPreferences("img_perfil", Context.MODE_PRIVATE);
-                String imagenPerfil = preferences.getString("imagen", "No name defined");
+                    SharedPreferences preferences = getApplicationContext().getSharedPreferences("img_perfil", Context.MODE_PRIVATE);
+                    String imagenPerfil = preferences.getString("imagen", "No name defined");
 
+                }
 
 
             }
