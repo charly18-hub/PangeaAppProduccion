@@ -101,7 +101,11 @@ public class HomeFragment extends Fragment {
 
 
         SharedPreferences preferences = requireActivity().getSharedPreferences("accesos", MODE_PRIVATE);
-        String email_perfil = preferences.getString("email", "No name defined");
+        String email_perfil = preferences.getString("email", "");
+        if(email_perfil.equals("")){
+            SharedPreferences prefs = requireActivity().getSharedPreferences("correo", MODE_PRIVATE);
+            email_perfil = prefs.getString("correo", "");
+        }
 
 
         recyclerViewPublicaciones = view.findViewById(R.id.recyclerViewChat);
@@ -427,7 +431,6 @@ public class HomeFragment extends Fragment {
             });
         }
 
-
         if(requestCode == GALLERY_PICKER &&  resultCode == RESULT_OK) {
 
 
@@ -446,7 +449,6 @@ public class HomeFragment extends Fragment {
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uiriTask.isSuccessful());
                     Uri dowloadUri = uiriTask.getResult();

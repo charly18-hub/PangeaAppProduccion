@@ -90,7 +90,7 @@ public class Login extends AppCompatActivity {
                                 startActivity(intent);
 
 
-                        }else {
+                        } else {
 
 
 
@@ -265,6 +265,7 @@ public class Login extends AppCompatActivity {
             RegistroRedesSociales usuario=new RegistroRedesSociales();
             usuario.setId(users.getUid());
             FirebaseFirestore.getInstance().collection("users").document(users.getUid()).set(usuario);
+
             ImagenPerfil imagen=new ImagenPerfil();
             imagen.setUsuario(users.getUid());
             FirebaseFirestore.getInstance().collection("fotoPerfil").document(users.getUid()).set(imagen);

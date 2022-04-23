@@ -23,15 +23,18 @@ public class RegistroRedesSociales {
     private String telephoneNumber;
     private boolean termsOfUse;
     private String userType;
+    private String userName;
 
     public RegistroRedesSociales() {
     }
 
-    public RegistroRedesSociales(Accounts accounts, Availability availability, String confirmedAccount, String countryOfOrigin,
-                                 String countryResidence, String dateOfBirth, DescriptionProfile descriptionProfile,
-                                 String emailAddress, String favoriteHobbie, String firstName, String gender, String id,
-                                 Interests interests, boolean isAdult, Language language, String lastName, String profession,
-                                 String profilePicture, String scholarship, String telephoneNumber, boolean termsOfUse, String userType) {
+    public RegistroRedesSociales(Accounts accounts, Availability availability, String confirmedAccount,
+                                 String countryOfOrigin, String countryResidence, String dateOfBirth,
+                                 DescriptionProfile descriptionProfile, String emailAddress,
+                                 String favoriteHobbie, String firstName, String gender, String id,
+                                 Interests interests, boolean isAdult, Language language, String lastName,
+                                 String profession, String profilePicture, String scholarship,
+                                 String telephoneNumber, boolean termsOfUse, String userType, String userName) {
         this.accounts = accounts;
         this.availability = availability;
         this.confirmedAccount = confirmedAccount;
@@ -54,6 +57,15 @@ public class RegistroRedesSociales {
         this.telephoneNumber = telephoneNumber;
         this.termsOfUse = termsOfUse;
         this.userType = userType;
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Accounts getAccounts() {
