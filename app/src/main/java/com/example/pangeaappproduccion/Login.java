@@ -262,6 +262,7 @@ public class Login extends AppCompatActivity {
         // [START check_current_user]
         FirebaseUser users = FirebaseAuth.getInstance().getCurrentUser();
         if (users != null) {
+
             RegistroRedesSociales usuario=new RegistroRedesSociales();
             usuario.setId(users.getUid());
             FirebaseFirestore.getInstance().collection("users").document(users.getUid()).set(usuario);
@@ -274,6 +275,7 @@ public class Login extends AppCompatActivity {
             Intent i = new Intent(Login.this, Registro.class);
             i.putExtra("uid",usuario.getId());
             startActivity(i);
+
         } else {
 
             // No user is signed in

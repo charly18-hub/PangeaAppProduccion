@@ -167,19 +167,16 @@ public class HomeFragment extends Fragment {
 
 
         db.collection("fotoPerfil").whereEqualTo("usuario", email_perfil).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                                RequestOptions requestOptions = new RequestOptions();
-                                requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
-                                Glide.with(context)
-                                        .load(documentSnapshot.get("multimedia"))
-                                        .apply(requestOptions)
-                                        .circleCrop()
-                                        .into(imgPerfil);
-                            }
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                            RequestOptions requestOptions = new RequestOptions();
+                            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
+                            Glide.with(context)
+                                    .load(documentSnapshot.get("multimedia"))
+                                    .apply(requestOptions)
+                                    .circleCrop()
+                                    .into(imgPerfil);
                         }
                     }
                 });
@@ -194,17 +191,13 @@ public class HomeFragment extends Fragment {
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
-
                                 Log.d("imagen", documentSnapshot.getId()+"la imagen es"+ documentSnapshot.get("multimedia"));
                                 RequestOptions requestOptions = new RequestOptions();
                                 requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
-
                                 Glide.with(context)
                                         .load(documentSnapshot.get("multimedia"))
                                         .apply(requestOptions)
                                         .into(imgHeader);
-
                             }
                         }
                     }

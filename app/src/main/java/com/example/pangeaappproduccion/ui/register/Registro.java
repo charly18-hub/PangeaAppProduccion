@@ -73,14 +73,6 @@ public class Registro extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // User is signed in
-            Intent intent = new Intent(Registro.this, MainActivity.class);
-            startActivity(intent);
-        } else {
-            // No user is signed in
-        }
         pass = findViewById(R.id.editTextPassword);
         edTextPrimerNombre = findViewById(R.id.edTextPrimerNombreProfe);
         edTextSegundoNombre = findViewById(R.id.edTextSegundoNombreProfe);
@@ -232,12 +224,11 @@ public class Registro extends AppCompatActivity {
                     usuario.setUserName("");
                     uid = extras.getString("uid", "");
                     usuario.setAccounts(new Accounts("" + uid, "", "", ""));
+
                     // and get whatever type user account id is
                     if (!uid.equals("")) {
 
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
                         db.collection("fotoPerfil").document(uid)
                                 .delete()
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -267,7 +258,15 @@ public class Registro extends AppCompatActivity {
 
                     }
                 } else {
+
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        Intent intent = new Intent(Registro.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+
                     RegistroAlumno registroAlumno = new RegistroAlumno();
+
                     registroAlumno.setapellido_materno(edTextMaterno.getText().toString());
                     registroAlumno.setapellido_paterno(edTextPaterno.getText().toString());
                     registroAlumno.setfirts_name(edTextPrimerNombre.getText().toString());
@@ -284,6 +283,13 @@ public class Registro extends AppCompatActivity {
                     registroAlumno.setciudad(edtCiudad.getText().toString());
                     registroAlumno.setMultimedia("");
                     registroAlumno.setpassword(pass.getText().toString());
+
+
+
+
+
+
+
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(editTextEmail.getText().toString(), pass.getText().toString())
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -307,6 +313,9 @@ public class Registro extends AppCompatActivity {
 
                         }
                     });
+
+
+
                 }
 
             }

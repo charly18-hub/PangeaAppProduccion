@@ -112,20 +112,12 @@ public class SegundoActivityRegistro extends AppCompatActivity {
                                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
                                                 FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                                db2.collection("users").document(uid).update("userName",UserPerfil.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void unused) {
-                                                        Toast.makeText(getApplicationContext(),"Se actualizo el nombre de usuario",Toast.LENGTH_LONG).show();
-                                                        Intent intent = new Intent(SegundoActivityRegistro.this, MainActivity.class);
-                                                        startActivity(intent);
-                                                    }
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull @NotNull Exception e) {
-                                                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                                                db2.collection("users").document(uid).update("userName",UserPerfil.getText().toString()).addOnSuccessListener(unused -> {
+                                                    Toast.makeText(getApplicationContext(),"Se actualizo el nombre de usuario",Toast.LENGTH_LONG).show();
+                                                    Intent intent = new Intent(SegundoActivityRegistro.this, MainActivity.class);
+                                                    startActivity(intent);
+                                                }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show());
 
-                                                    }
-                                                });
                                             }
                                         }
                                     }
@@ -220,6 +212,16 @@ public class SegundoActivityRegistro extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(getApplicationContext(),"Se actualizo la imagen de perfil",Toast.LENGTH_LONG).show();
+                            Bundle extras = getIntent().getExtras();
+                            String uid;
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            if (extras != null) {
+                                uid = extras.getString("uid","");
+                                if(!uid.equals("")) {
+                                    db2.collection("users").document(uid).update("profilePicture",dowloadUri.toString()).addOnSuccessListener(unusedd -> {
+                                    }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show());
+                                }
+                            }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
