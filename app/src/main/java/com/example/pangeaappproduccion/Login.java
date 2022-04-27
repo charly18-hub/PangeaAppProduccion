@@ -238,8 +238,19 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Ingresado(user);
+                            FirebaseUser users = mAuth.getCurrentUser();
+                            RegistroRedesSociales usuario=new RegistroRedesSociales();
+                            usuario.setId(users.getUid());
+                            FirebaseFirestore.getInstance().collection("users").document(users.getUid()).set(usuario);
+
+                            ImagenPerfil imagen=new ImagenPerfil();
+                            imagen.setUsuario(users.getUid());
+                            FirebaseFirestore.getInstance().collection("fotoPerfil").document(users.getUid()).set(imagen);
+
+                            // User is signed in
+                            Intent i = new Intent(Login.this, Registro.class);
+                            i.putExtra("uid",usuario.getId());
+                            startActivity(i);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -262,23 +273,12 @@ public class Login extends AppCompatActivity {
         // [START check_current_user]
         FirebaseUser users = FirebaseAuth.getInstance().getCurrentUser();
         if (users != null) {
-
-            RegistroRedesSociales usuario=new RegistroRedesSociales();
-            usuario.setId(users.getUid());
-            FirebaseFirestore.getInstance().collection("users").document(users.getUid()).set(usuario);
-
-            ImagenPerfil imagen=new ImagenPerfil();
-            imagen.setUsuario(users.getUid());
-            FirebaseFirestore.getInstance().collection("fotoPerfil").document(users.getUid()).set(imagen);
-
             // User is signed in
-            Intent i = new Intent(Login.this, Registro.class);
-            i.putExtra("uid",usuario.getId());
+            Intent i = new Intent(Login.this, MainActivity.class);
             startActivity(i);
-
+            finish();
+            Toast.makeText(Login.this, "Ingreso", Toast.LENGTH_SHORT).show();
         } else {
-
-            // No user is signed in
         }
         // [END check_current_user]
     }

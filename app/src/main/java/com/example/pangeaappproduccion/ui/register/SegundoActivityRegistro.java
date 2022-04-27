@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.pangeaappproduccion.FotoPerfil;
 import com.example.pangeaappproduccion.MainActivity;
+import com.example.pangeaappproduccion.Model.Registro.ImagenPerfil;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,10 +45,10 @@ public class SegundoActivityRegistro extends AppCompatActivity {
 
 
     TextView textUser;
-    EditText  UserPerfil;
+    EditText UserPerfil;
     Button register;
     ImageView imageView;
-    private static final int GALLERY_PICKER =1;
+    private static final int GALLERY_PICKER = 1;
     String correo;
     StorageReference mStorage = FirebaseStorage.getInstance().getReference();
 
@@ -55,7 +56,6 @@ public class SegundoActivityRegistro extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segundo_registro);
-
 
 
         String usuario_registrado = getIntent().getExtras().getString("user_name");
@@ -74,7 +74,7 @@ public class SegundoActivityRegistro extends AppCompatActivity {
 
         textUser.setText(usuario_registrado);
 
-        UserPerfil = (EditText)findViewById(R.id.editTextTextPersonName3);
+        UserPerfil = (EditText) findViewById(R.id.editTextTextPersonName3);
         imageView = findViewById(R.id.imageView3);
 
 
@@ -87,95 +87,64 @@ public class SegundoActivityRegistro extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intentImagen = new Intent(Intent.ACTION_PICK);
                 intentImagen.setType("image/*");
-                startActivityForResult(intentImagen,GALLERY_PICKER);
+                startActivityForResult(intentImagen, GALLERY_PICKER);
 
             }
         });
 
-        register = (Button)findViewById(R.id.btnRegistrarProfe3);
+        register = (Button) findViewById(R.id.btnRegistrarProfe3);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Bundle extras = getIntent().getExtras();
-                String uid;
+                String uid,id;
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 if (extras != null) {
-                    uid = extras.getString("uid","");
-                    if(!uid.equals("")){
-
-                        db.collection("fotoPerfil").whereEqualTo("usuario",correo).get()
+                    uid = extras.getString("uid", "");
+                    id = extras.getString("id", "");
+                    if (!uid.equals("")) {
+                        db.collection("users").whereEqualTo("emailAdress", correo).get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                                        if(task.isSuccessful()){
-                                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                                                 FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                                                db2.collection("users").document(uid).update("userName",UserPerfil.getText().toString()).addOnSuccessListener(unused -> {
-                                                    Toast.makeText(getApplicationContext(),"Se actualizo el nombre de usuario",Toast.LENGTH_LONG).show();
+                                                db2.collection("users").document(uid).update("userName", UserPerfil.getText().toString()).addOnSuccessListener(unused -> {
+                                                    Toast.makeText(getApplicationContext(), "Se actualizo el nombre de usuario", Toast.LENGTH_LONG).show();
                                                     Intent intent = new Intent(SegundoActivityRegistro.this, MainActivity.class);
                                                     startActivity(intent);
-                                                }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show());
+                                                }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
 
                                             }
                                         }
                                     }
                                 });
-
-
-
-                    }
-                }else{
-                    db.collection("fotoPerfil").whereEqualTo("usuario",email_register_obtenido).get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                                    if(task.isSuccessful()){
-                                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
-                                            String imgPerfil = (String) documentSnapshot.get("multimedia");
-                                            Toast.makeText(getApplicationContext(),imgPerfil,Toast.LENGTH_LONG).show();
-
-
-
-                                            FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-
-                                            Map<String, Object> dateUpdate = new HashMap<>();
-                                            dateUpdate.put("multimedia",imgPerfil);
-                                            dateUpdate.put("usuario",textUser.getText().toString());
-                                            dateUpdate.put("user",textUser.getText().toString());
-
-                                            db2.collection("users").document(email_register_obtenido).update(dateUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    Toast.makeText(getApplicationContext(),"se Actualizaron los datos",Toast.LENGTH_LONG).show();
-
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull @NotNull Exception e) {
-                                                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-
-                                                }
-                                            });
-
-
+                    }else if (!id.equals("")){
+                        db.collection("users").whereEqualTo("emailAddress", correo).get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                                                db2.collection("users").document(id).update("userName", UserPerfil.getText().toString()).addOnSuccessListener(unused -> {
+                                                    Toast.makeText(getApplicationContext(), "Se actualizo el nombre de usuario", Toast.LENGTH_LONG).show();
+                                                    Intent intent = new Intent(SegundoActivityRegistro.this, MainActivity.class);
+                                                    startActivity(intent);
+                                                }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
+                                            }
                                         }
                                     }
-                                }
-                            });
+                                });
+                    }
                 }
-
-
             }
         });
 
 
-
     }
-
-
 
 
     @Override
@@ -183,73 +152,60 @@ public class SegundoActivityRegistro extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        if(requestCode == GALLERY_PICKER &&  resultCode == RESULT_OK) {
-            Toast.makeText(getApplicationContext(),"SUBIENDO, NO CIERRE LA APLICACION!",Toast.LENGTH_LONG).show();
+        if (requestCode == GALLERY_PICKER && resultCode == RESULT_OK) {
 
-            Uri uri = data.getData();
-            imageView.setImageURI(uri);
+            Toast.makeText(getApplicationContext(), "SUBIENDO, NO CIERRE LA APLICACION!", Toast.LENGTH_LONG).show();
+            Bundle extras = getIntent().getExtras();
+            String uid, id;
+            if (extras != null) {
+                uid = extras.getString("uid", "");
+                id = extras.getString("id", "");
+                if (!uid.equals("")) {
 
-
-            StorageMetadata metadata = new StorageMetadata.Builder()
-                    .setCustomMetadata("descripcion","Esta es una Prueba")
-                    .setCustomMetadata("usuario",correo)
-                    .build();
-
-            StorageReference filePath = mStorage.child("fotosPerfil").child(uri.getLastPathSegment());
-            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!uiriTask.isSuccessful());
-                    Uri dowloadUri = uiriTask.getResult();
-
-
-                    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                    Map<String, Object> fotoPerfil = new HashMap<>();
-                    fotoPerfil.put("multimedia",dowloadUri.toString());
-                    fotoPerfil.put("usuario",correo);
-                    db2.collection("fotoPerfil").document(correo).update(fotoPerfil).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    Uri uri = data.getData();
+                    imageView.setImageURI(uri);
+                    StorageReference filePath = mStorage.child("fotoPerfil").child(uri.getLastPathSegment());
+                    filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(getApplicationContext(),"Se actualizo la imagen de perfil",Toast.LENGTH_LONG).show();
-                            Bundle extras = getIntent().getExtras();
-                            String uid;
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            if (extras != null) {
-                                uid = extras.getString("uid","");
-                                if(!uid.equals("")) {
-                                    db2.collection("users").document(uid).update("profilePicture",dowloadUri.toString()).addOnSuccessListener(unusedd -> {
-                                    }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show());
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uiriTask.isSuccessful()) ;
+                            Uri dowloadUri = uiriTask.getResult();
+                            FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                            Map<String, Object> fotoPerfil = new HashMap<>();
+                            fotoPerfil.put("multimedia", dowloadUri.toString());
+                            fotoPerfil.put("usuario", correo);
+                            db2.collection("fotoPerfil").document(correo).update(fotoPerfil).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(getApplicationContext(), "Se actualizo la imagen de perfil", Toast.LENGTH_LONG).show();
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    db2.collection("users").document(uid).update("profilePicture", dowloadUri.toString()).addOnSuccessListener(unusedd -> {
+                                    }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
                                 }
-                            }
+                            }).addOnFailureListener(e -> {
+                            });
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
+                    }).addOnFailureListener(e -> Log.e("FileManager", "Error en uploadImg ==>" + e));
+                } else if (!id.equals("")) {
+                    Uri uri = data.getData();
+                    imageView.setImageURI(uri);
+                    StorageReference filePath = mStorage.child("fotoPerfil").child(uri.getLastPathSegment());
+                    filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onFailure(@NonNull @NotNull Exception e) {
-
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(getApplicationContext(), "Se actualizo la imagen de perfil", Toast.LENGTH_LONG).show();
+                            Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uiriTask.isSuccessful()) ;
+                            Uri dowloadUri = uiriTask.getResult();
+                            ImagenPerfil imagen = new ImagenPerfil();
+                            imagen.setMultimedia(dowloadUri.toString());
+                            imagen.setUsuario(id);
+                            FirebaseFirestore.getInstance().collection("fotoPerfil").document(id).set(imagen);
                         }
-                    });
-
-
-
+                    }).addOnFailureListener(e -> Log.e("FileManager", "Error en uploadImg ==>" + e));
                 }
-
-
-
-
-
-
-
-
-
-
-
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e("FileManager","Error en uploadImg ==>"+e);
-                }
-            });
+            }
         }
 
 

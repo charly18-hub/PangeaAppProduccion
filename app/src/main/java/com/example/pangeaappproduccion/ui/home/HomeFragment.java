@@ -40,6 +40,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -75,19 +76,19 @@ public class HomeFragment extends Fragment {
 
     private TextView traducidoTexto;
 
-    private TextView etMensaje ,userPerfil,PaisPerfil,CursoPerfil,nivelPerfil,nombreUsuario;
-    private Button buttonChat, buttonImagen, buttonAudio,buttonReproAudio,buttonTraducir;
-    private ImageView imgPerfil,imgHeader;
+    private TextView etMensaje, userPerfil, PaisPerfil, CursoPerfil, nivelPerfil, nombreUsuario;
+    private Button buttonChat, buttonImagen, buttonAudio, buttonReproAudio, buttonTraducir;
+    private ImageView imgPerfil, imgHeader;
     private List<listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
     private RecyclerView recyclerViewPublicaciones;
     private String username;
     private static final int IMG_Header = 0;
-    private static final int GALLERY_PICKER =1;
-    private static final  int AudioSend = 2;
-    private static final  int ACTION_POST = 3;
+    private static final int GALLERY_PICKER = 1;
+    private static final int AudioSend = 2;
+    private static final int ACTION_POST = 3;
     private String imagenUsuario;
-
+    String email;
     Uri urlAudio;
 
     StorageReference mStorage = FirebaseStorage.getInstance().getReference();
@@ -100,13 +101,36 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        SharedPreferences preferences = requireActivity().getSharedPreferences("accesos", MODE_PRIVATE);
-        String email_perfil = preferences.getString("email", "");
-        if(email_perfil.equals("")){
-            SharedPreferences prefs = requireActivity().getSharedPreferences("correo", MODE_PRIVATE);
-            email_perfil = prefs.getString("correo", "");
-        }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        String email_perfil;
+        SharedPreferences prefs = requireActivity().getSharedPreferences("correo", MODE_PRIVATE);
+        email_perfil = prefs.getString("correo", "");
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            email = user.getEmail();
+            db.collection("users")
+                    .whereEqualTo("emailAddress", email_perfil)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+
+
+        } else {
+            // No user is signed in
+        }
 
         recyclerViewPublicaciones = view.findViewById(R.id.recyclerViewChat);
         etMensaje = view.findViewById(R.id.pregunta);
@@ -121,8 +145,8 @@ public class HomeFragment extends Fragment {
         nivelPerfil = view.findViewById(R.id.nivelPerfil);
         userPerfil = view.findViewById(R.id.userPerfil);
         PaisPerfil = view.findViewById(R.id.PaisPerfil);
-        CursoPerfil =  view.findViewById(R.id.CursoPerfil);
-        nombreUsuario =  view.findViewById(R.id.nombreUsuario);
+        CursoPerfil = view.findViewById(R.id.CursoPerfil);
+        nombreUsuario = view.findViewById(R.id.nombreUsuario);
 
 
         Context context = view.getContext();
@@ -135,7 +159,6 @@ public class HomeFragment extends Fragment {
         recyclerViewPublicaciones.setHasFixedSize(true);
 
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(email_perfil);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -143,7 +166,7 @@ public class HomeFragment extends Fragment {
                 if (document.exists()) {
                     username = document.getString("user");
                     nombreUsuario.setText(document.getString("user"));
-                    FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario",username).addSnapshotListener((value, error) -> {
+                    FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario", username).addSnapshotListener((value, error) -> {
                         if (error != null) {
                             Log.d(TAG, "Error:" + error.getMessage());
                         } else {
@@ -165,11 +188,10 @@ public class HomeFragment extends Fragment {
         });
 
 
-
-        db.collection("fotoPerfil").whereEqualTo("usuario", email_perfil).get()
+            db.collection("fotoPerfil").whereEqualTo("usuario", email_perfil).get()
                 .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                             RequestOptions requestOptions = new RequestOptions();
                             requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
                             Glide.with(context)
@@ -182,16 +204,14 @@ public class HomeFragment extends Fragment {
                 });
 
 
-
-
         FirebaseFirestore db2 = FirebaseFirestore.getInstance();
         db2.collection("fotosHeader").whereEqualTo("usuario", email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                                Log.d("imagen", documentSnapshot.getId()+"la imagen es"+ documentSnapshot.get("multimedia"));
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                Log.d("imagen", documentSnapshot.getId() + "la imagen es" + documentSnapshot.get("multimedia"));
                                 RequestOptions requestOptions = new RequestOptions();
                                 requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
                                 Glide.with(context)
@@ -204,25 +224,20 @@ public class HomeFragment extends Fragment {
                 });
 
 
-
-
-
-
-
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
         dbDataPerfil.collection("users").whereEqualTo("email", email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                                 userPerfil.setText(documentSnapshot.getString("usuario"));
                                 PaisPerfil.setText(documentSnapshot.getString("ciudad"));
                                 nivelPerfil.setText(documentSnapshot.getString("nivel"));
                                 CursoPerfil.setText(documentSnapshot.getString("idioma_interes"));
                                 String usuarioFinal = userPerfil.getText().toString();
-                                SharedPreferences.Editor editor =  getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE).edit();
-                                editor.putString("usuario_post", usuarioFinal );
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE).edit();
+                                editor.putString("usuario_post", usuarioFinal);
                                 editor.apply();
                             }
                         }
@@ -232,18 +247,12 @@ public class HomeFragment extends Fragment {
         String usuario_post_final = preferences1.getString("usuario_post", "No name defined");
 
 
-
-
-
-
-
-
         imgPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intentImagen = new Intent(Intent.ACTION_PICK);
                 intentImagen.setType("image/*");
-                startActivityForResult(intentImagen,GALLERY_PICKER);
+                startActivityForResult(intentImagen, GALLERY_PICKER);
 
             }
         });
@@ -254,7 +263,7 @@ public class HomeFragment extends Fragment {
 
                 Intent intentImagen = new Intent(Intent.ACTION_PICK);
                 intentImagen.setType("image/*");
-                startActivityForResult(intentImagen,IMG_Header);
+                startActivityForResult(intentImagen, IMG_Header);
 
             }
         });
@@ -264,7 +273,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 Intent intentImagen = new Intent(Intent.ACTION_PICK);
                 intentImagen.setType("image/*");
-                startActivityForResult(intentImagen,ACTION_POST);
+                startActivityForResult(intentImagen, ACTION_POST);
 
             }
         });
@@ -273,14 +282,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-                startActivityForResult(intent,AudioSend);
+                startActivityForResult(intent, AudioSend);
             }
         });
 
         buttonReproAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(),urlAudio);
+                MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(), urlAudio);
                 mediaPlayer.start();
             }
         });
@@ -305,7 +314,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                translate_api translate=new translate_api();
+                translate_api translate = new translate_api();
                 translate.setOnTranslationCompleteListener(new translate_api.OnTranslationCompleteListener() {
                     @Override
                     public void onStartTranslation() {
@@ -323,7 +332,7 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
-                translate.execute(etMensaje.getText().toString(),"es","en");
+                translate.execute(etMensaje.getText().toString(), "es", "en");
 
 
             }
@@ -355,14 +364,14 @@ public class HomeFragment extends Fragment {
         SharedPreferences preferences1 = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
         String usuario_post_final = preferences1.getString("usuario_post", "No name defined");
 
-        if(requestCode == AudioSend && resultCode == RESULT_OK){
+        if (requestCode == AudioSend && resultCode == RESULT_OK) {
             urlAudio = data.getData();
             StorageReference filePath = mStorage.child("audios").child(urlAudio.getLastPathSegment());
             filePath.putFile(urlAudio).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!uiriTask.isSuccessful());
+                    while (!uiriTask.isSuccessful()) ;
                     Uri dowloadUri = uiriTask.getResult();
 
                     FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
@@ -385,14 +394,14 @@ public class HomeFragment extends Fragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.e("FileManager","Error en uploadImg ==>"+e);
+                    Log.e("FileManager", "Error en uploadImg ==>" + e);
                 }
             });
 
         }
 
 
-        if(requestCode == IMG_Header &&  resultCode == RESULT_OK) {
+        if (requestCode == IMG_Header && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             imgHeader.setImageURI(uri);
 
@@ -404,7 +413,7 @@ public class HomeFragment extends Fragment {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!uiriTask.isSuccessful());
+                    while (!uiriTask.isSuccessful()) ;
                     Uri dowloadUri = uiriTask.getResult();
 
 
@@ -414,53 +423,48 @@ public class HomeFragment extends Fragment {
                     FirebaseFirestore.getInstance().collection("fotosHeader").add(fotoPerfil);
 
 
-
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.e("FileManager","Error en uploadImg ==>"+e);
+                    Log.e("FileManager", "Error en uploadImg ==>" + e);
                 }
             });
         }
 
-        if(requestCode == GALLERY_PICKER &&  resultCode == RESULT_OK) {
-
-
-
-
+        if (requestCode == GALLERY_PICKER && resultCode == RESULT_OK) {
 
 
             Uri uri = data.getData();
             imgPerfil.setImageURI(uri);
 
             StorageMetadata metadata = new StorageMetadata.Builder()
-                    .setCustomMetadata("descripcion","Esta es una Prueba")
-                    .setCustomMetadata("usuario",email_perfil)
+                    .setCustomMetadata("descripcion", "Esta es una Prueba")
+                    .setCustomMetadata("usuario", email_perfil)
                     .build();
             StorageReference filePath = mStorage.child("fotoPerfil").child(uri.getLastPathSegment());
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!uiriTask.isSuccessful());
+                    while (!uiriTask.isSuccessful()) ;
                     Uri dowloadUri = uiriTask.getResult();
 
                     FirebaseFirestore db2 = FirebaseFirestore.getInstance();
 
                     Map<String, Object> fotoPerfil = new HashMap<>();
-                    fotoPerfil.put("multimedia",dowloadUri.toString());
-                    fotoPerfil.put("usuario",username);
+                    fotoPerfil.put("multimedia", dowloadUri.toString());
+                    fotoPerfil.put("usuario", username);
                     db2.collection("fotoPerfil").document(email_perfil).update(fotoPerfil).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Toast.makeText(getContext(),"se subio el archivo",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "se subio el archivo", Toast.LENGTH_LONG).show();
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull @NotNull Exception e) {
-                            Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
 
                         }
                     });
@@ -476,19 +480,19 @@ public class HomeFragment extends Fragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.e("FileManager","Error en uploadImg ==>"+e);
+                    Log.e("FileManager", "Error en uploadImg ==>" + e);
                 }
             });
         }
 
 
-        if(requestCode == ACTION_POST &&  resultCode == RESULT_OK) {
+        if (requestCode == ACTION_POST && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             imgPerfil.setImageURI(uri);
 
             StorageMetadata metadata = new StorageMetadata.Builder()
-                    .setCustomMetadata("descripcion","Esta es una Prueba")
-                    .setCustomMetadata("usuario",username)
+                    .setCustomMetadata("descripcion", "Esta es una Prueba")
+                    .setCustomMetadata("usuario", username)
                     .build();
 
             StorageReference filePath = mStorage.child("redSocial").child(uri.getLastPathSegment());
@@ -496,7 +500,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!uiriTask.isSuccessful());
+                    while (!uiriTask.isSuccessful()) ;
                     Uri dowloadUri = uiriTask.getResult();
 
                     FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
@@ -518,7 +522,7 @@ public class HomeFragment extends Fragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.e("FileManager","Error en uploadImg ==>"+e);
+                    Log.e("FileManager", "Error en uploadImg ==>" + e);
                 }
             });
         }
@@ -533,16 +537,12 @@ public class HomeFragment extends Fragment {
     public class AdapterPublicaciones extends RecyclerView.Adapter<AdapterPublicaciones.PublicacionesHolder> {
 
 
-
         FirebaseUser fuser;
         private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
 
-        public  AdapterPublicaciones(List<listPublicaciones> listPublicaciones){
+        public AdapterPublicaciones(List<listPublicaciones> listPublicaciones) {
             this.listPublicaciones = listPublicaciones;
         }
-
-
-
 
 
         @NonNull
@@ -551,8 +551,7 @@ public class HomeFragment extends Fragment {
         public PublicacionesHolder onCreateViewHolder(@NonNull @NotNull ViewGroup viewGroup, int i) {
 
 
-
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_publicaciones,viewGroup,false);
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_publicaciones, viewGroup, false);
 
             return new PublicacionesHolder(view);
         }
@@ -567,8 +566,6 @@ public class HomeFragment extends Fragment {
             Glide.with(getActivity()).load(listPublicaciones.get(i).getMultimedia()).into(publicacionesHolder.imgPublicacion);
 
 
-
-
         }
 
         @Override
@@ -577,7 +574,7 @@ public class HomeFragment extends Fragment {
             return listPublicaciones.size();
         }
 
-        public class PublicacionesHolder extends RecyclerView.ViewHolder{
+        public class PublicacionesHolder extends RecyclerView.ViewHolder {
 
             private TextView Publicacion;
             private TextView Nombre;
