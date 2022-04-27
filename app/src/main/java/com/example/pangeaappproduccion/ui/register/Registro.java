@@ -43,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Registro extends AppCompatActivity {
 
@@ -66,21 +67,10 @@ public class Registro extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter_motivos = ArrayAdapter.createFromResource(this,
                 R.array.motivos_rray, android.R.layout.simple_spinner_item);
         profesores = (TextView) findViewById(R.id.profesores);
-        profesores.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Registro.this, Profesores.class);
-                startActivity(intent);
-            }
-        });
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // User is signed in
-            Intent intent = new Intent(Registro.this, MainActivity.class);
+        profesores.setOnClickListener(view -> {
+            Intent intent = new Intent(Registro.this, Profesores.class);
             startActivity(intent);
-        } else {
-            // No user is signed in
-        }
+        });
         pass = findViewById(R.id.editTextPassword);
         edTextPrimerNombre = findViewById(R.id.edTextPrimerNombreProfe);
         edTextSegundoNombre = findViewById(R.id.edTextSegundoNombreProfe);
@@ -214,37 +204,36 @@ public class Registro extends AppCompatActivity {
                 Bundle extras = getIntent().getExtras();
                 String uid;
 
+
+                SharedPreferences.Editor editor = getSharedPreferences("correo", MODE_PRIVATE).edit();
+                editor.putString("correo", editTextEmail.getText().toString());
+                editor.apply();
+
                 if (extras != null) {
-
-                    SharedPreferences.Editor editor = getSharedPreferences("correo", MODE_PRIVATE).edit();
-                    editor.putString("correo", editTextEmail.getText().toString());
-                    editor.apply();
-
-                    RegistroRedesSociales usuario = new RegistroRedesSociales();
-                    usuario.setLastName(edTextPaterno.getText().toString() + edTextMaterno.getText().toString());
-                    usuario.setFirstName(edTextPrimerNombre.getText().toString());
-                    usuario.setInterests(new Interests(editTextIntereses.getText().toString()));
-                    usuario.setEmailAddress(editTextEmail.getText().toString());
-                    usuario.setLanguage(new Language("" + idioma, idiomaNativo));
-                    usuario.setGender(sexoObtenido);
-                    usuario.setTelephoneNumber(edtTelefono.getText().toString());
-                    usuario.setCountryResidence(edtCiudad.getText().toString());
-                    usuario.setUserName("");
                     uid = extras.getString("uid", "");
-                    usuario.setAccounts(new Accounts("" + uid, "", "", ""));
-                    // and get whatever type user account id is
+
                     if (!uid.equals("")) {
 
+                        RegistroRedesSociales usuario = new RegistroRedesSociales();
+                        usuario.setLastName(edTextPaterno.getText().toString() + edTextMaterno.getText().toString());
+                        usuario.setFirstName(edTextPrimerNombre.getText().toString());
+                        usuario.setInterests(new Interests(editTextIntereses.getText().toString()));
+                        usuario.setEmailAddress(editTextEmail.getText().toString());
+                        usuario.setLanguage(new Language("" + idioma, idiomaNativo));
+                        usuario.setGender(sexoObtenido);
+                        usuario.setTelephoneNumber(edtTelefono.getText().toString());
+                        usuario.setCountryResidence(edtCiudad.getText().toString());
+                        usuario.setUserName("");
+                        usuario.setAccounts(new Accounts("" + uid, "", "", ""));
+
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
                         db.collection("fotoPerfil").document(uid)
                                 .delete()
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
-                                        ImagenPerfil imagen=new ImagenPerfil();
+                                        ImagenPerfil imagen = new ImagenPerfil();
                                         imagen.setUsuario(editTextEmail.getText().toString());
                                         FirebaseFirestore.getInstance().collection("fotoPerfil").document(editTextEmail.getText().toString()).set(imagen);
 
@@ -267,48 +256,46 @@ public class Registro extends AppCompatActivity {
 
                     }
                 } else {
-                    RegistroAlumno registroAlumno = new RegistroAlumno();
-                    registroAlumno.setapellido_materno(edTextMaterno.getText().toString());
-                    registroAlumno.setapellido_paterno(edTextPaterno.getText().toString());
-                    registroAlumno.setfirts_name(edTextPrimerNombre.getText().toString());
-                    registroAlumno.setlast_name(edTextSegundoNombre.getText().toString());
-                    registroAlumno.setIntereses(editTextIntereses.getText().toString());
-                    registroAlumno.setemail(editTextEmail.getText().toString());
-                    registroAlumno.setpassword("");
-                    registroAlumno.setidioma_interes(idioma);
-                    registroAlumno.setsexo(sexoObtenido);
-                    registroAlumno.setidioma_nativo(idiomaNativo);
-                    registroAlumno.settelefono(edtTelefono.getText().toString());
-                    registroAlumno.setuser("");
-                    registroAlumno.setMotivo(motivo);
-                    registroAlumno.setciudad(edtCiudad.getText().toString());
-                    registroAlumno.setMultimedia("");
-                    registroAlumno.setpassword(pass.getText().toString());
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(editTextEmail.getText().toString(), pass.getText().toString())
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    RegistroRedesSociales usuario = new RegistroRedesSociales();
+                    usuario.setLastName(edTextPaterno.getText().toString() + edTextMaterno.getText().toString());
+                    usuario.setFirstName(edTextPrimerNombre.getText().toString());
+                    usuario.setInterests(new Interests(editTextIntereses.getText().toString()));
+                    usuario.setEmailAddress(editTextEmail.getText().toString());
+                    usuario.setLanguage(new Language("" + idioma, idiomaNativo));
+                    usuario.setGender(sexoObtenido);
+                    usuario.setTelephoneNumber(edtTelefono.getText().toString());
+                    usuario.setCountryResidence(edtCiudad.getText().toString());
+                    usuario.setUserName("");
+                    usuario.setAccounts(new Accounts("", "", "", ""));
+
+
+                    ImagenPerfil imagen = new ImagenPerfil();
+                    imagen.setUsuario(editTextEmail.getText().toString());
+                    FirebaseFirestore.getInstance().collection("fotoPerfil").document(editTextEmail.getText().toString()).set(imagen);
+
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    String id = UUID.randomUUID().toString().toUpperCase();
+                    FirebaseAuth mAuth;
+                    mAuth = FirebaseAuth.getInstance();
+                    mAuth.createUserWithEmailAndPassword(editTextEmail.getText().toString(), pass.getText().toString())
+                            .addOnCompleteListener(Registro.this, new OnCompleteListener<AuthResult>() {
                                 @Override
-                                public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                                    FirebaseFirestore.getInstance().collection("users").document(editTextEmail.getText().toString()).set(registroAlumno);
-                                    Intent intent = new Intent(getApplicationContext(), SegundoActivityRegistro.class);
-                                    intent.putExtra("user_name", edTextSegundoNombre.getText().toString());
-                                    intent.putExtra("email_register", editTextEmail.getText().toString());
-                                    startActivity(intent);
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d("BIEN!!!!", "createUserWithEmail:success");
+                                        FirebaseFirestore.getInstance().collection("users").document(id).set(usuario).addOnCompleteListener(task1 -> {
+                                            Intent intent = new Intent(getApplicationContext(), SegundoActivityRegistro.class);
+                                            intent.putExtra("id", id);
+                                            startActivity(intent);
+                                        });
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w("ERROR!!!!", "createUserWithEmail:failure", task.getException());
+                                    }
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("FileManager", "Error en uploadImg ==>" + e);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                            builder.setTitle("Error");
-                            builder.setMessage("Error de registro");
-                            builder.setPositiveButton("Aceptar", null);
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-
-                        }
-                    });
+                            });
                 }
-
             }
         });
 
