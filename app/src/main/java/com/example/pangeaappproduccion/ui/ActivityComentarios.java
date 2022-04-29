@@ -54,6 +54,9 @@ public class ActivityComentarios extends AppCompatActivity {
     Button Comentar;
     EditText CajaComentario;
     String urlFotoPerfil;
+    String email;
+    String id;
+    String username;
 
 
     private List<listPublicaciones> listPublicaciones;
@@ -77,6 +80,12 @@ public class ActivityComentarios extends AppCompatActivity {
         String idPublicacion = getIntent().getExtras().getString("clave","");
         int multimedia = getIntent().getExtras().getInt("multimedia",0);
 
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("usuarioRegistroNormal", Context.MODE_PRIVATE);
+        email = pref.getString("email", "No name defined");
+        id = pref.getString("id", "No name defined");
+        username = pref.getString("userName", "No name defined");
+
+
         Usuario = findViewById(R.id.UsuarioPublicacion2);
         Publicacion = findViewById(R.id.publicacionForo);
 
@@ -97,10 +106,6 @@ public class ActivityComentarios extends AppCompatActivity {
                     }
                 });
 
-        SharedPreferences preferencesusuario = getSharedPreferences("usuario_recibido_chat2", Context.MODE_PRIVATE);
-
-        //ahora con el usuario activo (no id ni key), lo guardamos
-        String usuario_pangea = preferencesusuario.getString("usuario_recibido_chat2", "No existe idioma");
 
         //obtenemos la url de la foto del que esta comentando
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -170,7 +175,7 @@ public class ActivityComentarios extends AppCompatActivity {
                 listPublicaciones1.setId(clave);
                 listPublicaciones1.setComentario(CajaComentario.getText().toString());
                 listPublicaciones1.setMultimedia(urlFotoPerfil);
-                listPublicaciones1.setUsuario(usuario_pangea);
+                listPublicaciones1.setUsuario(username);
                 FirebaseFirestore.getInstance().collection("comentarios"+"/"+idPublicacion+"/"+"comentarios").add(listPublicaciones1);
                 CajaComentario.setText("");
             });
@@ -212,7 +217,7 @@ public class ActivityComentarios extends AppCompatActivity {
                 listPublicaciones1.setClave(clave);
                 listPublicaciones1.setComentario(CajaComentario.getText().toString());
                 listPublicaciones1.setMultimedia(urlFotoPerfil);
-                listPublicaciones1.setUsuario(usuario_pangea);
+                listPublicaciones1.setUsuario(username);
                 FirebaseFirestore.getInstance().collection("redSocial"+"/"+idPublicacion+"/"+"comentarios").add(listPublicaciones1);
                 CajaComentario.setText("");
             });

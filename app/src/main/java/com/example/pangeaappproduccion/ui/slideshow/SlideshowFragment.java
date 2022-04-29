@@ -70,6 +70,8 @@ public class SlideshowFragment extends Fragment {
     private static final  int AudioSend = 2;
     private static final  int ACTION_POST = 3;
     Uri urlAudio;
+    String email;
+    String id;
     String username;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -97,20 +99,11 @@ public class SlideshowFragment extends Fragment {
         String email_perfil = preferences.getString("email", "No name defined");
 
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("users").document(email_perfil);
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    username = document.getString("user");
-                } else {
-                    Log.d(TAG, "No such document");
-                }
-            } else {
-                Log.d(TAG, "get failed with ", task.getException());
-            }
-        });
+        SharedPreferences preferences1 = getActivity().getSharedPreferences("usuarioRegistroNormal", MODE_PRIVATE);
+        username = preferences1.getString("userName", "No name defined");
+        id = preferences1.getString("id", "No name defined");
+        email = preferences1.getString("email", "No name defined");
+
 
         String usuario_recibido = email_perfil;
         buttonChat.setOnClickListener(view1 -> {
@@ -125,6 +118,7 @@ public class SlideshowFragment extends Fragment {
             publicaciones.setId(id);
             publicaciones.setClave(clave);
             FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(publicaciones);
+            etMensaje.setText("");
         });
         buttonImagen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,6 +288,7 @@ public class SlideshowFragment extends Fragment {
                     Log.e("FileManager","Error en uploadImg ==>"+e);
                 }
             });
+            etMensaje.setText("");
         }
     }
 

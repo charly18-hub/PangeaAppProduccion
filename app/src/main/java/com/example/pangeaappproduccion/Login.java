@@ -1,5 +1,7 @@
 package com.example.pangeaappproduccion;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.Model.Registro.ImagenPerfil;
 import com.example.pangeaappproduccion.Model.Registro.RegistroRedesSociales;
 import com.example.pangeaappproduccion.Model.RegistroUsuarioRedesSociales;
@@ -36,9 +39,14 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class Login extends AppCompatActivity {
 
@@ -57,7 +65,7 @@ public class Login extends AppCompatActivity {
     private  static  final String TAG_Facebook = "FacebookLogin";
     private static final int RC_SIGN_IN_Facebook = 12345;
     private CallbackManager mCallbackManager;
-
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,33 +80,26 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(editTextTextPersonName.getText().toString(), editTextTextPassword.getText().toString()).addOnCompleteListener(task -> {
+
+                    if (task.isSuccessful()) {
+
+                            SharedPreferences.Editor editor = getSharedPreferences("accesos", MODE_PRIVATE).edit();
+                            editor.putString("email", editTextTextPersonName.getText().toString());
+                            editor.putString("password", editTextTextPersonName.getText().toString());
+                            editor.apply();
+                            Intent intent = new Intent(Login.this, MainActivity.class);
+                            startActivity(intent);
 
 
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(editTextTextPersonName.getText().toString(), editTextTextPassword.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-
-                        if (task.isSuccessful()) {
-
-                                SharedPreferences.Editor editor = getSharedPreferences("accesos", MODE_PRIVATE).edit();
-                                editor.putString("email", editTextTextPersonName.getText().toString());
-                                editor.putString("password", editTextTextPersonName.getText().toString());
-
-                                editor.apply();
-
-                                Intent intent = new Intent(Login.this, MainActivity.class);
-                                startActivity(intent);
-
-
-                        } else {
+                    } else {
 
 
 
-                            Toast.makeText(getApplicationContext(),"error logeo",Toast.LENGTH_LONG).show();
-
-                        }
+                        Toast.makeText(getApplicationContext(),"error logeo",Toast.LENGTH_LONG).show();
 
                     }
+
                 });
             }
         });
@@ -209,8 +210,6 @@ public class Login extends AppCompatActivity {
 
         //facebook
         mCallbackManager.onActivityResult(requestCode,resultCode,data);
-
-
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -273,10 +272,33 @@ public class Login extends AppCompatActivity {
         // [START check_current_user]
         FirebaseUser users = FirebaseAuth.getInstance().getCurrentUser();
         if (users != null) {
-            // User is signed in
-            Intent i = new Intent(Login.this, MainActivity.class);
-            startActivity(i);
-            finish();
+            id = users.getUid();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("users").document(id);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Object res;
+                            res = document.get("userName");
+                            if(res == null){
+
+                            }else{
+                                // User is signed in
+                                Intent i = new Intent(Login.this, MainActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
             Toast.makeText(Login.this, "Ingreso", Toast.LENGTH_SHORT).show();
         } else {
         }

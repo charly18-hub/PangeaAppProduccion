@@ -82,13 +82,15 @@ public class HomeFragment extends Fragment {
     private List<listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
     private RecyclerView recyclerViewPublicaciones;
-    private String username;
     private static final int IMG_Header = 0;
     private static final int GALLERY_PICKER = 1;
     private static final int AudioSend = 2;
     private static final int ACTION_POST = 3;
+    Context context;
     private String imagenUsuario;
     String email;
+    String id;
+    String username;
     Uri urlAudio;
 
     StorageReference mStorage = FirebaseStorage.getInstance().getReference();
@@ -108,26 +110,46 @@ public class HomeFragment extends Fragment {
         email_perfil = prefs.getString("correo", "");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         if (user != null) {
             email = user.getEmail();
-            db.collection("users")
-                    .whereEqualTo("emailAddress", email_perfil)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData());
+            id = user.getUid();
+            DocumentReference docRef = db.collection("users").document(id);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            username = document.get("userName").toString();
+                            SharedPreferences.Editor editor = requireActivity().getSharedPreferences("usuarioRegistroNormal", MODE_PRIVATE).edit();
+                            editor.putString("email", email);
+                            editor.putString("firstName", document.get("firstName").toString());
+                            editor.putString("lastName", document.get("lastName").toString());
+                            editor.putString("userName", username);
+                            editor.putString("id", id);
+                            editor.apply();
+                            nombreUsuario.setText(username);
+                            FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario", username).addSnapshotListener((value, error) -> {
+                                if (error != null) {
+                                    Log.d(TAG, "Error:" + error.getMessage());
+                                } else {
+                                    for (DocumentChange documentChange : value.getDocumentChanges()) {
+                                        if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                                            listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
+                                            adapterPublicacion.notifyDataSetChanged();
+                                        }
+                                    }
                                 }
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }
+                            });
+                        } else {
+                            Log.d(TAG, "No such document");
                         }
-                    });
-
-
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
         } else {
             // No user is signed in
         }
@@ -149,7 +171,7 @@ public class HomeFragment extends Fragment {
         nombreUsuario = view.findViewById(R.id.nombreUsuario);
 
 
-        Context context = view.getContext();
+        context = view.getContext();
 
 
         listPublicaciones = new ArrayList<>();
@@ -159,36 +181,7 @@ public class HomeFragment extends Fragment {
         recyclerViewPublicaciones.setHasFixedSize(true);
 
 
-        DocumentReference docRef = db.collection("users").document(email_perfil);
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    username = document.getString("user");
-                    nombreUsuario.setText(document.getString("user"));
-                    FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario", username).addSnapshotListener((value, error) -> {
-                        if (error != null) {
-                            Log.d(TAG, "Error:" + error.getMessage());
-                        } else {
-                            for (DocumentChange documentChange : value.getDocumentChanges()) {
-                                if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                                    listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
-                                    adapterPublicacion.notifyDataSetChanged();
-                                    recyclerViewPublicaciones.smoothScrollToPosition(listPublicaciones.size());
-                                }
-                            }
-                        }
-                    });
-                } else {
-                    Log.d(TAG, "No such document");
-                }
-            } else {
-                Log.d(TAG, "get failed with ", task.getException());
-            }
-        });
-
-
-            db.collection("fotoPerfil").whereEqualTo("usuario", email_perfil).get()
+        db.collection("fotoPerfil").whereEqualTo("usuario", id).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
@@ -203,9 +196,7 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-
-        FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-        db2.collection("fotosHeader").whereEqualTo("usuario", email_perfil).get()
+        db.collection("fotosHeader").whereEqualTo("usuario", id).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -223,7 +214,7 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-
+        /*
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
         dbDataPerfil.collection("users").whereEqualTo("email", email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -243,6 +234,8 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 });
+
+         */
         SharedPreferences preferences1 = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
         String usuario_post_final = preferences1.getString("usuario_post", "No name defined");
 
@@ -306,8 +299,19 @@ public class HomeFragment extends Fragment {
             publicaciones.setId(id);
             publicaciones.setClave(clave);
             publicaciones.setStatus("0");
-            FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(publicaciones);
-
+            FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(publicaciones).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                    adapterPublicacion.notifyDataSetChanged();
+                }
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error writing document", e);
+                        }
+                    });
         });
 
         buttonTraducir.setOnClickListener(new View.OnClickListener() {
@@ -387,7 +391,19 @@ public class HomeFragment extends Fragment {
                     publicaciones.setStatus("2");
                     publicaciones.setId(id);
                     publicaciones.setClave(clave);
-                    FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(publicaciones);
+                    FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(publicaciones).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                            adapterPublicacion.notifyDataSetChanged();
+                        }
+                    })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
                     etMensaje.setText("");
 
                 }
@@ -398,16 +414,18 @@ public class HomeFragment extends Fragment {
                 }
             });
 
+            etMensaje.setText("");
         }
 
 
         if (requestCode == IMG_Header && resultCode == RESULT_OK) {
             Uri uri = data.getData();
-            imgHeader.setImageURI(uri);
+            Glide.with(context)
+                    .load(uri)
+                    .into(imgHeader);
 
 
             StorageReference filePath = mStorage.child("fotosHeader").child(uri.getLastPathSegment());
-
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -419,7 +437,7 @@ public class HomeFragment extends Fragment {
 
                     FotoPerfil fotoPerfil = new FotoPerfil();
                     fotoPerfil.setMultimedia(dowloadUri.toString());
-                    fotoPerfil.setUsuario(usuario_post_final);
+                    fotoPerfil.setUsuario(id);
                     FirebaseFirestore.getInstance().collection("fotosHeader").add(fotoPerfil);
 
 
@@ -436,12 +454,14 @@ public class HomeFragment extends Fragment {
 
 
             Uri uri = data.getData();
-            imgPerfil.setImageURI(uri);
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
+            Glide.with(context)
+                    .load(uri)
+                    .apply(requestOptions)
+                    .circleCrop()
+                    .into(imgPerfil);
 
-            StorageMetadata metadata = new StorageMetadata.Builder()
-                    .setCustomMetadata("descripcion", "Esta es una Prueba")
-                    .setCustomMetadata("usuario", email_perfil)
-                    .build();
             StorageReference filePath = mStorage.child("fotoPerfil").child(uri.getLastPathSegment());
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -454,8 +474,8 @@ public class HomeFragment extends Fragment {
 
                     Map<String, Object> fotoPerfil = new HashMap<>();
                     fotoPerfil.put("multimedia", dowloadUri.toString());
-                    fotoPerfil.put("usuario", username);
-                    db2.collection("fotoPerfil").document(email_perfil).update(fotoPerfil).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    fotoPerfil.put("usuario", id);
+                    db2.collection("fotoPerfil").document(id).update(fotoPerfil).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(getContext(), "se subio el archivo", Toast.LENGTH_LONG).show();
@@ -470,10 +490,6 @@ public class HomeFragment extends Fragment {
                     });
 
 
-                    FotoPerfil fotoPerfils = new FotoPerfil();
-                    fotoPerfils.setMultimedia(dowloadUri.toString());
-                    fotoPerfils.setUsuario(email_perfil);
-                    FirebaseFirestore.getInstance().collection("fotoPerfil").add(fotoPerfils);
                     etMensaje.setText("");
 
                 }
@@ -488,12 +504,6 @@ public class HomeFragment extends Fragment {
 
         if (requestCode == ACTION_POST && resultCode == RESULT_OK) {
             Uri uri = data.getData();
-            imgPerfil.setImageURI(uri);
-
-            StorageMetadata metadata = new StorageMetadata.Builder()
-                    .setCustomMetadata("descripcion", "Esta es una Prueba")
-                    .setCustomMetadata("usuario", username)
-                    .build();
 
             StorageReference filePath = mStorage.child("redSocial").child(uri.getLastPathSegment());
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -516,8 +526,21 @@ public class HomeFragment extends Fragment {
                     PublicacionesImagenes.setClave(clave);
                     PublicacionesImagenes.setStatus("1");
 
-                    FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(PublicacionesImagenes);
-
+                    FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(PublicacionesImagenes)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    adapterPublicacion.notifyDataSetChanged();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                    adapterPublicacion.notifyDataSetChanged();
+                                }
+                            });
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -525,6 +548,7 @@ public class HomeFragment extends Fragment {
                     Log.e("FileManager", "Error en uploadImg ==>" + e);
                 }
             });
+            etMensaje.setText("");
         }
     }
 

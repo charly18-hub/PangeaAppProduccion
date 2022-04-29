@@ -40,8 +40,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 app:cardCornerRadius="20dp"
@@ -60,8 +60,8 @@
                         android:text="TextView"
                         android:textSize="20sp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="16dp">
+                android:layout_marginStart="16dp">
 
 
                 <EditText

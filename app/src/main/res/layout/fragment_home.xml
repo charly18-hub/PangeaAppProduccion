@@ -162,7 +162,7 @@
                                 android:padding="3sp"
                                 android:layout_height="40dp"
                                 android:layout_marginStart="10dp"
-                                android:layout_marginRight="40dp"
+                                android:layout_marginEnd="40dp"
                                 android:backgroundTint="@color/white"
                                 android:text="Publicar"
                                 android:textColor="#2196F3"
@@ -175,7 +175,7 @@
                             android:id="@+id/traducido"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
+                            android:layout_marginStart="20dp"
                             android:text="TextView"
                             android:visibility="invisible" />
                     </LinearLayout>
@@ -184,7 +184,7 @@
                         android:id="@+id/userPerfil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:textColor="#2196F3"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -193,7 +193,7 @@
                         android:id="@+id/PaisPerfil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:textColor="#1B1A1A"
                         android:textStyle="bold" />
 
@@ -201,7 +201,7 @@
                         android:id="@+id/CursoPerfil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:textColor="#232323"
                         android:textStyle="bold" />
 
@@ -209,7 +209,7 @@
                         android:id="@+id/nivelPerfil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:textColor="#201F1F"
                         android:textStyle="bold" />
 
