@@ -149,8 +149,8 @@ public class EnviarSolicitud extends AppCompatActivity {
             public void onClick(View view) {
                 SolicitudesList solicitudesList = new SolicitudesList();
                 solicitudesList.setEstatus("enviada");
-                solicitudesList.setUsuario(usuario_post_final);
-                solicitudesList.getUsuario();
+                solicitudesList.setUserName(usuario_post_final);
+                solicitudesList.getUserName();
 
 
                 FirebaseFirestore.getInstance().collection("solicitudes" + "/" + solicitud_enviar + "/" + "solicitudes" ).document(usuario_post_final).set(solicitudesList);
@@ -175,8 +175,8 @@ public class EnviarSolicitud extends AppCompatActivity {
 
         SolicitudesList solicitudesList2 = new SolicitudesList();
         solicitudesList2.setEstatus("enviada");
-        solicitudesList2.setUsuario(solicitud_enviar);
-        solicitudesList2.getUsuario();
+        solicitudesList2.setUserName(solicitud_enviar);
+        solicitudesList2.getUserName();
 
         FirebaseFirestore.getInstance().collection("solicitudes" + "/" + usuario_post_final + "/" + "solicitudes").document(solicitud_enviar).set(solicitudesList2);
 

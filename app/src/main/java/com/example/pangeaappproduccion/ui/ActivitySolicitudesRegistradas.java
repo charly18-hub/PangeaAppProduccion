@@ -54,10 +54,10 @@ public class ActivitySolicitudesRegistradas extends AppCompatActivity {
         adapterSolicitudes = new AdapterSolicitudes(listAmistad, new AdapterSolicitudes.ItemClickListener() {
             @Override
             public void onItemClick(SolicitudesList listSolicitudes) {
-                Toast.makeText(getApplicationContext(),listSolicitudes.getUsuario(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),listSolicitudes.getUserName(),Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(getApplicationContext(), AceptarRechazarSolicitud.class);
-                intent.putExtra("perfil_a_enviar", listSolicitudes.getUsuario());
+                intent.putExtra("perfil_a_enviar", listSolicitudes.getUserName());
                 startActivity(intent);
             }
 
@@ -68,7 +68,7 @@ public class ActivitySolicitudesRegistradas extends AppCompatActivity {
 
 
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("users").whereEqualTo("email",email_perfil).get()
+        dbDataPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -76,7 +76,7 @@ public class ActivitySolicitudesRegistradas extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
 
-                                String usuario = documentSnapshot.getString("usuario");
+                                String usuario = documentSnapshot.getString("uid");
 
                                 Toast.makeText(getApplicationContext(),usuario+" usuario obtenido",Toast.LENGTH_LONG).show();
 
@@ -95,7 +95,7 @@ public class ActivitySolicitudesRegistradas extends AppCompatActivity {
 
 
 
-        FirebaseFirestore.getInstance().collection("solicitudes").document(usuarioObtenido).collection("solicitudes").whereEqualTo("estatus","enviada").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("users").document(usuarioObtenido).collection("Solicitudes").whereEqualTo("estatus","enviada").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
                 if (error != null) {

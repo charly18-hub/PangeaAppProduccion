@@ -28,8 +28,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -50,12 +53,14 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        String destinatario_recibido_chat = getIntent().getExtras().getString("destinaraio");
+        String destinatario_recibido_chat = getIntent().getExtras().getString("destinatario");
+        Toast.makeText(getApplicationContext(),"se envio destinatario"+destinatario_recibido_chat, Toast.LENGTH_LONG).show();
+
         String usuario_recibido_chat = getIntent().getExtras().getString("usuario");
 
 
-        FirebaseFirestore dbDataUserPerfil = FirebaseFirestore.getInstance();
-        dbDataUserPerfil.collection("users").whereEqualTo("email",usuario_recibido_chat).get()
+        FirebaseFirestore dbDataUserPerfilDestinatario = FirebaseFirestore.getInstance();
+        dbDataUserPerfilDestinatario.collection("users").whereEqualTo("userName",destinatario_recibido_chat).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -63,8 +68,30 @@ public class ChatActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
 
-                                String usuarioEmisor = documentSnapshot.getString("usuario");
-                                Toast.makeText(getApplicationContext(),"obtenido"+usuarioEmisor, Toast.LENGTH_LONG).show();
+                                String usuarioDestinatario = documentSnapshot.getString("uid");
+
+                                Toast.makeText(getApplicationContext(), "prueba existe dentro : "+ usuarioDestinatario, Toast.LENGTH_LONG).show();
+
+
+                                SharedPreferences.Editor editor2 = getSharedPreferences("usuario_Destinatario_id", MODE_PRIVATE).edit();
+                                editor2.putString("usuario_Destinatario_id", usuarioDestinatario);
+                                editor2.apply();
+                            }
+                        }
+                    }
+                });
+
+
+        FirebaseFirestore dbDataUserPerfil = FirebaseFirestore.getInstance();
+        dbDataUserPerfil.collection("users").whereEqualTo("emailAddress",usuario_recibido_chat).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+
+
+                                String usuarioEmisor = documentSnapshot.getString("uid");
 
 
                                 SharedPreferences.Editor editor1 = getSharedPreferences("usuario_recibido_chat1", MODE_PRIVATE).edit();
@@ -78,14 +105,21 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
-        SharedPreferences.Editor editor = getSharedPreferences("destinatario_recibido_chat", MODE_PRIVATE).edit();
-        editor.putString("destinatario_recibido_chat", destinatario_recibido_chat);
+        SharedPreferences.Editor editor = getSharedPreferences("usuario_Destinatario", MODE_PRIVATE).edit();
+        editor.putString("usuario_Destinatario", destinatario_recibido_chat);
         editor.apply();
 
         SharedPreferences preferencesusuario = getSharedPreferences("usuario_recibido_chat1", Context.MODE_PRIVATE);
-        String usuario_recibido_chat1 = preferencesusuario.getString("usuario_recibido_chat1", "No existe idioma");
+        String usuario_recibido_chat1 = preferencesusuario.getString("usuario_recibido_chat1", "No existe usuario arriba");
 
-        Toast.makeText(getApplicationContext(),"guardado"+usuario_recibido_chat1, Toast.LENGTH_LONG).show();
+
+
+
+        SharedPreferences preferencesusuarioDestino = getSharedPreferences("usuario_Destinatario_id", Context.MODE_PRIVATE);
+        String usuario_Destino = preferencesusuarioDestino.getString("usuario_Destinatario_id", "No existe emisor arriba");
+
+
+        Toast.makeText(getApplicationContext(), "prueba : "+ usuario_Destino, Toast.LENGTH_LONG).show();
 
 
 
@@ -102,10 +136,22 @@ public class ChatActivity extends AppCompatActivity {
                 if(usuario_recibido_chat.length() == 0 || mensaje.length() == 0)
                     return;
 
+                TimeZone timeZone = TimeZone.getTimeZone("America/Mexico_City");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                simpleDateFormat.setTimeZone(timeZone);
+                String time = simpleDateFormat.format(new Date());
+
+
                 MensajeChat mensajeChat = new MensajeChat();
                 mensajeChat.setMessage(mensaje.getText().toString());
-                mensajeChat.setName(usuario_recibido_chat1);
-                FirebaseFirestore.getInstance().collection("chat"+"/"+destinatario_recibido_chat+"/"+usuario_recibido_chat1 ).add(mensajeChat);
+                mensajeChat.setIdUserEnvio(usuario_Destino);
+                mensajeChat.setIsActive("true");
+                mensajeChat.setDateUtc(time);
+                mensajeChat.setType("received");
+
+                FirebaseFirestore.getInstance().collection("users"+"/"+usuario_recibido_chat1+"/"+"chats"+"/"+usuario_Destino+"/"+"Messages" ).add(mensajeChat);
+
+               // FirebaseFirestore.getInstance().collection("users"+"/"+usuario_Destino+"/"+"chats"+"/"+usuario_recibido_chat1+"/"+"Messages" ).add(mensajeChat);
 
                 SendChat();
 
@@ -121,7 +167,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerViewChatPersonal.setHasFixedSize(true);
 
 
-        FirebaseFirestore.getInstance().collection("chat"+"/"+usuario_recibido_chat1+"/"+destinatario_recibido_chat).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("users"+"/"+usuario_recibido_chat1+"/"+"chats"+"/"+usuario_Destino+"/"+"Messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
 
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
@@ -142,43 +188,62 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-
-        FirebaseFirestore.getInstance().collection("chat"+"/"+destinatario_recibido_chat+"/"+usuario_recibido_chat1).addSnapshotListener(new EventListener<QuerySnapshot>() {
-
-            @Override
-            public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.d(TAG, "Error:" + error.getMessage());
-                    Toast.makeText(getApplicationContext(), "Error"+ error.getMessage(), Toast.LENGTH_LONG).show();
-                } else {
-                    for (DocumentChange documentChange : value.getDocumentChanges()) {
-                        if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                            listMensajesPersonal.add(documentChange.getDocument().toObject(MensajeChatPersonal.class));
-                            adapterChatPersonal.notifyDataSetChanged();
-                            recyclerViewChatPersonal.smoothScrollToPosition(listMensajesPersonal.size());
-                        }
-                    }
-                }
-            }
-        });
 
 
     }
 
     public void SendChat(){
 
-        SharedPreferences preferencesDestinatario = getSharedPreferences("destinatario_recibido_chat", Context.MODE_PRIVATE);
-        String destinatario_recibido_chat = preferencesDestinatario.getString("destinatario_recibido_chat", "no existe destino");
+        SharedPreferences preferencesDestinatario = getSharedPreferences("usuario_Destinatario_id", Context.MODE_PRIVATE);
+        String destinatario_recibido_chat = preferencesDestinatario.getString("usuario_Destinatario_id", "no existe destino");
+
+
+
 
         SharedPreferences preferencesusuario = getSharedPreferences("usuario_recibido_chat1", Context.MODE_PRIVATE);
         String usuario_recibido_chat = preferencesusuario.getString("usuario_recibido_chat1", "No existe emisor");
 
 
 
-        MensajeChat mensajeChat = new MensajeChat();
-        mensajeChat.setMessage(mensaje.getText().toString());
-        mensajeChat.setName(destinatario_recibido_chat);
-        FirebaseFirestore.getInstance().collection("chat"+"/"+usuario_recibido_chat+"/"+destinatario_recibido_chat).add(mensajeChat);
+
+
+        FirebaseFirestore dbDataUserPerfil = FirebaseFirestore.getInstance();
+        dbDataUserPerfil.collection("users").whereEqualTo("uid",usuario_recibido_chat).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+
+
+                                String usuarioEmisor1 = documentSnapshot.getString("userName");
+
+                                TimeZone timeZone = TimeZone.getTimeZone("America/Mexico_City");
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                                simpleDateFormat.setTimeZone(timeZone);
+                                String time = simpleDateFormat.format(new Date());
+
+
+                                MensajeChat mensajeChat = new MensajeChat();
+                                mensajeChat.setMessage(mensaje.getText().toString());
+                                mensajeChat.setIdUserEnvio(usuario_recibido_chat);
+                                mensajeChat.setIsActive("true");
+                                mensajeChat.setDateUtc(time);
+                                mensajeChat.setType("received");
+                                FirebaseFirestore.getInstance().collection("users"+"/"+destinatario_recibido_chat+"/"+"chats"+"/"+usuario_recibido_chat+"/"+"Messages").add(mensajeChat);
+
+                             //   FirebaseFirestore.getInstance().collection("users"+"/"+usuario_recibido_chat+"/"+"chats"+"/"+destinatario_recibido_chat+"/"+"Messages").add(mensajeChat);
+
+                            }
+                        }
+                    }
+                });
+
+
+
+
+
+
 
 
     }

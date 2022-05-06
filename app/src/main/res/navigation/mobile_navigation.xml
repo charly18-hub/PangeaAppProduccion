@@ -53,6 +53,10 @@
         android:label="fragment_foro"
         tools:layout="@layout/fragment_foro" />
 
-
+    <fragment
+        android:id="@+id/evaluaciones"
+        android:name="com.example.pangeaappproduccion.EvaluacionFragment"
+        android:label="fragment_evaluacion"
+        tools:layout="@layout/fragment_evaluacion" />
 
 </navigation>

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.pangeaappproduccion.R;
@@ -55,8 +56,8 @@ public class AdapterSolicitudes extends RecyclerView.Adapter<AdapterSolicitudes.
 
         Context context1 = solicitudesHolder.itemView.getContext();
 
-        solicitudesHolder.nombre2.setText(listSolicitudes.get(i).getUsuario());
-        Glide.with(solicitudesHolder.itemView.getContext()).load(listSolicitudes.get(i).getMultimedia()).into(solicitudesHolder.imgPublicacion);
+        solicitudesHolder.nombre2.setText(listSolicitudes.get(i).getUserName());
+        Glide.with(solicitudesHolder.itemView.getContext()).load(listSolicitudes.get(i).getProfilePicture()).into(solicitudesHolder.imgPublicacion);
         solicitudesHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
