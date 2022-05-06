@@ -162,10 +162,10 @@
     <!-- aceptar rechazar -->
     <string name="Rechazar">Reject</string>
     <string name="Aceptar">Accept</string>
-    <string name="selecciona_el_idioma_que_prefieras_en_la_aplicaci_n">Selecciona el idioma que prefieras en la aplicación.</string>
-    <string name="ingles">Ingles</string>
-    <string name="espa_ol">Español</string>
-    <string name="guardar">Guardar</string>
+    <string name="selecciona_el_idioma_que_prefieras_en_la_aplicaci_n">Select the language you prefer in the application.</string>
+    <string name="ingles">English</string>
+    <string name="espa_ol">Spanish</string>
+    <string name="guardar">Save</string>
 
 
 </resources>

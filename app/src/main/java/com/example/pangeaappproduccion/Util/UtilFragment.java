@@ -13,17 +13,13 @@ import java.util.Locale;
 
 public class UtilFragment extends Fragment {
     public void establecerIdioma(String idioma){
-        if(idioma.equals("Español") || idioma.equals("Spanish")){
-            idioma = "es";
-        }else if(idioma.equals("English") || idioma.equals("Ingles")){
-                idioma = "en";
-        }
         Locale locale = new Locale(idioma);
         Locale.setDefault(locale);
         Resources resources = requireActivity().getResources();
         Configuration config = resources.getConfiguration();
         config.setLocale(locale);
         resources.updateConfiguration(config, resources.getDisplayMetrics());
+        requireActivity().recreate();
     }
     public void establecerIdioma(){
         SharedPreferences prefs = requireActivity().getSharedPreferences("usuarioRegistroNormal", Context.MODE_PRIVATE);
@@ -38,6 +34,11 @@ public class UtilFragment extends Fragment {
         }
     }
     public void obtenerIdiomaPreferido(String idioma){
+        if(idioma.equals("Español") || idioma.equals("Spanish")){
+            idioma = "es";
+        }else if(idioma.equals("English") || idioma.equals("Ingles")){
+            idioma = "en";
+        }
         SharedPreferences.Editor editor = requireActivity().getSharedPreferences("usuarioRegistroNormal", MODE_PRIVATE).edit();
         editor.putString("idioma", idioma);
         editor.apply();
