@@ -53,7 +53,7 @@ public class ActivityAmistad extends AppCompatActivity {
         adapterAmistad = new AdapterAmistad(listAmistad, new AdapterAmistad.ItemClickListener() {
             @Override
             public void onItemClick(SolicitudesList listSolicitudes) {
-                Toast.makeText(getApplicationContext(),listSolicitudes.getUsuario(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),listSolicitudes.getUserName(),Toast.LENGTH_LONG).show();
 
 
             }
@@ -66,7 +66,7 @@ public class ActivityAmistad extends AppCompatActivity {
 
 
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("users").whereEqualTo("email",email_perfil).get()
+        dbDataPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -74,7 +74,7 @@ public class ActivityAmistad extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
 
-                                String usuario = documentSnapshot.getString("usuario");
+                                String usuario = documentSnapshot.getString("uid");
 
 
                                 SharedPreferences.Editor editor = getSharedPreferences("usuarioObtenido", MODE_PRIVATE).edit();
@@ -92,7 +92,7 @@ public class ActivityAmistad extends AppCompatActivity {
 
 
 
-        FirebaseFirestore.getInstance().collection("solicitudes").document(usuarioObtenido).collection("aceptadas").whereEqualTo("estatus","aceptada").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("users").document(usuarioObtenido).collection("Solicitudes").whereEqualTo("estatus","aceptada").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
                 if (error != null) {

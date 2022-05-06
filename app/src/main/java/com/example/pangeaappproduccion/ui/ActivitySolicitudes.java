@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.example.pangeaappproduccion.ActivityAmistad;
 import com.example.pangeaappproduccion.Adapters.AdapterSolicitudes;
 import com.example.pangeaappproduccion.EnviarSolicitud;
+import com.example.pangeaappproduccion.Lenguages;
+import com.example.pangeaappproduccion.Model.Registro.Language;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.SolicitudesList;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,15 +57,17 @@ public class ActivitySolicitudes extends AppCompatActivity {
         String email_perfil = preferences.getString("email", "No name defined");
 
 
+
+
         recyclerViewSolicitudes = findViewById(R.id.recyclerAmistad);
         listSolicitudes = new ArrayList<>();
         adapterSolicitudes = new AdapterSolicitudes(listSolicitudes, new AdapterSolicitudes.ItemClickListener() {
             @Override
             public void onItemClick(SolicitudesList listSolicitudes) {
-                Toast.makeText(getApplicationContext(),listSolicitudes.getUsuario(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),listSolicitudes.getUserName(),Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(getApplicationContext(), EnviarSolicitud.class);
-                intent.putExtra("perfil_a_enviar", listSolicitudes.getUsuario());
+                intent.putExtra("perfil_a_enviar", listSolicitudes.getUserName());
                 startActivity(intent);
 
 
@@ -80,21 +84,28 @@ public class ActivitySolicitudes extends AppCompatActivity {
 
 
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("users").whereEqualTo("email",email_perfil).get()
+        dbDataPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
+                                Lenguages idiomaInteres = documentSnapshot.toObject(Lenguages.class);
 
-                                String idiomaInteres = documentSnapshot.getString("idioma_interes");
 
-                                Toast.makeText(getApplicationContext(),idiomaInteres+" lenguaje obtenido",Toast.LENGTH_LONG).show();
 
-                                SharedPreferences.Editor editor = getSharedPreferences("idiomaInteres", MODE_PRIVATE).edit();
-                                editor.putString("idioma_interes", idiomaInteres);
-                                editor.apply();
+                                if (idiomaInteres != null){
+
+
+                                    String idioma = idiomaInteres.getGoalLearning();
+
+                                    SharedPreferences.Editor editor = getSharedPreferences("idiomaInteres", MODE_PRIVATE).edit();
+                                    editor.putString("idioma_interes", idioma);
+                                    editor.apply();
+                                }
+
+
                             }
                         }
                     }
@@ -104,10 +115,9 @@ public class ActivitySolicitudes extends AppCompatActivity {
         SharedPreferences preferencesIdioma = getSharedPreferences("idiomaInteres", Context.MODE_PRIVATE);
         String idiomaObtenidoInteres = preferencesIdioma.getString("idioma_interes", "No existe idioma");
 
-        Toast.makeText(getApplicationContext(),idiomaObtenidoInteres,Toast.LENGTH_LONG).show();
 
 
-        FirebaseFirestore.getInstance().collection("users").whereEqualTo("idioma_interes",idiomaObtenidoInteres).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("language.goalLearning",idiomaObtenidoInteres).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
                 if (error != null) {

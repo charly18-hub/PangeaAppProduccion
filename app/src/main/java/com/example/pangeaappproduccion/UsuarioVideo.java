@@ -9,10 +9,17 @@ public class UsuarioVideo {
     private String password;
     private String fcm_token;
     private String telefono;
-    private String multimedia;
-    private String usuario;
+    private String profilePicture;
+    private String userName;
+    private String telephoneNumber;
 
 
+    public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+    public void setTelephoneNumber(String telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
+    }
 
     public String getFirts_name() {
         return firts_name;
@@ -35,9 +42,7 @@ public class UsuarioVideo {
         this.last_name = last_name;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
     public void setPassword(String password) {
         this.password = password;
     }
@@ -56,17 +61,17 @@ public class UsuarioVideo {
         this.telefono = telefono;
     }
 
-    public String getMultimedia() {
-        return multimedia;
+    public String getProfilePicture() {
+        return profilePicture;
     }
-    public void setMultimedia(String  multimedia) {
-        this.multimedia = multimedia;
+    public void setProfilePicture(String  profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getUserName() {
+        return userName;
     }
-    public void setUsuario(String  usuario) {
-        this.usuario = usuario;
+    public void setUserName(String  userName) {
+        this.userName = userName;
     }
 }

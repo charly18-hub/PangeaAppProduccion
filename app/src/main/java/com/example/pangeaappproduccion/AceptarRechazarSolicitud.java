@@ -55,7 +55,7 @@ public class AceptarRechazarSolicitud extends AppCompatActivity {
 
 
         FirebaseFirestore dbDataPerfil1 = FirebaseFirestore.getInstance();
-        dbDataPerfil1.collection("users").whereEqualTo("email",email_perfil).get()
+        dbDataPerfil1.collection("users").whereEqualTo("emailAddress",email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -63,7 +63,7 @@ public class AceptarRechazarSolicitud extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
 
-                                String user = documentSnapshot.getString("user");
+                                String user = documentSnapshot.getString("userName");
 
                                 SharedPreferences.Editor editor = getSharedPreferences("user_solicitud", MODE_PRIVATE).edit();
                                 editor.putString("user_solicitud", user);
@@ -78,7 +78,7 @@ public class AceptarRechazarSolicitud extends AppCompatActivity {
 
 
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("users").whereEqualTo("usuario",solicitud_enviar).get()
+        dbDataPerfil.collection("users").whereEqualTo("userName",solicitud_enviar).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -86,7 +86,7 @@ public class AceptarRechazarSolicitud extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
 
-                                String email = documentSnapshot.getString("email");
+                                String email = documentSnapshot.getString("emailAddress");
 
                                 Toast.makeText(getApplicationContext(),email+" email obtenido",Toast.LENGTH_LONG).show();
 
@@ -150,8 +150,8 @@ public class AceptarRechazarSolicitud extends AppCompatActivity {
 
                 SolicitudesList solicitudesList = new SolicitudesList();
                 solicitudesList.setEstatus("acepata");
-                solicitudesList.setUsuario(userEnvia);
-                solicitudesList.getUsuario();
+                solicitudesList.setUserName(userEnvia);
+                solicitudesList.getUserName();
 
 
                 FirebaseFirestore.getInstance().collection("solicitudes" + "/" + solicitud_enviar + "/" + "aceptadas" ).document(userEnvia).set(solicitudesList);
@@ -180,12 +180,12 @@ public class AceptarRechazarSolicitud extends AppCompatActivity {
 
                 SolicitudesList solicitudesList = new SolicitudesList();
                 solicitudesList.setEstatus("rechazadas");
-                solicitudesList.setUsuario(userEnvia);
-                solicitudesList.getUsuario();
+                solicitudesList.setUserName(userEnvia);
+                solicitudesList.getUserName();
 
 
                 FirebaseFirestore.getInstance().collection("solicitudes" + "/" + solicitud_enviar + "/" + "rechazadas" ).document(userEnvia).set(solicitudesList);
-                FirebaseFirestore.getInstance().collection("solicitudes" + "/" +solicitud_enviar + "/" + "solicitudes").document(userEnvia).delete();
+                FirebaseFirestore.getInstance().collection("solicitudes" + "/" + solicitud_enviar + "/" + "solicitudes").document(userEnvia).delete();
 
 
                 rechasedSolicitud();
@@ -210,8 +210,8 @@ public class AceptarRechazarSolicitud extends AppCompatActivity {
 
         SolicitudesList solicitudesList2 = new SolicitudesList();
         solicitudesList2.setEstatus("rechazada");
-        solicitudesList2.setUsuario(userRecibe);
-        solicitudesList2.getUsuario();
+        solicitudesList2.setUserName(userRecibe);
+        solicitudesList2.getUserName();
 
         FirebaseFirestore.getInstance().collection("solicitudes" + "/" + userEnvia + "/" + "rechazadas").document(userRecibe).set(solicitudesList2);
         FirebaseFirestore.getInstance().collection("solicitudes" + "/" +userEnvia + "/" + "solicitudes").document(userRecibe).delete();
@@ -234,8 +234,8 @@ public class AceptarRechazarSolicitud extends AppCompatActivity {
 
         SolicitudesList solicitudesList2 = new SolicitudesList();
         solicitudesList2.setEstatus("aceptada");
-        solicitudesList2.setUsuario(userRecibe);
-        solicitudesList2.getUsuario();
+        solicitudesList2.setUserName(userRecibe);
+        solicitudesList2.getUserName();
 
         FirebaseFirestore.getInstance().collection("solicitudes" + "/" + userEnvia + "/" + "aceptadas").document(userRecibe).set(solicitudesList2);
         FirebaseFirestore.getInstance().collection("solicitudes" + "/" +userEnvia + "/" + "solicitudes").document(userRecibe).delete();

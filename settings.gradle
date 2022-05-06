@@ -1,5 +1,5 @@
 rootProject.name = "PangeaAppProduccion"
 include ':app'
-include 'commonlib'
-include 'mobilertc'
 
+include ':commonlib'
+include ':mobilertc'

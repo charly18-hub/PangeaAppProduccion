@@ -1,12 +1,30 @@
 package com.example.pangeaappproduccion;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.pangeaappproduccion.Adapters.AdapterEvaluaciones;
+import com.example.pangeaappproduccion.Adapters.listEvaluaciones;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +32,12 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class EvaluacionFragment extends Fragment {
+
+    private List <com.example.pangeaappproduccion.Adapters.listEvaluaciones> listEvaluaciones;
+    private AdapterEvaluaciones adapterEvaluaciones;
+    private RecyclerView recyclerViewEvaluaciones;
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +83,42 @@ public class EvaluacionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_evaluacion, container, false);
+        View view =  inflater.inflate(R.layout.fragment_evaluacion, container, false);
+
+
+        recyclerViewEvaluaciones = view.findViewById(R.id.recyclerPreguntas);
+
+        Context context = view.getContext();
+
+
+        listEvaluaciones = new ArrayList<>();
+        adapterEvaluaciones = new AdapterEvaluaciones(context,listEvaluaciones);
+        recyclerViewEvaluaciones.setAdapter(adapterEvaluaciones);
+        recyclerViewEvaluaciones.setLayoutManager(new LinearLayoutManager(context));
+        recyclerViewEvaluaciones.setHasFixedSize(true);
+
+
+        FirebaseFirestore.getInstance().collection("Evaluaciones").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d(TAG, "Error:" + error.getMessage());
+                } else {
+                    for (DocumentChange documentChange : value.getDocumentChanges()) {
+                        if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                            listEvaluaciones.add(documentChange.getDocument().toObject(com.example.pangeaappproduccion.Adapters.listEvaluaciones.class));
+                            adapterEvaluaciones.notifyDataSetChanged();
+                            recyclerViewEvaluaciones.smoothScrollToPosition(listEvaluaciones.size());
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+        return view;
+
+
     }
 }

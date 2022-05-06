@@ -112,6 +112,7 @@ public class llamadas extends Fragment {
 
         SharedPreferences preferences = getActivity().getSharedPreferences("accesos",Context.MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
+        Toast.makeText(getActivity(),email_perfil+" shared",Toast.LENGTH_LONG).show();
 
         Context context = view.getContext();
         recyclerViewUsuariosVideo = view.findViewById(R.id.recyclerViewUsuariosVideo);
@@ -144,7 +145,7 @@ public class llamadas extends Fragment {
 
 
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("users").whereEqualTo("email",email_perfil).get()
+        dbDataPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -152,7 +153,7 @@ public class llamadas extends Fragment {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
 
-                                String usuario = documentSnapshot.getString("usuario");
+                                String usuario = documentSnapshot.getString("uid");
 
                                 Toast.makeText(getActivity(),usuario+" usuario obtenido",Toast.LENGTH_LONG).show();
 
@@ -173,7 +174,7 @@ public class llamadas extends Fragment {
 
 
 
-        FirebaseFirestore.getInstance().collection("solicitudes").document(usuarioObtenido).collection("aceptadas").whereEqualTo("estatus","acepata").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("users").document(usuarioObtenido).collection("Solicitudes").whereEqualTo("estatus","aceptada").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
                 if (error != null) {

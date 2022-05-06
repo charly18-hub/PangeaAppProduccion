@@ -73,13 +73,12 @@ public class AdapterUsuariosVideo extends RecyclerView.Adapter<AdapterUsuariosVi
 
 
         String numero = listUsuarios.get(i).getTelefono();
-        String destinatario = listUsuarios.get(i).getFirts_name();
+        String destinatario = listUsuarios.get(i).getUserName();
 
 
         usuariosHolder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
 
                 Uri number = Uri.parse("tel:" + numero);

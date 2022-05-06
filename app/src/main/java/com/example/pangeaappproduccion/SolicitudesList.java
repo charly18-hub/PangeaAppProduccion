@@ -4,23 +4,23 @@ public class SolicitudesList {
 
 
 
-    private String usuario;
-    private String multimedia;
+    private String userName;
+    private String profilePicture;
     private String estatus;
 
 
-    public String getUsuario() {
-        return usuario;
+    public String getUserName() {
+        return userName;
     }
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getMultimedia() {
-        return multimedia;
+    public String getProfilePicture() {
+        return profilePicture;
     }
-    public void setMultimedia(String  multimedia) {
-        this.multimedia = multimedia;
+    public void setProfilePicture(String  profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public String getEstatus() {
