@@ -2,6 +2,9 @@ package com.example.pangeaappproduccion.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -27,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,8 +40,7 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
     private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private Context context;
 
-    public AdapterPublicacion(List<listPublicaciones> listPublicaciones)
-    {
+    public AdapterPublicacion(List<listPublicaciones> listPublicaciones) {
         this.listPublicaciones = listPublicaciones;
 
     }
@@ -47,7 +50,7 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
     @NotNull
     @Override
     public PublicacionHolder onCreateViewHolder(@NonNull @NotNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_publicaciones,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_publicaciones, viewGroup, false);
         return new PublicacionHolder(view);
     }
 
@@ -56,7 +59,7 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
 
         publicacionHolder.nombre2.setText(listPublicaciones.get(i).getUsuario());
         publicacionHolder.publicacion2.setText(listPublicaciones.get(i).getMensaje());
-        if(listPublicaciones.get(i).getStatus().equals("0")){
+        if (listPublicaciones.get(i).getStatus().equals("0")) {
             publicacionHolder.imgPublicacion.setVisibility(View.GONE);
             publicacionHolder.btnComentario.setOnClickListener(view -> {
                 FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
@@ -77,7 +80,7 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
                             }
                         });
             });
-        }else if(listPublicaciones.get(i).getStatus().equals("1")){
+        } else if (listPublicaciones.get(i).getStatus().equals("1")) {
             Glide.with(publicacionHolder.itemView.getContext()).load(listPublicaciones.get(i).getMultimedia()).into(publicacionHolder.imgPublicacion);
             publicacionHolder.btnComentario.setOnClickListener(view -> {
                 FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
@@ -99,7 +102,7 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
                             }
                         });
             });
-        }else if(listPublicaciones.get(i).getStatus().equals("2")){
+        } else if (listPublicaciones.get(i).getStatus().equals("2")) {
             publicacionHolder.audioLayout.setVisibility(View.VISIBLE);
             publicacionHolder.publicacionLayout.setVisibility(View.GONE);
             publicacionHolder.imgPublicacion.setImageResource(R.drawable.audio);
@@ -112,7 +115,7 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
                 mediaPlayer = new MediaPlayer();
                 try {
                     // mediaPlayer.setDataSource(String.valueOf(myUri));
-                    mediaPlayer.setDataSource(publicacionHolder.imgPublicacion.getContext(),myUri);
+                    mediaPlayer.setDataSource(publicacionHolder.imgPublicacion.getContext(), myUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -147,7 +150,6 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
     }
 
 
-
     @Override
     public int getItemCount() {
         return listPublicaciones.size();
@@ -155,17 +157,17 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
 
     }
 
-    class  PublicacionHolder extends  RecyclerView.ViewHolder{
+    class PublicacionHolder extends RecyclerView.ViewHolder {
 
         private TextView nombre2;
         private TextView publicacion2;
         private ImageView imgPublicacion;
-        private LinearLayout audioLayout,publicacionLayout;
+        private LinearLayout audioLayout, publicacionLayout;
         private Button reproducir;
         private Button btnComentario;
 
 
-        public PublicacionHolder(@NonNull View itemView){
+        public PublicacionHolder(@NonNull View itemView) {
             super(itemView);
 
             nombre2 = itemView.findViewById(R.id.usuarioForo);

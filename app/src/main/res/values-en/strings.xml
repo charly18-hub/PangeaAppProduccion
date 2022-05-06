@@ -180,6 +180,23 @@
     <string name="ingles">English</string>
     <string name="espa_ol">Spanish</string>
     <string name="guardar">Save</string>
+    <string name="que_estas_pensando">What are you thinking?</string>
+    <string name="publicaciones">Publications</string>
+    <string name="imagenes">Images</string>
+    <string name="multimedia">Multimedia</string>
+    <string name="salon_de_clases">Classroom</string>
+    <string name="alumno">Student</string>
+    <string name="clase">Class</string>
+    <string name="contrase_a_clase">Password of the class</string>
+    <string name="tomar_clase">Take Class</string>
+    <string name="traductor">Translator</string>
+    <string name="escribe_algo">Write something</string>
+    <string name="mis_traducciones">My translations</string>
+    <string name="traducciones">Translations</string>
+    <string name="eventos">Eventos</string>
+    <string name="foro">Forum</string>
+    <string name="escribe_tu_pregunta">Write your question</string>
+    <string name="preguntas_recientes">Recent questions</string>
 
 
 </resources>

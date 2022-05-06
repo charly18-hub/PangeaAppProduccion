@@ -92,12 +92,12 @@ public class HomeFragment extends UtilFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        establecerIdioma();
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        establecerIdioma();
         String email_perfil;
         SharedPreferences prefs = requireActivity().getSharedPreferences("correo", MODE_PRIVATE);
         email_perfil = prefs.getString("correo", "");

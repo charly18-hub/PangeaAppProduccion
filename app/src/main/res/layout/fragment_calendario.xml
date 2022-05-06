@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:background="@null"
         android:backgroundTint="#FFFFFF"
-        android:text="Eventos"
+        android:text="@string/eventos"
         android:textColor="#2196F3"
         android:textSize="20sp"
         android:textStyle="bold" />

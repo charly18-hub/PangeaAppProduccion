@@ -34,16 +34,21 @@
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/app_bar_main.xml" value="0.33" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/content_main.xml" value="0.3203125" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_blank.xml" value="0.2390625" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_calendario.xml" value="0.2875" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_evaluacion.xml" value="0.5541666666666667" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_foro.xml" value="0.2875" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_home.xml" value="0.33697916666666666" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_idioma_preferido.xml" value="0.5401041666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_imagenes_publicacion.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_multimedia.xml" value="0.3203125" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_publicaciones_text.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_slideshow.xml" value="0.33" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_traduccion.xml" value="0.2875" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_videollamadas.xml" value="0.3307291666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_comentario_foro.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_comentario_traduccion.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_comentarios.xml" value="0.3484375" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_evaluaciones.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_publicaciones.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_publicaciones_multimedia.xml" value="0.3203125" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_publicaciones_text.xml" value="0.5541666666666667" />

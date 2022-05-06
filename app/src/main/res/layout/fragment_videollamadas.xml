@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="Salon de Clase"
+            android:text="@string/salon_de_clases"
             android:textAlignment="center"
             android:textColor="#ffff"
             android:textSize="20sp"
@@ -35,7 +35,7 @@
             android:layout_marginEnd="50dp"
             android:backgroundTint="#FFFFFF"
             android:ems="10"
-            android:hint="Alumno"
+            android:hint="@string/alumno"
             android:inputType="textPersonName"
             android:textColor="#FBFBFB" />
 
@@ -48,7 +48,7 @@
             android:layout_marginEnd="50dp"
             android:backgroundTint="#FFFEFE"
             android:ems="10"
-            android:hint="Clase"
+            android:hint="@string/clase"
             android:inputType="textPersonName" />
 
         <EditText
@@ -60,7 +60,7 @@
             android:layout_marginEnd="50dp"
             android:backgroundTint="#F6F3F3"
             android:ems="10"
-            android:hint="Contraseña Clase"
+            android:hint="@string/contrase_a_clase"
             android:inputType="textPersonName" />
 
         <Button
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:backgroundTint="#857B7B"
-            android:text="Tomar Clase"
+            android:text="@string/tomar_clase"
             app:icon="@drawable/zm_sip_ic_new_chat" />
 
     </LinearLayout>

@@ -83,7 +83,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:backgroundTint="#C4C5C1"
-                        android:text="Comentar"
+                        android:text="@string/Comentar"
                         android:textColor="#2196F3"
                         android:textSize="10sp"
                         app:iconTint="#2196F3" />

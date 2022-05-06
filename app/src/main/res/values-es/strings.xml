@@ -169,5 +169,22 @@
     <string name="ingles">Ingles</string>
     <string name="espa_ol">Español</string>
     <string name="guardar">Guardar</string>
+    <string name="que_estas_pensando">¿Qué estás pensando?</string>
+    <string name="publicaciones">Publicaciones</string>
+    <string name="imagenes">Imagenes</string>
+    <string name="multimedia">Multimedia</string>
+    <string name="salon_de_clases">Salon de clases</string>
+    <string name="alumno">Alumno</string>
+    <string name="clase">Clase</string>
+    <string name="contrase_a_clase">Contraseña de la clase</string>
+    <string name="tomar_clase">Tomar Clase</string>
+    <string name="traductor">Traductor</string>
+    <string name="escribe_algo">Escribe algo</string>
+    <string name="mis_traducciones">Mis traducciones</string>
+    <string name="traducciones">Traducciones</string>
+    <string name="eventos">Eventos</string>
+    <string name="foro">Foro</string>
+    <string name="escribe_tu_pregunta">Escribe tu pregunta</string>
+    <string name="preguntas_recientes">Preguntas recientes</string>
 
 </resources>

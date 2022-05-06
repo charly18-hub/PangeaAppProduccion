@@ -334,8 +334,8 @@ public class traduccion extends UtilFragment {
 
 
 
-        adapter.addFragment(new PangeaTraducciones(), "Traducciones");
-        adapter.addFragment(new MisTraducciones(), "Mis Traducciones");
+        adapter.addFragment(new PangeaTraducciones(),  getString(R.string.traducciones));
+        adapter.addFragment(new MisTraducciones(),  getString(R.string.mis_traducciones));
 
 
 

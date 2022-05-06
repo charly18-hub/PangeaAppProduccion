@@ -156,12 +156,9 @@ public class SlideshowFragment extends UtilFragment {
         miFragment = new GalleryFragment();
         miFragment.setArguments(datos_a_fragment);
 
-
-        adapter.addFragment(new PublicacionesTextFragment(), "Publicaciones");
-        adapter.addFragment(new ImagenesPublicacion(), "Imagenes");
-        adapter.addFragment(new MultimediaFragment(), "Multimedia");
-
-
+        adapter.addFragment(new PublicacionesTextFragment(), getString(R.string.publicaciones));
+        adapter.addFragment(new ImagenesPublicacion(), getString(R.string.imagenes));
+        adapter.addFragment(new MultimediaFragment(), getString(R.string.multimedia));
 
         viewPager.setAdapter(adapter);
     }

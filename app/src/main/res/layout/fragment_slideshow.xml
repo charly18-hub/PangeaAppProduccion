@@ -35,8 +35,9 @@
                     android:ems="10"
                     android:gravity="start|top"
                     android:inputType="textMultiLine"
-                    android:text="¿Que estas pensando?"
+                    android:text="@string/que_estas_pensando"
                     android:textSize="10sp" />
+
                 <TextView
                     android:id="@+id/traducido"
                     android:layout_width="match_parent"
@@ -44,6 +45,7 @@
                     android:layout_marginStart="50dp"
                     android:layout_marginEnd="50dp"
                     />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -98,7 +100,7 @@
                         android:layout_height="40dp"
                         android:layout_marginStart="10dp"
                         android:backgroundTint="@color/white"
-                        android:text="Traducir"
+                        android:text="@string/Traducir"
                         android:textColor="#2196F3"
                         android:textSize="9dp">
 
@@ -113,7 +115,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="40dp"
                         android:backgroundTint="@color/white"
-                        android:text="Publicar"
+                        android:text="@string/Publicar"
                         android:textColor="#2196F3"
                         android:textSize="9dp" />
 
