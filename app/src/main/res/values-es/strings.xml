@@ -83,7 +83,8 @@
     <string name="Apellido_Materno">Apellido materno</string>
     <string name="Sexo">Sexo</string>
     <string name="Hombre">Hombre</string>
-    <string name="Mujer">Women</string>
+    <string name="Mujer">Mujer</string>
+    <string name="idioma_nativo">Idioma_nativo</string>
     <string name="Otro">Otro</string>
     <string name="Idioma_de_interes">Idioma de interés</string>
     <string name="Nivel_del_idioma_de_interes">Nivel del idioma de interés</string>
@@ -93,6 +94,7 @@
     <string name="correo">Correo</string>
     <string name="Teléfono">Teléfono</string>
     <string name="Contraseña">Contraseña</string>
+    <string name="Siguiente">Siguiente</string>
     <string name="Confirmar_la_contraseña">Confirmar la contraseña</string>
 
     <!-- Traducciones Registro pt 2 -->

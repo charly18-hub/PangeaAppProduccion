@@ -18,7 +18,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-
+    <string name="idioma_nativo">Native Language</string>
 
 
     <string name="title_activity_registro">Registration</string>
@@ -28,6 +28,7 @@
     <string name="menu_home">Social Network</string>
     <string name="menu_gallery">Publish</string>
     <string name="menu_slideshow">Home Pangea</string>
+    <string name="Siguiente">Next</string>
     <string name="menu_video">Video call</string>
     <string name="menu_traduccion">Translation</string>
 
@@ -87,7 +88,7 @@
     <string name="Hombre">Men</string>
     <string name="Mujer">Women</string>
     <string name="Otro">Other</string>
-    <string name="Idioma_de_interes">language of interest</string>
+    <string name="Idioma_de_interes">Language of interest</string>
     <string name="Nivel_del_idioma_de_interes">Language level of interest</string>
     <string name="Pais_de_origen">Country of origin</string>
     <string name="Motivos_de_aprendizaje">Learning motives</string>

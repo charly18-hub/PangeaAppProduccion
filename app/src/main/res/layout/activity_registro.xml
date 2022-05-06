@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Registro"
+                android:text="@string/Registro"
                 android:textAlignment="center"
                 android:textColor="#201F1F"
                 android:textStyle="bold"
@@ -46,7 +46,7 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Alumnos"
+                    android:text="@string/alumnos"
                     android:textAlignment="center"
                     android:textColor="#114FAE"
                     android:textStyle="bold" />
@@ -55,7 +55,7 @@
                     android:id="@+id/profesores"
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
-                    android:text="Profesores"
+                    android:text="@string/profesores"
                     android:textAlignment="textStart"
                     android:textColor="#101010" />
             </LinearLayout>
@@ -69,7 +69,7 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                android:hint="Primer Nombre"
+                android:hint="@string/primer_nombre"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -84,7 +84,7 @@
                 android:ems="10"
                 android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:inputType="textPersonName"
-                android:hint="Segundo Nombre"
+                android:hint="@string/segundo_nombre"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
@@ -99,7 +99,7 @@
                 android:ems="10"
                 android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:inputType="textPersonName"
-                android:hint="Apellido Paterno"
+                android:hint="@string/Apellido_Paterno"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
@@ -114,7 +114,7 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                android:hint="Apellido Materno"
+                android:hint="@string/Apellido_Materno"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
@@ -155,7 +155,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:text="Sexo"
+                android:text="@string/Sexo"
                 android:textColor="#121111" />
 
             <LinearLayout
@@ -176,7 +176,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_weight="1"
-                        android:text="Hombre" />
+                        android:text="@string/Hombre" />
 
                     <RadioButton
                         android:id="@+id/radioMujer"
@@ -184,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="10dp"
-                        android:text="Mujer" />
+                        android:text="@string/Mujer" />
 
                     <RadioButton
                         android:id="@+id/radioOtro"
@@ -192,7 +192,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="10dp"
-                        android:text="Otro" />
+                        android:text="@string/Otro" />
 
                     <RadioButton
                         android:id="@+id/sinDato"
@@ -213,7 +213,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:text="Idioma Interes"
+                android:text="@string/Idioma_de_interes"
                 android:textColor="#0C0C0C" />
 
             <Spinner
@@ -235,7 +235,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
-                android:hint="Nivel Idioma Interes" />
+                android:hint="@string/Nivel_del_idioma_de_interes" />
 
 
             <TextView
@@ -245,7 +245,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:text="Idioma Nativo"
+                android:text="@string/idioma_nativo"
                 android:textColor="#0C0C0C" />
 
             <Spinner
@@ -271,7 +271,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="text"
-                android:hint="Pais Origen" />
+                android:hint="@string/Pais_de_origen" />
 
 
 
@@ -282,7 +282,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:text="Motivos Aprendizaje"
+                android:text="@string/Motivos_de_aprendizaje"
                 android:textColor="#0C0C0C" />
 
             <Spinner
@@ -315,7 +315,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
-                android:hint="Tematica de Interes" />
+                android:hint="@string/Tematica_de_interes" />
 
             <EditText
                 android:id="@+id/editTextEmail"
@@ -327,7 +327,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:gravity="start|top"
-                android:hint="Correo"/>
+                android:hint="@string/correo"/>
 
 
 
@@ -341,7 +341,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="number"
-                android:hint="Telefono" />
+                android:hint="@string/Teléfono" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -350,7 +350,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:hint="Contraseña"
+                android:hint="@string/Contraseña"
                 android:textColor="#090909" />
 
 
@@ -362,7 +362,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:hint="Confirma Contraseña"
+                android:hint="@string/Confirmar_la_contraseña"
                 android:textColor="#0C0C0C" />
 
             <EditText
@@ -373,7 +373,7 @@
                 android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:inputType="textPassword"
-                android:hint="Password" />
+                android:hint="@string/Contraseña" />
 
             <EditText
                 android:id="@+id/editTextPassword"
@@ -383,14 +383,14 @@
                 android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:inputType="textPassword"
-                android:hint="Password" />
+                android:hint="@string/Contraseña" />
 
             <Button
                 android:id="@+id/btnRegistrarProfe3"
                 style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Siguiente"
+                android:text="@string/Siguiente"
                 android:textColor="#2196F3" />
 
 

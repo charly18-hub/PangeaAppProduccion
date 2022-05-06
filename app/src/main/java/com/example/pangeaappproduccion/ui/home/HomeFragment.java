@@ -32,6 +32,7 @@ import com.example.pangeaappproduccion.Buscador;
 import com.example.pangeaappproduccion.FotoPerfil;
 import com.example.pangeaappproduccion.Publicaciones;
 import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.example.pangeaappproduccion.databinding.FragmentHomeBinding;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.translate_api;
@@ -69,7 +70,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends UtilActivity {
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;

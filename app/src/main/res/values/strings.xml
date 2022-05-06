@@ -87,12 +87,14 @@
     <string name="Hombre">Men</string>
     <string name="Mujer">Women</string>
     <string name="Otro">Other</string>
-    <string name="Idioma_de_interes">language of interest</string>
+    <string name="idioma_nativo">Native Language</string>
+    <string name="Idioma_de_interes">Language of interest</string>
     <string name="Nivel_del_idioma_de_interes">Language level of interest</string>
     <string name="Pais_de_origen">Country of origin</string>
     <string name="Motivos_de_aprendizaje">Learning motives</string>
     <string name="Tematica_de_interes">Topic of interest</string>
     <string name="correo">Mail</string>
+    <string name="Siguiente">Next</string>
     <string name="Teléfono">Telephone</string>
     <string name="Contraseña">Password</string>
     <string name="Confirmar_la_contraseña">confirm password</string>
