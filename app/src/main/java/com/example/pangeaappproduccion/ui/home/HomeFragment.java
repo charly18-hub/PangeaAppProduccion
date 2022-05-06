@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +31,7 @@ import com.example.pangeaappproduccion.Buscador;
 import com.example.pangeaappproduccion.FotoPerfil;
 import com.example.pangeaappproduccion.Publicaciones;
 import com.example.pangeaappproduccion.R;
-import com.example.pangeaappproduccion.Util.UtilActivity;
+import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentHomeBinding;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.translate_api;
@@ -46,31 +45,26 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class HomeFragment extends UtilActivity {
+public class HomeFragment extends UtilFragment {
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
@@ -102,10 +96,8 @@ public class HomeFragment extends UtilActivity {
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+        establecerIdioma();
         String email_perfil;
         SharedPreferences prefs = requireActivity().getSharedPreferences("correo", MODE_PRIVATE);
         email_perfil = prefs.getString("correo", "");

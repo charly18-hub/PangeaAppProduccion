@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterAmistad;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
@@ -29,7 +30,7 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ActivityAmistad extends AppCompatActivity {
+public class ActivityAmistad extends UtilActivity {
 
     private List<SolicitudesList> listAmistad;
     private AdapterAmistad adapterAmistad;
@@ -48,6 +49,7 @@ public class ActivityAmistad extends AppCompatActivity {
 
 
 
+        establecerIdioma();
         recyclerViewAmistad = findViewById(R.id.recyclerAmistad);
         listAmistad = new ArrayList<>();
         adapterAmistad = new AdapterAmistad(listAmistad, new AdapterAmistad.ItemClickListener() {

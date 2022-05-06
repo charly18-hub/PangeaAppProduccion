@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterChatPersonal;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
@@ -36,7 +37,7 @@ import java.util.TimeZone;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends UtilActivity {
 
     private TextView etReceptor;
     private EditText mensaje;
@@ -53,6 +54,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        establecerIdioma();
         String destinatario_recibido_chat = getIntent().getExtras().getString("destinatario");
         Toast.makeText(getApplicationContext(),"se envio destinatario"+destinatario_recibido_chat, Toast.LENGTH_LONG).show();
 

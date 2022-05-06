@@ -22,6 +22,7 @@ import com.example.pangeaappproduccion.Lenguages;
 import com.example.pangeaappproduccion.Model.Registro.Language;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.SolicitudesList;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
@@ -38,7 +39,7 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ActivitySolicitudes extends AppCompatActivity {
+public class ActivitySolicitudes extends UtilActivity {
 
 
 
@@ -59,6 +60,7 @@ public class ActivitySolicitudes extends AppCompatActivity {
 
 
 
+        establecerIdioma();
         recyclerViewSolicitudes = findViewById(R.id.recyclerAmistad);
         listSolicitudes = new ArrayList<>();
         adapterSolicitudes = new AdapterSolicitudes(listSolicitudes, new AdapterSolicitudes.ItemClickListener() {

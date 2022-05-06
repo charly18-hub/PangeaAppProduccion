@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Listas.listTraducciones;
+import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.gallery.GalleryFragment;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
@@ -46,7 +47,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link traduccion#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class traduccion extends Fragment {
+public class traduccion extends UtilFragment {
 
     private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
     private AdapterTraducciones adapterTraducciones;
@@ -111,6 +112,7 @@ public class traduccion extends Fragment {
 
 
 
+        establecerIdioma();
         View view = inflater.inflate(R.layout.fragment_traduccion, container, false);
 
         SharedPreferences preferences = getActivity().getSharedPreferences("accesos", MODE_PRIVATE);

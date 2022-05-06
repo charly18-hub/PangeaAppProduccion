@@ -59,4 +59,10 @@
         android:label="fragment_evaluacion"
         tools:layout="@layout/fragment_evaluacion" />
 
+    <fragment
+        android:id="@+id/idioma"
+        android:name="com.example.pangeaappproduccion.IdiomaPreferidoFragment"
+        android:label="Idioma"
+        tools:layout="@layout/fragment_idioma_preferido" />
+
 </navigation>

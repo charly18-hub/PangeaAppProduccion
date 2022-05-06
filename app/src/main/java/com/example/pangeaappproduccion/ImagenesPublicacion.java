@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacion;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.firebase.firestore.DocumentChange;
@@ -35,7 +36,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  * Use the {@link ImagenesPublicacion#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ImagenesPublicacion extends Fragment {
+public class ImagenesPublicacion extends UtilFragment {
 
     private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
@@ -103,6 +104,7 @@ public class ImagenesPublicacion extends Fragment {
         recyclerViewPublicaciones.setHasFixedSize(true);
 
 
+        establecerIdioma();
         FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("status","1").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {

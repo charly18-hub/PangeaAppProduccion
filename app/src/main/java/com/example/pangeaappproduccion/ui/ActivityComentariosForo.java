@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.pangeaappproduccion.Adapters.AdapterComentarioForo;
 import com.example.pangeaappproduccion.Listas.listForo;
 import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,7 +38,7 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ActivityComentariosForo extends AppCompatActivity {
+public class ActivityComentariosForo extends UtilActivity {
 
 
     TextView Usuario,Pregunta;
@@ -64,6 +65,7 @@ public class ActivityComentariosForo extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),email_perfil + " shared",Toast.LENGTH_LONG).show();
 
 
+        establecerIdioma();
         String idPregunta = getIntent().getExtras().getString("id");
         Toast.makeText(getApplicationContext(), "llego a activityComentarios" + idPregunta, Toast.LENGTH_LONG).show();
 

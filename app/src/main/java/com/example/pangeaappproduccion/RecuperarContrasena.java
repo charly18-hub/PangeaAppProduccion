@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +43,7 @@ import java.util.Map;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage.ET;
 
-public class RecuperarContrasena extends AppCompatActivity {
+public class RecuperarContrasena extends UtilActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

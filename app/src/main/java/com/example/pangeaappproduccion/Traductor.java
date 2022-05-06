@@ -8,7 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class Traductor extends AppCompatActivity {
+import com.example.pangeaappproduccion.Util.UtilActivity;
+
+public class Traductor extends UtilActivity {
 
     EditText text,fromLangCode,toLangCode;
     TextView translatedText;
@@ -19,6 +21,7 @@ public class Traductor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_traductor);
         initUi();
+        establecerIdioma();
         btnTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

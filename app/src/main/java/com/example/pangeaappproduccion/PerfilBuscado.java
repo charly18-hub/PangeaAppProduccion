@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacion;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
@@ -34,7 +35,7 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class PerfilBuscado extends AppCompatActivity {
+public class PerfilBuscado extends UtilActivity {
 
 
     TextView Perfil,PaisUsuario,Nivel,Idioma,Intereses;
@@ -64,6 +65,7 @@ public class PerfilBuscado extends AppCompatActivity {
         recyclerViewPublicaciones = findViewById(R.id.recyclerViewBuscador);
 
 
+        establecerIdioma();
         listPublicaciones = new ArrayList<>();
         adapterPublicacion = new AdapterPublicacion(listPublicaciones);
         recyclerViewPublicaciones.setAdapter(adapterPublicacion);

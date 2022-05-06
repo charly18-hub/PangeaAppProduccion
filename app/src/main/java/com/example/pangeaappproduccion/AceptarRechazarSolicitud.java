@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,9 +26,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
-public class AceptarRechazarSolicitud extends AppCompatActivity {
+public class AceptarRechazarSolicitud extends UtilActivity {
     TextView nombreSolicitud;
-    Context context;
     ImageView fotoPerfil;
     Button aceptarSolicitud,rechazarSolicitud;
 
@@ -49,10 +49,8 @@ public class AceptarRechazarSolicitud extends AppCompatActivity {
         editor.putString("recibe_solicitud", solicitud_enviar);
         editor.apply();
 
-
-
-        fotoPerfil = (ImageView) findViewById(R.id.fotoPerfil);
-
+        establecerIdioma();
+        fotoPerfil = findViewById(R.id.fotoPerfil);
 
         FirebaseFirestore dbDataPerfil1 = FirebaseFirestore.getInstance();
         dbDataPerfil1.collection("users").whereEqualTo("emailAddress",email_perfil).get()

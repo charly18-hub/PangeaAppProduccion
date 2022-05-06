@@ -3,8 +3,6 @@ package com.example.pangeaappproduccion.ui.slideshow;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -30,20 +28,18 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacion;
 import com.example.pangeaappproduccion.ImagenesPublicacion;
-import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.MultimediaFragment;
 import com.example.pangeaappproduccion.Publicaciones;
 import com.example.pangeaappproduccion.PublicacionesTextFragment;
 import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.gallery.GalleryFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
@@ -54,7 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SlideshowFragment extends Fragment {
+public class SlideshowFragment extends UtilFragment {
     private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
 
@@ -82,6 +78,7 @@ public class SlideshowFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_slideshow, container, false);
 
+        establecerIdioma();
         // Setting ViewPager for each Tabs
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpagerPublicaciones);
         setupViewPager(viewPager);

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacionForo;
 import com.example.pangeaappproduccion.Listas.listForo;
+import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,7 +48,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  * Use the {@link Foro#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Foro extends Fragment {
+public class Foro extends UtilFragment {
 
 
 
@@ -119,6 +120,7 @@ public class Foro extends Fragment {
 
         Toast.makeText(getActivity(),email_perfil + " shared",Toast.LENGTH_LONG).show();
 
+        establecerIdioma();
 
         FirebaseFirestore dbDataUserPerfil = FirebaseFirestore.getInstance();
         dbDataUserPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()

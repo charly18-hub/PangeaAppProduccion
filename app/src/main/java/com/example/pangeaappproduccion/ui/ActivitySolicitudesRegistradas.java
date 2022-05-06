@@ -17,6 +17,7 @@ import com.example.pangeaappproduccion.AceptarRechazarSolicitud;
 import com.example.pangeaappproduccion.Adapters.AdapterSolicitudes;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.SolicitudesList;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
@@ -33,7 +34,7 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ActivitySolicitudesRegistradas extends AppCompatActivity {
+public class ActivitySolicitudesRegistradas extends UtilActivity {
 
     private List<SolicitudesList> listAmistad;
     private AdapterSolicitudes adapterSolicitudes;
@@ -49,6 +50,7 @@ public class ActivitySolicitudesRegistradas extends AppCompatActivity {
 
 
 
+        establecerIdioma();
         recyclerViewSolicitudes = findViewById(R.id.recyclerAmistadSolicitudes);
         listAmistad = new ArrayList<>();
         adapterSolicitudes = new AdapterSolicitudes(listAmistad, new AdapterSolicitudes.ItemClickListener() {

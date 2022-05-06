@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.pangeaappproduccion.Util.UtilFragment;
+
 import us.zoom.sdk.JoinMeetingOptions;
 import us.zoom.sdk.JoinMeetingParams;
 import us.zoom.sdk.MeetingService;
@@ -32,7 +34,7 @@ import us.zoom.sdk.ZoomSDKInitializeListener;
  * Use the {@link videollamadas#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class videollamadas extends Fragment {
+public class videollamadas extends UtilFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -88,6 +90,7 @@ public class videollamadas extends Fragment {
         MP = view.findViewById(R.id.etPass);
         joing = view.findViewById(R.id.btnTomarClase);
         zoomInit(getContext());
+        establecerIdioma();
         joing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

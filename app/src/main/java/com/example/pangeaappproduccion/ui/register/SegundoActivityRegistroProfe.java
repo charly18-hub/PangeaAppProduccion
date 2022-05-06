@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SegundoActivityRegistroProfe extends AppCompatActivity {
+public class SegundoActivityRegistroProfe extends UtilActivity {
 
 
     TextView textUser;
@@ -38,6 +39,7 @@ public class SegundoActivityRegistroProfe extends AppCompatActivity {
         setContentView(R.layout.activity_segundo_registro_profe);
 
 
+        establecerIdioma();
         String usuario_registrado = getIntent().getExtras().getString("user_name");
         String email_register_obtenido = getIntent().getExtras().getString("email_register");
 

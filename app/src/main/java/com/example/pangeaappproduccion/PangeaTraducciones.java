@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.pangeaappproduccion.Listas.listTraducciones;
+import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.firebase.firestore.DocumentChange;
@@ -36,7 +37,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  */
 
 
-public class PangeaTraducciones extends Fragment {
+public class PangeaTraducciones extends UtilFragment {
 
 
 
@@ -101,6 +102,7 @@ public class PangeaTraducciones extends Fragment {
         Context context = view.getContext();
 
 
+        establecerIdioma();
         listTraducciones = new ArrayList<>();
         adapterTraducciones = new AdapterTraducciones(context,listTraducciones);
         recyclerViewTraducciones.setAdapter(adapterTraducciones);

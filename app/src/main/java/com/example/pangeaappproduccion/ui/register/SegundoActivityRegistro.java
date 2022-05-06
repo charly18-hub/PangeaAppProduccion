@@ -26,6 +26,7 @@ import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.MainActivity;
 import com.example.pangeaappproduccion.Model.Registro.ImagenPerfil;
 import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.example.pangeaappproduccion.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,7 +50,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SegundoActivityRegistro extends AppCompatActivity {
+public class SegundoActivityRegistro extends UtilActivity {
 
 
     TextView textUser;
@@ -66,6 +67,7 @@ public class SegundoActivityRegistro extends AppCompatActivity {
         setContentView(R.layout.activity_segundo_registro);
 
 
+        establecerIdioma();
         String usuario_registrado = getIntent().getExtras().getString("user_name");
         String email_register_obtenido = getIntent().getExtras().getString("email_register");
 

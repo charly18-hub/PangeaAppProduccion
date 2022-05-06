@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPreguntasEvaluaciones;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,7 +22,7 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ActivityPreguntasEvaluacion extends AppCompatActivity {
+public class ActivityPreguntasEvaluacion extends UtilActivity {
 
     private List<com.example.pangeaappproduccion.Adapters.listEvaluaciones> listEvaluaciones;
     private AdapterPreguntasEvaluaciones adapterPreguntasEvaluaciones;
@@ -43,6 +44,7 @@ public class ActivityPreguntasEvaluacion extends AppCompatActivity {
 
 
 
+        establecerIdioma();
         listEvaluaciones = new ArrayList<>();
         adapterPreguntasEvaluaciones = new AdapterPreguntasEvaluaciones(getApplicationContext(),listEvaluaciones);
         recyclerViewPreguntasEvaluaciones.setAdapter(adapterPreguntasEvaluaciones);

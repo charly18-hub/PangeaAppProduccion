@@ -22,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pangeaappproduccion.Adapters.AdapterUsuarios;
+import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
@@ -49,7 +50,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  * Use the {@link llamadas#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class llamadas extends Fragment {
+public class llamadas extends UtilFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -114,6 +115,7 @@ public class llamadas extends Fragment {
         String email_perfil = preferences.getString("email", "No name defined");
         Toast.makeText(getActivity(),email_perfil+" shared",Toast.LENGTH_LONG).show();
 
+        establecerIdioma();
         Context context = view.getContext();
         recyclerViewUsuariosVideo = view.findViewById(R.id.recyclerViewUsuariosVideo);
 

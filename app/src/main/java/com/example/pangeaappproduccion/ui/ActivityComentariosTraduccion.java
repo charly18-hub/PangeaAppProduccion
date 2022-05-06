@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.pangeaappproduccion.AdapterComentariosTraduccion;
 import com.example.pangeaappproduccion.Listas.listTraducciones;
 import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,7 +38,7 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ActivityComentariosTraduccion extends AppCompatActivity {
+public class ActivityComentariosTraduccion extends UtilActivity {
 
     TextView Usuario,Pregunta;
     Button ComentarPregunta;
@@ -63,6 +64,7 @@ public class ActivityComentariosTraduccion extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),email_perfil + " shared",Toast.LENGTH_LONG).show();
 
 
+        establecerIdioma();
         String idPregunta = getIntent().getExtras().getString("id");
         Toast.makeText(getApplicationContext(), "llego a activityComentarios" + idPregunta, Toast.LENGTH_LONG).show();
 

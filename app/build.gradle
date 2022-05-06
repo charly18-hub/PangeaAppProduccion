@@ -12,9 +12,6 @@ android {
 
 
     defaultConfig {
-        configurations.all {
-            resolutionStrategy { force 'androidx.core:core:1.6.0' }
-        }
         applicationId "com.example.pangeaappproduccion"
         minSdkVersion 23
         targetSdkVersion 30

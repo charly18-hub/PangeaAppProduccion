@@ -47,5 +47,9 @@
             android:icon="@drawable/ic_baseline_group_24"
             android:title="Evaluaciones" />
 
+        <item
+            android:id="@+id/idioma"
+            android:icon="@drawable/ic_baseline_translate_24"
+            android:title="Idioma preferido" />
     </group>
 </menu>

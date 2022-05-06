@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacionText;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.firebase.firestore.DocumentChange;
@@ -30,7 +31,7 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class PublicacionesTextFragment extends Fragment {
+public class PublicacionesTextFragment extends UtilFragment {
 
 
 
@@ -61,6 +62,7 @@ public class PublicacionesTextFragment extends Fragment {
         recyclerViewPublicaciones.setLayoutManager(new LinearLayoutManager(context));
         recyclerViewPublicaciones.setHasFixedSize(true);
 
+        establecerIdioma();
 
         FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("status","0").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

@@ -33,6 +33,7 @@ import com.example.pangeaappproduccion.Model.Registro.Language;
 import com.example.pangeaappproduccion.Model.Registro.RegistroRedesSociales;
 import com.example.pangeaappproduccion.Profesores;
 import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.example.pangeaappproduccion.ui.DatePickerFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,7 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class Registro extends AppCompatActivity {
+public class Registro extends UtilActivity {
 
 
     TextView profesores;
@@ -65,6 +66,7 @@ public class Registro extends AppCompatActivity {
         setContentView(R.layout.activity_registro);
 
 
+        establecerIdioma();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.idiomas_array, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> adapter_motivos = ArrayAdapter.createFromResource(this,

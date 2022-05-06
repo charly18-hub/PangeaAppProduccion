@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -31,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 
-public class ActivityResponderEvaluacion extends AppCompatActivity {
+public class ActivityResponderEvaluacion extends UtilActivity {
 
     TextView Respuesta1,Respuesta2,Respuesta3,Pregunta;
     Button EnviarRespuesta;
@@ -46,6 +47,7 @@ public class ActivityResponderEvaluacion extends AppCompatActivity {
 
 
 
+        establecerIdioma();
 
         FirebaseFirestore dbDataPerfilType = FirebaseFirestore.getInstance();
 

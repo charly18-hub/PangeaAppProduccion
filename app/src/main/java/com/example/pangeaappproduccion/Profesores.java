@@ -15,12 +15,13 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.example.pangeaappproduccion.ui.register.Registro;
 import com.example.pangeaappproduccion.ui.register.RegistroProfe;
 import com.example.pangeaappproduccion.ui.register.SegundoActivityRegistroProfe;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class Profesores extends AppCompatActivity {
+public class Profesores extends UtilActivity {
 
     TextView alumnos;
     Button RegistrarAlumno;
@@ -51,6 +52,7 @@ public class Profesores extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
                 R.array.idiomas_array, android.R.layout.simple_spinner_item);
 
+        establecerIdioma();
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner1.setAdapter(adapter1);

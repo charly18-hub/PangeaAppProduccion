@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacionMultimedia;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.firebase.firestore.DocumentChange;
@@ -35,7 +36,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  * Use the {@link MultimediaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MultimediaFragment extends Fragment {
+public class MultimediaFragment extends UtilFragment {
 
     private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
     private AdapterPublicacionMultimedia adapterPublicacion;
@@ -63,6 +64,7 @@ public class MultimediaFragment extends Fragment {
         Context context = view.getContext();
 
 
+        establecerIdioma();
         listPublicaciones = new ArrayList<>();
         adapterPublicacion = new AdapterPublicacionMultimedia(listPublicaciones);
         recyclerViewPublicaciones.setAdapter(adapterPublicacion);

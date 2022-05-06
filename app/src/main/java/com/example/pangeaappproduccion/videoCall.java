@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.pangeaappproduccion.Util.UtilActivity;
+
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
@@ -16,7 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class videoCall extends AppCompatActivity {
+public class videoCall extends UtilActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class videoCall extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        establecerIdioma();
 
         int numero = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
         //String NameConference = "Llamada"+numero+"2020";

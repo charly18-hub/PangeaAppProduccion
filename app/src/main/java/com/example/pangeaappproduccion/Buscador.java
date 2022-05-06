@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterBusqueda;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.example.pangeaappproduccion.ui.ActivitySolicitudes;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -27,7 +28,7 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class Buscador extends AppCompatActivity {
+public class Buscador extends UtilActivity {
 
 
     private List<com.example.pangeaappproduccion.BuscadorList> listBuscador;
@@ -42,6 +43,7 @@ public class Buscador extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscador);
 
+        establecerIdioma();
         recyclerViewbusquedas = findViewById(R.id.recyclerBuscador);
         listBuscador = new ArrayList<>();
         adapterBusqueda = new AdapterBusqueda(listBuscador, new AdapterBusqueda.ItemClickListener() {

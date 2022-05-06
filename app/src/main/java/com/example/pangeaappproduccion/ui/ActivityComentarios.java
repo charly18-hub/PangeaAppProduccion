@@ -24,6 +24,7 @@ import com.example.pangeaappproduccion.Adapters.AdapterComentarios;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.Model.Comentario;
 import com.example.pangeaappproduccion.R;
+import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,7 +48,7 @@ import java.util.UUID;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ActivityComentarios extends AppCompatActivity {
+public class ActivityComentarios extends UtilActivity {
 
 
     TextView Usuario,Publicacion;
@@ -75,6 +76,7 @@ public class ActivityComentarios extends AppCompatActivity {
         setContentView(R.layout.activity_comentarios);
 
 
+        establecerIdioma();
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("accesos", Context.MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
         String idPublicacion = getIntent().getExtras().getString("clave","");
