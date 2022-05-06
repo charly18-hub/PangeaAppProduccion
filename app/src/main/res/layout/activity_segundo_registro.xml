@@ -38,7 +38,7 @@
                 android:id="@+id/textBienvenida"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Casi Terminamos "
+                android:text="Casi Terminamos"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -82,7 +82,6 @@
                     android:ems="10"
                     android:hint="Nombre Perfil"
                     android:inputType="textPersonName" />
-
 
                 <Button
                     android:id="@+id/btnRegistrarProfe3"

@@ -137,7 +137,7 @@
                     android:layout_marginEnd="20dp"
                     android:ems="10"
                     android:inputType="textPassword"
-                    android:hint="ZCuenta Bancaria" />
+                    android:hint="Cuenta Bancaria" />
 
                 <Button
                     android:id="@+id/btnRegistrarProfe3"

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PangeaApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Red Social</string>
+    <string name="menu_gallery">Publicar</string>
+    <string name="menu_slideshow">Home Pangea</string>
+    <string name="menu_video">Videollamada</string>
+    <string name="menu_traduccion">Traducción</string>
+
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_registro">Registro</string>
+    <string name="tab_text_1">Usuarios</string>
+    <string name="tab_text_2">Profesores</string>
+    <string name="title_activity_registros">Registros</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!--Spinner-->
+    <string name="back"><![CDATA[<-]]></string>
+
+
+    <string name="forward"><![CDATA[->]]></string>
+    <string name="facebook_app_id">443299894223330</string>
+
+
+    <string name="fb_login_protocol_scheme">fb1234</string>
+
+
+    <!--facebook-->
+
+    <string name="facebook_client_token">b191b544abfc108b3c41f27387865b22</string>
+    <string-array name="idiomas_array">
+        <item>Ingles</item>
+        <item>Español</item>
+        <item>Aleman</item>
+        <item>Italiano</item>
+        <item>Frances</item>
+        <item>Japones</item>
+        <item>Chino</item>
+    </string-array>
+    <string-array name="motivos_rray">
+        <item>Trabajo</item>
+        <item>Viajes</item>
+        <item>Eduacion</item>
+        <item>Familia/Amigos</item>
+    </string-array>
+
+
+
+
+    <!-- Traducciones Login -->
+
+    <string name="Email">Correo</string>
+    <string name="Login">Iniciar Sesión</string>
+    <string name="Registro">Registro</string>
+    <string name="Sign_In">PangeaApp</string>
+    <string name="Olvidaste_contraseña">¿Olvidaste tu contraseña?</string>
+
+    <!-- Traducciones Registro -->
+    <string name="registro">Registro</string>
+    <string name="alumnos">Estudiantes</string>
+    <string name="profesores">Profesores</string>
+    <string name="primer_nombre">Nombre</string>
+    <string name="segundo_nombre">Segundo nombre</string>
+    <string name="Apellido_Paterno">Apellido paterno</string>
+    <string name="Apellido_Materno">Apellido materno</string>
+    <string name="Sexo">Sexo</string>
+    <string name="Hombre">Hombre</string>
+    <string name="Mujer">Women</string>
+    <string name="Otro">Otro</string>
+    <string name="Idioma_de_interes">Idioma de interés</string>
+    <string name="Nivel_del_idioma_de_interes">Nivel del idioma de interés</string>
+    <string name="Pais_de_origen">País de origen</string>
+    <string name="Motivos_de_aprendizaje">Motivos de aprendizaje</string>
+    <string name="Tematica_de_interes">Tematica de interes</string>
+    <string name="correo">Correo</string>
+    <string name="Teléfono">Teléfono</string>
+    <string name="Contraseña">Contraseña</string>
+    <string name="Confirmar_la_contraseña">Confirmar la contraseña</string>
+
+    <!-- Traducciones Registro pt 2 -->
+    <string name="casi_terminamos">Casi Terminamos</string>
+    <string name="nombre_perfil">Nombre Perfil</string>
+    <string name="Registrarse">Registrarse</string>
+
+
+    <!-- publicaciones multimedia -->
+    <string name="Reproducir">Reproducir</string>
+    <string name="Comentar">Comentar</string>
+
+
+    <!-- solicitudes -->
+    <string name="Solicitudes">Solicitudes</string>
+    <string name="Amistades">Amistades</string>
+    <string name="Amistades_sugeridas">Amistades sugeridas</string>
+
+
+    <!-- Registro profe -->
+    <string name="Nombre_Certificado">Nombre Certificado</string>
+    <string name="Expedido_Por">Expedido Por</string>
+    <string name="Lengua_Certificada">Lengua Certificada</string>
+    <string name="Disponibilidad">Disponibilidad</string>
+    <string name="Zona_Horaria">Zona Horaria</string>
+    <string name="Cuenta_Bancaria">Cuenta Bancaria</string>
+    <string name="Ultimo_Paso">Último Paso</string>
+
+
+    <!-- recuperar_contrase;a -->
+    <string name="Recuperar_Contraseña">Recuperar Contraseña</string>
+    <string name="Solicitud_realizada">Tu Solicitud fue realizada , se te envio un correo con el proceso de actualizacion de contraseña, revisa tu carpeta de SPAM</string>
+    <string name="Actualizar">Actualizar</string>
+
+
+
+    <!-- Profesores -->
+    <string name="Idioma_Enseñar">Idioma Enseñar</string>
+    <string name="Nivel_de_enseñanza">Nivel de enseñanza</string>
+    <string name="Precio_Hora">Precio Hora</string>
+
+
+
+    <!-- perfil_buscado -->
+    <string name="Traducir">Traducir</string>
+    <string name="Publicar">Publicar</string>
+
+
+
+    <!-- enviar_solicitud -->
+    <string name="Agregar">Agregar</string>
+
+
+    <!-- comentarios_traduccion -->
+    <string name="Escribe_tu_Comentario">Escribe tu Comentario</string>
+
+
+    <!-- chat -->
+    <string name="Escribe_el_mensaje">Escribe el mensaje</string>
+
+
+    <!-- buscador -->
+    <string name="Solicitudes_de_Amistad">Solicitudes de Amistad</string>
+
+    <!-- amistad -->
+    <string name="Amigos">Amigos</string>
+
+    <!-- aceptar rechazar -->
+    <string name="Rechazar">Rechazar</string>
+    <string name="Aceptar">Aceptar</string>
+
+</resources>
