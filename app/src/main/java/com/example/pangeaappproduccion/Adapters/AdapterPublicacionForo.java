@@ -64,7 +64,7 @@ public class AdapterPublicacionForo  extends RecyclerView.Adapter<AdapterPublica
             public void onClick(View view) {
 
                 FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-                dbDataPerfil.collection("foro").get()
+                dbDataPerfil.collection("foro").whereEqualTo("mensaje", listForo.get(i).getMensaje()).get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {

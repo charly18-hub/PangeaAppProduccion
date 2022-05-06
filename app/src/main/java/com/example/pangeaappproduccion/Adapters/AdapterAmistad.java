@@ -47,8 +47,8 @@ public class AdapterAmistad  extends RecyclerView.Adapter<AdapterAmistad.Amistad
     @Override
     public void onBindViewHolder(@NonNull @NotNull AdapterAmistad.AmistadHolder amistadHolder, int i) {
 
-        amistadHolder.nombre2.setText(listSolicitudes.get(i).getUsuario());
-        Glide.with(amistadHolder.itemView.getContext()).load(listSolicitudes.get(i).getMultimedia()).into(amistadHolder.imgPublicacion);
+        amistadHolder.nombre2.setText(listSolicitudes.get(i).getUserName());
+        Glide.with(amistadHolder.itemView.getContext()).load(listSolicitudes.get(i).getProfilePicture()).into(amistadHolder.imgPublicacion);
         amistadHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

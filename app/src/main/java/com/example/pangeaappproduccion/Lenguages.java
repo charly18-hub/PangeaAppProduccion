@@ -1,25 +1,30 @@
-package com.example.pangeaappproduccion.Model.Registro;
-
+package com.example.pangeaappproduccion;
 import java.util.List;
+import java.util.Map;
 
-public class Language {
-    private String goalLearning;
+public class Lenguages {
+
+    private String goalLearning = "Ingles";
     private String nativee;
     private String[] other;
     private String[]  pretendToLearn;
 
-    public Language(String s) {
+    public Lenguages(String s) {
     }
 
-    public Language(String goalLearning, String nativee) {
+    public Lenguages(String goalLearning, String nativee) {
         this.goalLearning = goalLearning;
         this.nativee = nativee;
     }
-    public Language(String goalLearning, String nativee, String[] other, String[] pretendToLearn) {
+    public Lenguages(String goalLearning, String nativee, String[] other, String[] pretendToLearn) {
         this.goalLearning = goalLearning;
         this.nativee = nativee;
         this.other = other;
         this.pretendToLearn = pretendToLearn;
+    }
+
+    public Lenguages() {
+
     }
 
     public String getGoalLearning() {
@@ -53,4 +58,5 @@ public class Language {
     public void setPretendToLearn(String[] pretendToLearn) {
         this.pretendToLearn = pretendToLearn;
     }
+
 }

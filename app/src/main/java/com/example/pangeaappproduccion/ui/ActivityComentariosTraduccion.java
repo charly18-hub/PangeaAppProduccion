@@ -60,6 +60,7 @@ public class ActivityComentariosTraduccion extends AppCompatActivity {
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("accesos", Context.MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
 
+        Toast.makeText(getApplicationContext(),email_perfil + " shared",Toast.LENGTH_LONG).show();
 
 
         String idPregunta = getIntent().getExtras().getString("id");
@@ -71,7 +72,7 @@ public class ActivityComentariosTraduccion extends AppCompatActivity {
 
 
         FirebaseFirestore dbDataUserPerfil = FirebaseFirestore.getInstance();
-        dbDataUserPerfil.collection("users").whereEqualTo("email",email_perfil).get()
+        dbDataUserPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -79,7 +80,8 @@ public class ActivityComentariosTraduccion extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
 
-                                String usuarioEmisor = documentSnapshot.getString("usuario");
+                                String usuarioEmisor = documentSnapshot.getString("userName");
+                                Toast.makeText(getApplicationContext(),usuarioEmisor + " Obtenidp",Toast.LENGTH_LONG).show();
 
 
                                 SharedPreferences.Editor editor1 = getSharedPreferences("usuario_recibido_chat1", MODE_PRIVATE).edit();
@@ -91,8 +93,9 @@ public class ActivityComentariosTraduccion extends AppCompatActivity {
                 });
 
         SharedPreferences preferencesusuario = getSharedPreferences("usuario_recibido_chat1", Context.MODE_PRIVATE);
-        String usuario_foro = preferencesusuario.getString("usuario_recibido_chat1", "No existe idioma");
+        String usuario_traductor = preferencesusuario.getString("usuario_recibido_chat1", "No existe idioma");
 
+        Toast.makeText(getApplicationContext(),usuario_traductor + " guardado",Toast.LENGTH_LONG).show();
 
 
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
@@ -153,7 +156,7 @@ public class ActivityComentariosTraduccion extends AppCompatActivity {
 
                 com.example.pangeaappproduccion.Listas.listTraducciones listTraducciones = new listTraducciones();
                 listTraducciones.setTraduccion(CajaComentarioPregunta.getText().toString());
-                listTraducciones.setUsuario(usuario_foro);
+                listTraducciones.setUsuario(usuario_traductor);
                 FirebaseFirestore.getInstance().collection("traducciones"+"/"+idPregunta+"/"+"comentario").add(listTraducciones);
                 CajaComentarioPregunta.setText("");
             }

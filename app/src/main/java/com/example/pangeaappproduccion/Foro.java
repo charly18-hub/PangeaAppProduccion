@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacionForo;
 import com.example.pangeaappproduccion.Listas.listForo;
@@ -116,9 +117,11 @@ public class Foro extends Fragment {
         SharedPreferences preferences = getActivity().getSharedPreferences("accesos", MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
 
+        Toast.makeText(getActivity(),email_perfil + " shared",Toast.LENGTH_LONG).show();
+
 
         FirebaseFirestore dbDataUserPerfil = FirebaseFirestore.getInstance();
-        dbDataUserPerfil.collection("users").whereEqualTo("email",email_perfil).get()
+        dbDataUserPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -126,7 +129,8 @@ public class Foro extends Fragment {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
 
-                                String usuarioEmisor = documentSnapshot.getString("usuario");
+                                String usuarioEmisor = documentSnapshot.getString("userName");
+                                Toast.makeText(getActivity(),usuarioEmisor + " obtenido",Toast.LENGTH_LONG).show();
 
 
                                 SharedPreferences.Editor editor1 = getActivity().getSharedPreferences("usuario_recibido_chat1", MODE_PRIVATE).edit();
@@ -139,6 +143,7 @@ public class Foro extends Fragment {
 
         SharedPreferences preferencesusuario = getActivity().getSharedPreferences("usuario_recibido_chat1", Context.MODE_PRIVATE);
         String usuario_foro = preferencesusuario.getString("usuario_recibido_chat1", "No existe idioma");
+        Toast.makeText(getActivity(),usuario_foro + " guardado",Toast.LENGTH_LONG).show();
 
 
         listForo = new ArrayList<>();

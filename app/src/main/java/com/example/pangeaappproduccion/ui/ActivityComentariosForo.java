@@ -61,6 +61,7 @@ public class ActivityComentariosForo extends AppCompatActivity {
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("accesos", Context.MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
 
+        Toast.makeText(getApplicationContext(),email_perfil + " shared",Toast.LENGTH_LONG).show();
 
 
         String idPregunta = getIntent().getExtras().getString("id");
@@ -72,7 +73,7 @@ public class ActivityComentariosForo extends AppCompatActivity {
 
 
         FirebaseFirestore dbDataUserPerfil = FirebaseFirestore.getInstance();
-        dbDataUserPerfil.collection("users").whereEqualTo("email",email_perfil).get()
+        dbDataUserPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
@@ -80,8 +81,9 @@ public class ActivityComentariosForo extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
 
-                                String usuarioEmisor = documentSnapshot.getString("usuario");
+                                String usuarioEmisor = documentSnapshot.getString("userName");
 
+                                Toast.makeText(getApplicationContext(),usuarioEmisor + " Obtenidp",Toast.LENGTH_LONG).show();
 
                                 SharedPreferences.Editor editor1 = getSharedPreferences("usuario_recibido_chat1", MODE_PRIVATE).edit();
                                 editor1.putString("usuario_recibido_chat1", usuarioEmisor);
@@ -94,6 +96,7 @@ public class ActivityComentariosForo extends AppCompatActivity {
         SharedPreferences preferencesusuario = getSharedPreferences("usuario_recibido_chat1", Context.MODE_PRIVATE);
         String usuario_foro = preferencesusuario.getString("usuario_recibido_chat1", "No existe idioma");
 
+        Toast.makeText(getApplicationContext(),usuario_foro + " guardado",Toast.LENGTH_LONG).show();
 
 
         FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();

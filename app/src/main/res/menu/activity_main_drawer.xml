@@ -42,5 +42,10 @@
             android:title="Foro" />
 
 
+        <item
+            android:id="@+id/evaluaciones"
+            android:icon="@drawable/ic_baseline_group_24"
+            android:title="Evaluaciones" />
+
     </group>
 </menu>

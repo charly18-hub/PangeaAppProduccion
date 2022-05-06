@@ -71,7 +71,8 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
         usuariosHolder.email.setText(listUsuarios.get(i).getEmail());
         usuariosHolder.password.setText(listUsuarios.get(i).getPassword());
         usuariosHolder.fcm_token.setText(listUsuarios.get(i).getToken());
-        Glide.with(usuariosHolder.itemView.getContext()).load(listUsuarios.get(i).getMultimedia()).into(usuariosHolder.ImgUserPerfil);
+        Glide.with(usuariosHolder.itemView.getContext()).load(listUsuarios.get(i).getProfilePicture()).into(usuariosHolder.ImgUserPerfil);
+
 
 
         SharedPreferences preferences = context.getApplicationContext().getSharedPreferences("accesos",Context.MODE_PRIVATE);
@@ -80,8 +81,8 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
 
 
 
-        String numero = listUsuarios.get(i).getTelefono();
-        String destinatario = listUsuarios.get(i).getUsuario();
+        String numero = listUsuarios.get(i).getTelephoneNumber();
+        String destinatario = listUsuarios.get(i).getUserName();
 
 
 
@@ -90,7 +91,9 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
         usuariosHolder.video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context.getApplicationContext(), videoCall.class);
+
+
+               Intent intent = new Intent(context.getApplicationContext(), videoCall.class);
                 intent.putExtra("destinaraio", destinatario);
                 intent.putExtra("usuario",email_perfil);
                 context.startActivity(intent);
@@ -120,8 +123,11 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
         usuariosHolder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 Intent intent = new Intent(context.getApplicationContext(), ChatActivity.class);
-                intent.putExtra("destinaraio", destinatario);
+                intent.putExtra("destinatario", destinatario ); //aqui debe ir destinatario pero ese valor viene nullo checar
                 Toast.makeText(context,"se envio destinatario"+destinatario, Toast.LENGTH_LONG).show();
                 intent.putExtra("usuario",email_perfil);
                 Toast.makeText(context,"se envio usuario"+email_perfil, Toast.LENGTH_LONG).show();

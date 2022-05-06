@@ -1,8 +1,10 @@
 package com.example.pangeaappproduccion;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,15 +20,21 @@ import android.view.ViewGroup;
 import com.example.pangeaappproduccion.Listas.listTraducciones;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
@@ -88,6 +96,9 @@ public class MisTraducciones extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_mis_traducciones, container, false);
 
+        SharedPreferences preferences = getActivity().getSharedPreferences("accesos", MODE_PRIVATE);
+        String email_perfil = preferences.getString("email", "No name defined");
+
 
         recyclerViewTraducciones = view.findViewById(R.id.recycle_view_mistraducciones);
 
@@ -101,7 +112,37 @@ public class MisTraducciones extends Fragment {
         recyclerViewTraducciones.setHasFixedSize(true);
 
 
-        FirebaseFirestore.getInstance().collection("traducciones").whereEqualTo("usuario","angel").addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+
+        FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
+        dbDataPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+
+
+                                    String userName = (String) documentSnapshot.get("userName");
+
+                                    SharedPreferences.Editor editor = getActivity().getSharedPreferences("UsernameData", MODE_PRIVATE).edit();
+                                    editor.putString("userName", userName);
+                                    editor.apply();
+
+
+
+                            }
+                        }
+                    }
+                });
+
+
+        SharedPreferences preferencesIdioma = getActivity().getSharedPreferences("UsernameData", MODE_PRIVATE);
+        String UserNameObtenido = preferencesIdioma.getString("username", "No existe idioma");
+
+
+
+        FirebaseFirestore.getInstance().collection("traducciones").whereEqualTo("usuario",UserNameObtenido).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
                 if (error != null) {

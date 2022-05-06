@@ -1,5 +1,6 @@
 package com.example.pangeaappproduccion;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.mlkit.common.model.DownloadConditions;
 import com.google.mlkit.nl.translate.Translator;
 
@@ -34,6 +37,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -107,6 +113,12 @@ public class traduccion extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_traduccion, container, false);
 
+        SharedPreferences preferences = getActivity().getSharedPreferences("accesos", MODE_PRIVATE);
+        String email_perfil = preferences.getString("email", "No name defined");
+
+        Toast.makeText(getActivity(),email_perfil + " shared",Toast.LENGTH_LONG).show();
+
+
         // Setting ViewPager for each Tabs
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpagerTraductores);
         setupViewPager(viewPager);
@@ -123,6 +135,36 @@ public class traduccion extends Fragment {
 
 
 
+        FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
+        dbDataPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+
+
+                                String userName = (String) documentSnapshot.get("userName");
+
+                                Toast.makeText(getActivity(),userName + " extraido",Toast.LENGTH_LONG).show();
+
+
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("UsernameData", MODE_PRIVATE).edit();
+                                editor.putString("userName", userName);
+                                editor.apply();
+
+
+
+                            }
+                        }
+                    }
+                });
+
+
+        SharedPreferences preferencesIdioma = getActivity().getSharedPreferences("UsernameData", MODE_PRIVATE);
+        String UserNameObtenido = preferencesIdioma.getString("userName", "No existe usuario");
+
+        Toast.makeText(getActivity(),UserNameObtenido,Toast.LENGTH_LONG).show();
 
 
 
@@ -134,11 +176,14 @@ public class traduccion extends Fragment {
             public void onClick(View view) {
 
 
+                String clave = UUID.randomUUID().toString().toUpperCase();
 
 
                 listTraducciones listTraducciones = new listTraducciones();
                 listTraducciones.setTraduccion(text.getText().toString());
-                listTraducciones.setUsuario("angel");
+                listTraducciones.setId(clave);
+
+                listTraducciones.setUsuario(UserNameObtenido);
                 FirebaseFirestore.getInstance().collection("traducciones").add(listTraducciones);
 
                 translate_api translate=new translate_api();
