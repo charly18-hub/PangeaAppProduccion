@@ -47,10 +47,10 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link llamadas#newInstance} factory method to
+ * Use the {@link LlamadasFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class llamadas extends UtilFragment {
+public class LlamadasFragment extends UtilFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,7 +70,7 @@ public class llamadas extends UtilFragment {
     Button inMeeting ;
     StorageReference mStorage = FirebaseStorage.getInstance().getReference();
 
-    public llamadas() {
+    public LlamadasFragment() {
         // Required empty public constructor
     }
 
@@ -83,8 +83,8 @@ public class llamadas extends UtilFragment {
      * @return A new instance of fragment llamadas.
      */
     // TODO: Rename and change types and number of parameters
-    public static llamadas newInstance(String param1, String param2) {
-        llamadas fragment = new llamadas();
+    public static LlamadasFragment newInstance(String param1, String param2) {
+        LlamadasFragment fragment = new LlamadasFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -131,11 +131,6 @@ public class llamadas extends UtilFragment {
                         Toast.LENGTH_LONG).show();
 
                 enviarNotificacion(listUsuarios.get(recyclerViewUsuariosVideo.getChildAdapterPosition(view)).getFirts_name());
-
-
-
-
-
             }
         });
 
@@ -153,12 +148,7 @@ public class llamadas extends UtilFragment {
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
-
                                 String usuario = documentSnapshot.getString("uid");
-
-                                Toast.makeText(getActivity(),usuario+" usuario obtenido",Toast.LENGTH_LONG).show();
-
                                 SharedPreferences.Editor editor = context.getSharedPreferences("usuarioObtenido", Context.MODE_PRIVATE).edit();
                                 editor.putString("usuarioObtenido", usuario);
                                 editor.apply();
@@ -212,7 +202,6 @@ public class llamadas extends UtilFragment {
 
 
             String token = "dDmdxYtmT6OCl3-e_qQV_J:APA91bF0x2tKsJr8f0GPCeJOKWC4E7rx5RjN33gWcWz9xw2elMERVxrosW8Z1EgV1rMh58dMdeoTmLx8W5cdlZkNPJsYICORjMIZjeklL7BONQfqxsandzyoz30NgzqBN_VABy38n3oc";
-
             json.put("to",token);
             JSONObject notificacion = new JSONObject();
             notificacion.put("titulo","Tienes una solicitud de llamada");

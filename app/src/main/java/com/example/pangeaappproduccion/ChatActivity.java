@@ -17,15 +17,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterChatPersonal;
+import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -170,7 +177,6 @@ public class ChatActivity extends UtilActivity {
 
 
         FirebaseFirestore.getInstance().collection("users"+"/"+usuario_recibido_chat1+"/"+"chats"+"/"+usuario_Destino+"/"+"Messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
-
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -232,7 +238,27 @@ public class ChatActivity extends UtilActivity {
                                 mensajeChat.setIsActive("true");
                                 mensajeChat.setDateUtc(time);
                                 mensajeChat.setType("received");
-                                FirebaseFirestore.getInstance().collection("users"+"/"+destinatario_recibido_chat+"/"+"chats"+"/"+usuario_recibido_chat+"/"+"Messages").add(mensajeChat);
+                                FirebaseFirestore.getInstance().collection("users"+"/"+destinatario_recibido_chat+"/"+"chats"+"/"+usuario_recibido_chat+"/"+"Messages").add(mensajeChat)
+                                        .addOnCompleteListener(task1 -> {
+                                            DocumentReference docRef = dbDataUserPerfil.collection("users").document(destinatario_recibido_chat);
+                                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task1) {
+                                                    if (task1.isSuccessful()) {
+                                                        DocumentSnapshot document = task1.getResult();
+                                                        if (document.exists()) {
+                                                            String FCM = Objects.requireNonNull(document.get("tokenFCM")).toString();
+                                                        } else {
+                                                            Log.d(TAG, "No such document");
+                                                        }
+                                                    } else {
+                                                        Log.d(TAG, "get failed with ", task1.getException());
+                                                    }
+                                                }
+                                            });
+
+
+                                        });
 
                              //   FirebaseFirestore.getInstance().collection("users"+"/"+usuario_recibido_chat+"/"+"chats"+"/"+destinatario_recibido_chat+"/"+"Messages").add(mensajeChat);
 
@@ -242,8 +268,8 @@ public class ChatActivity extends UtilActivity {
                 });
 
 
-
-
+                // Uid del usuario al que se le envia el msj
+                // destinatario_recibido_chat
 
 
 

@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/llamadas"
-        android:name="com.example.pangeaappproduccion.llamadas"
+        android:name="com.example.pangeaappproduccion.LlamadasFragment"
         android:label="fragment_llamadas"
         tools:layout="@layout/fragment_llamadas" />
 

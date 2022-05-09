@@ -48,6 +48,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -65,11 +66,9 @@ import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class HomeFragment extends UtilFragment {
-
-    private HomeViewModel homeViewModel;
-    private FragmentHomeBinding binding;
-
-    private TextView traducidoTexto;
+    HomeViewModel homeViewModel;
+    FragmentHomeBinding binding;
+    TextView traducidoTexto;
 
     private TextView etMensaje, userPerfil, PaisPerfil, CursoPerfil, nivelPerfil, nombreUsuario;
     private Button buttonChat, buttonImagen, buttonAudio, buttonReproAudio, buttonTraducir;
@@ -121,20 +120,38 @@ public class HomeFragment extends UtilFragment {
                             editor.putString("lastName", document.get("lastName").toString());
                             editor.putString("userName", username);
                             editor.putString("id", id);
-                            editor.apply();
                             nombreUsuario.setText(username);
-                            FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario", username).addSnapshotListener((value, error) -> {
-                                if (error != null) {
-                                    Log.d(TAG, "Error:" + error.getMessage());
-                                } else {
-                                    for (DocumentChange documentChange : value.getDocumentChanges()) {
-                                        if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                                            listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
-                                            adapterPublicacion.notifyDataSetChanged();
+
+
+                            FirebaseMessaging.getInstance().getToken()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (!task1.isSuccessful()) {
+                                            Log.w("holi", "Fetching FCM registration token failed", task1.getException());
+                                            return;
                                         }
-                                    }
-                                }
-                            });
+                                        String token = task1.getResult();
+                                        editor.putString("tokenCFM", token);
+                                        editor.apply();
+
+                                        DocumentReference userRef = db.collection("users").document(id);
+                                        userRef.update("tokenFCM", token)
+                                                .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully updated!"))
+                                                .addOnFailureListener(e -> Log.w(TAG, "Error updating document", e));
+                                        FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario", username).addSnapshotListener((value, error) -> {
+                                            if (error != null) {
+                                                Log.d(TAG, "Error:" + error.getMessage());
+                                            } else {
+                                                for (DocumentChange documentChange : value.getDocumentChanges()) {
+                                                    if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                                                        listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
+                                                        adapterPublicacion.notifyDataSetChanged();
+                                                    }
+                                                }
+                                            }
+                                        });
+
+                                    });
+
                         } else {
                             Log.d(TAG, "No such document");
                         }

@@ -38,6 +38,7 @@ public class IdiomaPreferidoFragment extends UtilFragment {
             RadioButton radioButton =view.findViewById(selectedId);
             if(!idioma.equals("Vacio!")){
                 obtenerIdiomaPreferido(radioButton.getText().toString());
+                requireActivity().recreate();
             }
         });
         return view;

@@ -197,6 +197,7 @@
     <string name="foro">Forum</string>
     <string name="escribe_tu_pregunta">Write your question</string>
     <string name="preguntas_recientes">Recent questions</string>
+    <string name="msg_token_fmt">TOKEN!</string>
 
 
 </resources>

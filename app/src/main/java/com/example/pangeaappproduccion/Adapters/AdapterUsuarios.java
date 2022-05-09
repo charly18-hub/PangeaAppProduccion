@@ -27,23 +27,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.UsuariosHolder>
-        implements View.OnClickListener{
+        implements View.OnClickListener {
 
     private List<UsuarioVideo> listUsuarios;
     private Context context;
-    private  View.OnClickListener listener;
+    private View.OnClickListener listener;
 
 
-
-
-
-
-    public AdapterUsuarios(Context context1,List<UsuarioVideo> listUsuarios)
-    {
+    public AdapterUsuarios(Context context1, List<UsuarioVideo> listUsuarios) {
         this.context = context1;
-
         this.listUsuarios = listUsuarios;
-
     }
 
 
@@ -52,7 +45,7 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
     @Override
     public AdapterUsuarios.UsuariosHolder onCreateViewHolder(@NonNull @NotNull ViewGroup viewGroup, int i) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_usuarios,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_usuarios, viewGroup, false);
 
 
         Context mcontext = view.getContext();
@@ -74,28 +67,20 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
         Glide.with(usuariosHolder.itemView.getContext()).load(listUsuarios.get(i).getProfilePicture()).into(usuariosHolder.ImgUserPerfil);
 
 
-
-        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences("accesos",Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences("accesos", Context.MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
-
-
 
 
         String numero = listUsuarios.get(i).getTelephoneNumber();
         String destinatario = listUsuarios.get(i).getUserName();
 
 
-
-
-
         usuariosHolder.video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-               Intent intent = new Intent(context.getApplicationContext(), videoCall.class);
+                Intent intent = new Intent(context.getApplicationContext(), videoCall.class);
                 intent.putExtra("destinaraio", destinatario);
-                intent.putExtra("usuario",email_perfil);
+                intent.putExtra("usuario", email_perfil);
                 context.startActivity(intent);
             }
         });
@@ -104,17 +89,12 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
         usuariosHolder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
                 Uri number = Uri.parse("tel:" + numero);
                 Toast.makeText(view.getContext(), number.toString(), Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(Intent.ACTION_DIAL, number);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.getApplicationContext().startActivity(i);
-
-
 
 
             }
@@ -124,13 +104,11 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
             @Override
             public void onClick(View view) {
 
-
-
                 Intent intent = new Intent(context.getApplicationContext(), ChatActivity.class);
-                intent.putExtra("destinatario", destinatario ); //aqui debe ir destinatario pero ese valor viene nullo checar
-                Toast.makeText(context,"se envio destinatario"+destinatario, Toast.LENGTH_LONG).show();
-                intent.putExtra("usuario",email_perfil);
-                Toast.makeText(context,"se envio usuario"+email_perfil, Toast.LENGTH_LONG).show();
+                intent.putExtra("destinatario", destinatario); //aqui debe ir destinatario pero ese valor viene nullo checar
+                Toast.makeText(context, "se envio destinatario" + destinatario, Toast.LENGTH_LONG).show();
+                intent.putExtra("usuario", email_perfil);
+                Toast.makeText(context, "se envio usuario" + email_perfil, Toast.LENGTH_LONG).show();
 
                 context.startActivity(intent);
             }
@@ -140,7 +118,6 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
     }
 
 
-
     @Override
     public int getItemCount() {
         return listUsuarios.size();
@@ -148,23 +125,21 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
 
     }
 
-    public void setOnClickListener(View.OnClickListener listener){
+    public void setOnClickListener(View.OnClickListener listener) {
         this.listener = listener;
     }
 
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.button4:
 
 
-
                 break;
 
-            case  R.id.button5:
-
+            case R.id.button5:
 
 
                 break;
@@ -176,7 +151,7 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
 
     }
 
-    class  UsuariosHolder extends  RecyclerView.ViewHolder{
+    class UsuariosHolder extends RecyclerView.ViewHolder {
 
         private TextView firtsname;
         private TextView email;
@@ -186,20 +161,20 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
 
         private ImageView ImgUserPerfil;
 
-        private Button video, call,chat;
+        private Button video, call, chat;
 
-        public UsuariosHolder(@NonNull View itemView){
+        public UsuariosHolder(@NonNull View itemView) {
             super(itemView);
 
             firtsname = itemView.findViewById(R.id.firts_name);
             lastname = itemView.findViewById(R.id.last_name);
             email = itemView.findViewById(R.id.email);
             password = itemView.findViewById(R.id.password);
-            fcm_token= itemView.findViewById(R.id.fcm_token);
+            fcm_token = itemView.findViewById(R.id.fcm_token);
             video = itemView.findViewById(R.id.button4);
             call = itemView.findViewById(R.id.button5);
             chat = itemView.findViewById(R.id.button6);
-            ImgUserPerfil =  itemView.findViewById(R.id.ImgUserPerfil);
+            ImgUserPerfil = itemView.findViewById(R.id.ImgUserPerfil);
 
 
         }
