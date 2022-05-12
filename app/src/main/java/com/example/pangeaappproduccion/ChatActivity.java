@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterChatPersonal;
 import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Util.Notifications.FCMSend;
 import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,6 +53,7 @@ public class ChatActivity extends UtilActivity {
     private List<MensajeChatPersonal> listMensajesPersonal;
     private AdapterChatPersonal adapterChatPersonal;
     private RecyclerView recyclerViewChatPersonal;
+    private String tokenFCM;
 
 
 
@@ -63,7 +65,6 @@ public class ChatActivity extends UtilActivity {
 
         establecerIdioma();
         String destinatario_recibido_chat = getIntent().getExtras().getString("destinatario");
-        Toast.makeText(getApplicationContext(),"se envio destinatario"+destinatario_recibido_chat, Toast.LENGTH_LONG).show();
 
         String usuario_recibido_chat = getIntent().getExtras().getString("usuario");
 
@@ -78,8 +79,7 @@ public class ChatActivity extends UtilActivity {
 
 
                                 String usuarioDestinatario = documentSnapshot.getString("uid");
-
-                                Toast.makeText(getApplicationContext(), "prueba existe dentro : "+ usuarioDestinatario, Toast.LENGTH_LONG).show();
+                                tokenFCM = documentSnapshot.getString("tokenFCM");
 
 
                                 SharedPreferences.Editor editor2 = getSharedPreferences("usuario_Destinatario_id", MODE_PRIVATE).edit();
@@ -128,10 +128,6 @@ public class ChatActivity extends UtilActivity {
         String usuario_Destino = preferencesusuarioDestino.getString("usuario_Destinatario_id", "No existe emisor arriba");
 
 
-        Toast.makeText(getApplicationContext(), "prueba : "+ usuario_Destino, Toast.LENGTH_LONG).show();
-
-
-
         etReceptor = (TextView)findViewById(R.id.receptor);
         recyclerViewChatPersonal = findViewById(R.id.reciclerChatPersonal);
 
@@ -158,7 +154,27 @@ public class ChatActivity extends UtilActivity {
                 mensajeChat.setDateUtc(time);
                 mensajeChat.setType("received");
 
-                FirebaseFirestore.getInstance().collection("users"+"/"+usuario_recibido_chat1+"/"+"chats"+"/"+usuario_Destino+"/"+"Messages" ).add(mensajeChat);
+                FirebaseFirestore.getInstance().collection("users"+"/"+usuario_recibido_chat1+"/"+"chats"+"/"+usuario_Destino+"/"+"Messages" ).add(mensajeChat).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        DocumentReference docRef = dbDataUserPerfil.collection("users").document(destinatario_recibido_chat);
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task1) {
+                                if (task1.isSuccessful()) {
+                                    FCMSend.pushNotification(
+                                            ChatActivity.this,
+                                            tokenFCM,
+                                            "Nuevo Mensaje",
+                                            mensaje.getText().toString()
+                                    );
+                                } else {
+                                    Log.d(TAG, "get failed with ", task1.getException());
+                                }
+                            }
+                        });
+                    }
+                });
 
                // FirebaseFirestore.getInstance().collection("users"+"/"+usuario_Destino+"/"+"chats"+"/"+usuario_recibido_chat1+"/"+"Messages" ).add(mensajeChat);
 
@@ -206,12 +222,8 @@ public class ChatActivity extends UtilActivity {
         String destinatario_recibido_chat = preferencesDestinatario.getString("usuario_Destinatario_id", "no existe destino");
 
 
-
-
         SharedPreferences preferencesusuario = getSharedPreferences("usuario_recibido_chat1", Context.MODE_PRIVATE);
         String usuario_recibido_chat = preferencesusuario.getString("usuario_recibido_chat1", "No existe emisor");
-
-
 
 
 
@@ -240,22 +252,6 @@ public class ChatActivity extends UtilActivity {
                                 mensajeChat.setType("received");
                                 FirebaseFirestore.getInstance().collection("users"+"/"+destinatario_recibido_chat+"/"+"chats"+"/"+usuario_recibido_chat+"/"+"Messages").add(mensajeChat)
                                         .addOnCompleteListener(task1 -> {
-                                            DocumentReference docRef = dbDataUserPerfil.collection("users").document(destinatario_recibido_chat);
-                                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task1) {
-                                                    if (task1.isSuccessful()) {
-                                                        DocumentSnapshot document = task1.getResult();
-                                                        if (document.exists()) {
-                                                            String FCM = Objects.requireNonNull(document.get("tokenFCM")).toString();
-                                                        } else {
-                                                            Log.d(TAG, "No such document");
-                                                        }
-                                                    } else {
-                                                        Log.d(TAG, "get failed with ", task1.getException());
-                                                    }
-                                                }
-                                            });
 
 
                                         });
