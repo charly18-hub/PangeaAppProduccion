@@ -1,4 +1,4 @@
-package com.example.pangeaappproduccion.Listas;
+package com.example.pangeaappproduccion.Model;
 
 public class listPublicaciones {
 
@@ -10,6 +10,15 @@ public class listPublicaciones {
     private String id;
     private String comentario;
     private String clave;
+    private String usuarioPublico;
+
+    public String getUsuarioPublico() {
+        return usuarioPublico;
+    }
+
+    public void setUsuarioPublico(String usuarioPublico) {
+        this.usuarioPublico = usuarioPublico;
+    }
 
     public String getClave() {
         return clave;

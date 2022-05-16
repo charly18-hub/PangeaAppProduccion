@@ -1,7 +1,5 @@
 package com.example.pangeaappproduccion;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,10 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.pangeaappproduccion.Listas.listPublicaciones;
 import com.example.pangeaappproduccion.Model.Registro.ImagenPerfil;
 import com.example.pangeaappproduccion.Model.Registro.RegistroRedesSociales;
-import com.example.pangeaappproduccion.Model.RegistroUsuarioRedesSociales;
 import com.example.pangeaappproduccion.ui.register.Registro;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -39,14 +35,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class Login extends AppCompatActivity {
 

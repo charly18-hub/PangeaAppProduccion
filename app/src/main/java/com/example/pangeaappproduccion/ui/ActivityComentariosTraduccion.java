@@ -2,7 +2,6 @@ package com.example.pangeaappproduccion.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.AdapterComentariosTraduccion;
-import com.example.pangeaappproduccion.Listas.listTraducciones;
+import com.example.pangeaappproduccion.Model.listTraducciones;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
@@ -45,7 +44,7 @@ public class ActivityComentariosTraduccion extends UtilActivity {
     EditText CajaComentarioPregunta;
 
 
-    private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
+    private List<com.example.pangeaappproduccion.Model.listTraducciones> listTraducciones;
     private AdapterComentariosTraduccion adapterComentariosTraduccion;
 
     private SlideshowViewModel slideshowViewModel;
@@ -156,7 +155,7 @@ public class ActivityComentariosTraduccion extends UtilActivity {
             public void onClick(View view) {
 
 
-                com.example.pangeaappproduccion.Listas.listTraducciones listTraducciones = new listTraducciones();
+                com.example.pangeaappproduccion.Model.listTraducciones listTraducciones = new listTraducciones();
                 listTraducciones.setTraduccion(CajaComentarioPregunta.getText().toString());
                 listTraducciones.setUsuario(usuario_traductor);
                 FirebaseFirestore.getInstance().collection("traducciones"+"/"+idPregunta+"/"+"comentario").add(listTraducciones);

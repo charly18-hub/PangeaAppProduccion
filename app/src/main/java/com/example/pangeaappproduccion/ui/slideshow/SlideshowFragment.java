@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class SlideshowFragment extends UtilFragment {
-    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Model.listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
 
     private SlideshowViewModel slideshowViewModel;

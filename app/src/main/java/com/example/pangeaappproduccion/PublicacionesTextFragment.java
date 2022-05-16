@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacionText;
-import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Model.listPublicaciones;
 import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
@@ -35,7 +35,7 @@ public class PublicacionesTextFragment extends UtilFragment {
 
 
 
-    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Model.listPublicaciones> listPublicaciones;
     private AdapterPublicacionText adapterPublicacion;
 
     private SlideshowViewModel slideshowViewModel;

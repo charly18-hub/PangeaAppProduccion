@@ -2,11 +2,11 @@ package com.example.pangeaappproduccion;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterAmistad;
 import com.example.pangeaappproduccion.Util.UtilActivity;
+import com.example.pangeaappproduccion.ui.PerfilAmigos.PerfilAmigosActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
@@ -56,8 +57,11 @@ public class ActivityAmistad extends UtilActivity {
             @Override
             public void onItemClick(SolicitudesList listSolicitudes) {
                 Toast.makeText(getApplicationContext(),listSolicitudes.getUserName(),Toast.LENGTH_LONG).show();
-
-
+                Intent intent = new Intent(ActivityAmistad.this, PerfilAmigosActivity.class);
+                Bundle b = new Bundle();
+                b.putString("nombreUsuario", listSolicitudes.getUserName()); //Your id
+                intent.putExtras(b); //Put your id to your next Intent
+                startActivity(intent);
             }
 
         });
@@ -74,11 +78,7 @@ public class ActivityAmistad extends UtilActivity {
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
-
                                 String usuario = documentSnapshot.getString("uid");
-
-
                                 SharedPreferences.Editor editor = getSharedPreferences("usuarioObtenido", MODE_PRIVATE).edit();
                                 editor.putString("usuarioObtenido", usuario);
                                 editor.apply();
@@ -105,7 +105,6 @@ public class ActivityAmistad extends UtilActivity {
                             listAmistad.add(documentChange.getDocument().toObject(SolicitudesList.class));
                             adapterAmistad.notifyDataSetChanged();
                             recyclerViewAmistad.smoothScrollToPosition(listAmistad.size());
-
 
                         }
                     }

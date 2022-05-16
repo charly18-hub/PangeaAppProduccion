@@ -2,12 +2,13 @@ package com.example.pangeaappproduccion;
 
 public class Publicaciones {
 
-    private String usuario;
+    private String clave;
+    private String id;
     private String mensaje;
     private String multimedia;
     private String status;
-    private String id;
-    private String clave;
+    private String usuario;
+    private String usuarioPublico;
 
 
     public String getId() {
@@ -54,4 +55,11 @@ public class Publicaciones {
         this.status = status;
     }
 
+    public String getUsuarioPublico() {
+        return usuarioPublico;
+    }
+
+    public void setUsuarioPublico(String usuarioPublico) {
+        this.usuarioPublico = usuarioPublico;
+    }
 }

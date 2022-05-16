@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pangeaappproduccion.Model.Comentario;
 import com.example.pangeaappproduccion.R;
-import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Model.listPublicaciones;
 
 public class AdapterComentarios extends RecyclerView.Adapter<AdapterComentarios.ComentariosHolder> {
 

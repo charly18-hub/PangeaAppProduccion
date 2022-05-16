@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pangeaappproduccion.Listas.listTraducciones;
+import com.example.pangeaappproduccion.Model.listTraducciones;
 import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.gallery.GalleryFragment;
@@ -49,7 +49,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class traduccion extends UtilFragment {
 
-    private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
+    private List<com.example.pangeaappproduccion.Model.listTraducciones> listTraducciones;
     private AdapterTraducciones adapterTraducciones;
 
     private SlideshowViewModel slideshowViewModel;

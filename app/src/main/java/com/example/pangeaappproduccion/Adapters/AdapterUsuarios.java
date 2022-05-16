@@ -70,6 +70,8 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
         SharedPreferences preferences = context.getApplicationContext().getSharedPreferences("accesos", Context.MODE_PRIVATE);
         String email_perfil = preferences.getString("email", "No name defined");
 
+        SharedPreferences pref = context.getApplicationContext().getSharedPreferences("usuarioRegistroNormal", Context.MODE_PRIVATE);
+        String usuarioActual = pref.getString("userName", "No name defined");
 
         String numero = listUsuarios.get(i).getTelephoneNumber();
         String destinatario = listUsuarios.get(i).getUserName();
@@ -79,8 +81,8 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context.getApplicationContext(), videoCall.class);
-                intent.putExtra("destinaraio", destinatario);
-                intent.putExtra("usuario", email_perfil);
+                intent.putExtra("destinatario", listUsuarios.get(i).getUserName());
+                intent.putExtra("usuario", usuarioActual);
                 context.startActivity(intent);
             }
         });
@@ -103,13 +105,9 @@ public class AdapterUsuarios extends RecyclerView.Adapter<AdapterUsuarios.Usuari
         usuariosHolder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(context.getApplicationContext(), ChatActivity.class);
-                intent.putExtra("destinatario", destinatario); //aqui debe ir destinatario pero ese valor viene nullo checar
-                Toast.makeText(context, "se envio destinatario" + destinatario, Toast.LENGTH_LONG).show();
+                intent.putExtra("destinatario", destinatario);
                 intent.putExtra("usuario", email_perfil);
-                Toast.makeText(context, "se envio usuario" + email_perfil, Toast.LENGTH_LONG).show();
-
                 context.startActivity(intent);
             }
         });

@@ -8,6 +8,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/drawable/fondo.xml" value="0.479" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_aceptar_rechazar_solicitud.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_amistad.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_buscador.xml" value="0.5541666666666667" />
@@ -21,7 +22,9 @@
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_llamada_voz.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_login.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_main.xml" value="0.3307291666666667" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_palabras.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_perfil.xml" value="0.5541666666666667" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_perfil_amigos.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_perfil_buscado.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_profesores.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_recuperar_contrasena.xml" value="0.5541666666666667" />
@@ -33,6 +36,7 @@
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/activity_splash_screen.xml" value="0.3307291666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/app_bar_main.xml" value="0.33" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/content_main.xml" value="0.3203125" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fondo.xml" value="0.415625" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_blank.xml" value="0.2390625" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_calendario.xml" value="0.2875" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_evaluacion.xml" value="0.5541666666666667" />
@@ -42,10 +46,12 @@
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_imagenes_publicacion.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_llamadas.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_multimedia.xml" value="0.3203125" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_perfil_amigos.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_publicaciones_text.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_slideshow.xml" value="0.33" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_traduccion.xml" value="0.2875" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/fragment_videollamadas.xml" value="0.3307291666666667" />
+        <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_amistades.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_comentario_foro.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_comentario_traduccion.xml" value="0.5541666666666667" />
         <entry key="..\:/Escritorio/s/PangeaAppProduccion/app/src/main/res/layout/item_comentarios.xml" value="0.3484375" />
@@ -63,7 +69,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

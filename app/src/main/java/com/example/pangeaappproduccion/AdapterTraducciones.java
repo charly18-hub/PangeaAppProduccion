@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pangeaappproduccion.Listas.listTraducciones;
+import com.example.pangeaappproduccion.Model.listTraducciones;
 import com.example.pangeaappproduccion.ui.ActivityComentariosTraduccion;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AdapterTraducciones extends RecyclerView.Adapter<AdapterTraducciones.TraduccionesHolder> {
 
-    private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
+    private List<com.example.pangeaappproduccion.Model.listTraducciones> listTraducciones;
     private Context context;
 
     public AdapterTraducciones(Context context2, List<listTraducciones> listTraducciones)

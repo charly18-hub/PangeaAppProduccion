@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacion;
-import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Model.listPublicaciones;
 import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
@@ -38,7 +38,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  */
 public class ImagenesPublicacion extends UtilFragment {
 
-    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Model.listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
 
     private SlideshowViewModel slideshowViewModel;

@@ -17,7 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pangeaappproduccion.Listas.listTraducciones;
+import com.example.pangeaappproduccion.Model.listTraducciones;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,7 +45,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class MisTraducciones extends Fragment {
 
 
-    private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
+    private List<com.example.pangeaappproduccion.Model.listTraducciones> listTraducciones;
     private AdapterTraducciones adapterTraducciones;
 
     private SlideshowViewModel slideshowViewModel;

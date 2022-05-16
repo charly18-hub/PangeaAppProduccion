@@ -8,21 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pangeaappproduccion.ActivityPreguntasEvaluacion;
-import com.example.pangeaappproduccion.ActivityResponderEvaluacion;
-import com.example.pangeaappproduccion.Adapters.AdapterPublicacionForo;
-import com.example.pangeaappproduccion.Listas.listForo;
 import com.example.pangeaappproduccion.R;
-import com.example.pangeaappproduccion.ui.ActivityComentarios;
-import com.example.pangeaappproduccion.ui.ActivityComentariosForo;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 

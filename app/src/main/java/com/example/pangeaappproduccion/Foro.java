@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacionForo;
-import com.example.pangeaappproduccion.Listas.listForo;
+import com.example.pangeaappproduccion.Model.listForo;
 import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
@@ -53,7 +53,7 @@ public class Foro extends UtilFragment {
 
 
 
-    private List<com.example.pangeaappproduccion.Listas.listForo> listForo;
+    private List<com.example.pangeaappproduccion.Model.listForo> listForo;
     private AdapterPublicacionForo adapterForo;
 
     private SlideshowViewModel slideshowViewModel;

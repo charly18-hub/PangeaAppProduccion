@@ -15,7 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pangeaappproduccion.Listas.listTraducciones;
+import com.example.pangeaappproduccion.Model.listTraducciones;
 import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentSlideshowBinding;
 import com.example.pangeaappproduccion.ui.slideshow.SlideshowViewModel;
@@ -42,7 +42,7 @@ public class PangeaTraducciones extends UtilFragment {
 
 
 
-    private List<com.example.pangeaappproduccion.Listas.listTraducciones> listTraducciones;
+    private List<com.example.pangeaappproduccion.Model.listTraducciones> listTraducciones;
     private AdapterTraducciones adapterTraducciones;
 
     private SlideshowViewModel slideshowViewModel;

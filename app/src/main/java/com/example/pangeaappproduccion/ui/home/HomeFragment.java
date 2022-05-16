@@ -33,7 +33,7 @@ import com.example.pangeaappproduccion.Publicaciones;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.Util.UtilFragment;
 import com.example.pangeaappproduccion.databinding.FragmentHomeBinding;
-import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Model.listPublicaciones;
 import com.example.pangeaappproduccion.translate_api;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -96,6 +96,8 @@ public class HomeFragment extends UtilFragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String email_perfil;
         SharedPreferences prefs = requireActivity().getSharedPreferences("correo", MODE_PRIVATE);
@@ -572,7 +574,7 @@ public class HomeFragment extends UtilFragment {
 
 
         FirebaseUser fuser;
-        private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
+        private List<com.example.pangeaappproduccion.Model.listPublicaciones> listPublicaciones;
 
         public AdapterPublicaciones(List<listPublicaciones> listPublicaciones) {
             this.listPublicaciones = listPublicaciones;

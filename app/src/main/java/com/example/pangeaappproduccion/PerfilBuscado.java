@@ -2,7 +2,6 @@ package com.example.pangeaappproduccion;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacion;
-import com.example.pangeaappproduccion.Listas.listPublicaciones;
+import com.example.pangeaappproduccion.Model.listPublicaciones;
 import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,7 +40,7 @@ public class PerfilBuscado extends UtilActivity {
     TextView Perfil,PaisUsuario,Nivel,Idioma,Intereses;
     ImageView FotoPerfil,FotoHead;
 
-    private List<com.example.pangeaappproduccion.Listas.listPublicaciones> listPublicaciones;
+    private List<com.example.pangeaappproduccion.Model.listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
     private RecyclerView recyclerViewPublicaciones;
 
