@@ -191,6 +191,7 @@ public class HomeFragment extends UtilFragment {
                             Glide.with(context)
                                     .load(documentSnapshot.get("multimedia"))
                                     .apply(requestOptions)
+                                    .apply(new RequestOptions().override(300, 300))
                                     .circleCrop()
                                     .into(imgPerfil);
                         }
@@ -415,7 +416,10 @@ public class HomeFragment extends UtilFragment {
                 Map<String, Object> fotoPerfil = new HashMap<>();
                 fotoPerfil.put("multimedia", dowloadUri.toString());
                 fotoPerfil.put("usuario", id);
-                db2.collection("fotoPerfil").document(id).update(fotoPerfil).addOnSuccessListener(unused -> Toast.makeText(getContext(), "se subio el archivo", Toast.LENGTH_LONG).show()).addOnFailureListener(e -> Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
+                db2.collection("fotoPerfil").document(id).update(fotoPerfil).addOnSuccessListener(unused -> Toast.makeText(getContext(), "se subio el archivo", Toast.LENGTH_LONG).show())
+                        .addOnFailureListener(e ->{
+                             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        });
                 etMensaje.setText("");
 
             }).addOnFailureListener(new OnFailureListener() {
