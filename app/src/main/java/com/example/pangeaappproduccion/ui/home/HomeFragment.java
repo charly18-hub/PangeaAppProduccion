@@ -175,9 +175,7 @@ public class HomeFragment extends UtilFragment {
                                                 }
                                             }
                                         });
-
                                     });
-
                         }
                     }
                 }

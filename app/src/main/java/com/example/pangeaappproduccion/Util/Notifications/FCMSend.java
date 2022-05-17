@@ -36,14 +36,8 @@ public class FCMSend {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BASE_URL, json, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(context.getApplicationContext(), "respuesta"+ response, Toast.LENGTH_LONG).show();
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context.getApplicationContext(), "Error"+ error, Toast.LENGTH_LONG).show();
-                }
-            }){
+            }, error -> Toast.makeText(context.getApplicationContext(), "Error"+ error, Toast.LENGTH_LONG).show()){
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
@@ -53,68 +47,6 @@ public class FCMSend {
                 }
             };
             queue.add(jsonObjectRequest);
-
-            /*
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("to", token);
-
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("my_message", "Keep eating healthy!");
-
-            jsonBody.putOpt("data", jsonObject);
-
-
-            final String requestBody = jsonBody.toString();
-
-
-            StringRequest sr = new StringRequest(Request.Method.POST,BASE_URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.d(TAG, "Response: " + response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "That didn't work..." + error);
-                }
-            }){
-                @Override
-                protected Map<String,String> getParams(){
-                    Map<String,String> params = new HashMap<String, String>();
-
-                    return params;
-                }
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> params = new HashMap<String, String>();
-                    params.put("Authorization",SERVER_KEY);
-
-                    return params;
-                }
-
-
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-
-            };
-            queue.add(sr);
-             */
-
-
 
         } catch (JSONException e) {
             e.printStackTrace();

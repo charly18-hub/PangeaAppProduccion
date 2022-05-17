@@ -73,7 +73,6 @@ public class ChatActivity extends UtilActivity {
                                 String usuarioDestinatario = documentSnapshot.getString("uid");
                                 tokenFCM = documentSnapshot.getString("tokenFCM");
 
-
                                 SharedPreferences.Editor editor2 = getSharedPreferences("usuario_Destinatario_id", MODE_PRIVATE).edit();
                                 editor2.putString("usuario_Destinatario_id", usuarioDestinatario);
                                 editor2.apply();
