@@ -56,6 +56,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,6 +89,7 @@ public class HomeFragment extends UtilFragment {
     String id;
     String username;
     Uri urlAudio;
+    boolean portada = false;
 
     StorageReference mStorage = FirebaseStorage.getInstance().getReference();
 
@@ -128,7 +130,6 @@ public class HomeFragment extends UtilFragment {
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             email = user.getEmail();
@@ -149,7 +150,7 @@ public class HomeFragment extends UtilFragment {
                             editor.putString("userName", username);
                             RegistroRedesSociales interes = document.toObject(RegistroRedesSociales.class);
                             assert interes != null;
-                            String language=interes.getLanguage().getGoalLearning();
+                            String language = interes.getLanguage().getGoalLearning();
                             editor.putString("languageInterest", language);
                             editor.putString("id", id);
                             nombreUsuario.setText(username);
@@ -198,25 +199,28 @@ public class HomeFragment extends UtilFragment {
                     }
                 });
 
-        db.collection("fotosHeader").whereEqualTo("usuario", id).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("fotosHeader").document(id).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                Log.d("imagen", documentSnapshot.getId() + "la imagen es" + documentSnapshot.get("multimedia"));
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
                                 RequestOptions requestOptions = new RequestOptions();
                                 requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
                                 Glide.with(context)
-                                        .load(documentSnapshot.get("multimedia"))
+                                        .load(document.get("multimedia"))
                                         .apply(requestOptions)
                                         .into(imgHeader);
+                                portada = true;
                             }
                         }
                     }
                 });
 
-        imgPerfil.setOnClickListener(view12 -> {
+        imgPerfil.setOnClickListener(view12 ->
+
+        {
             Intent intentImagen = new Intent(Intent.ACTION_PICK);
             intentImagen.setType("image/*");
             startActivityForResult(intentImagen, GALLERY_PICKER);
@@ -261,7 +265,9 @@ public class HomeFragment extends UtilFragment {
         });
 
 
-        buttonChat.setOnClickListener(view1 -> {
+        buttonChat.setOnClickListener(view1 ->
+
+        {
             FirebaseFirestore dbDataPerfils = FirebaseFirestore.getInstance();
             DocumentReference publicacion = dbDataPerfils.collection("redSocial").document();
             String clave = publicacion.getId();
@@ -273,12 +279,12 @@ public class HomeFragment extends UtilFragment {
             publicaciones.setClave(clave);
             publicaciones.setStatus("0");
             FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(publicaciones).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d(TAG, "DocumentSnapshot successfully written!");
-                    adapterPublicacion.notifyDataSetChanged();
-                }
-            })
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                            adapterPublicacion.notifyDataSetChanged();
+                        }
+                    })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
@@ -326,10 +332,12 @@ public class HomeFragment extends UtilFragment {
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode,
+                                 @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == AudioSend && resultCode == RESULT_OK) {
+            Toast.makeText(getContext(), "Subiendo audio, no cierre la app", Toast.LENGTH_LONG).show();
             urlAudio = data.getData();
             StorageReference filePath = mStorage.child("audios").child(urlAudio.getLastPathSegment());
             filePath.putFile(urlAudio).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -353,12 +361,13 @@ public class HomeFragment extends UtilFragment {
                     publicaciones.setId(id);
                     publicaciones.setClave(clave);
                     FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(publicaciones).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully written!");
-                            adapterPublicacion.notifyDataSetChanged();
-                        }
-                    })
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    adapterPublicacion.notifyDataSetChanged();
+                                    Toast.makeText(getContext(), "Audio subido", Toast.LENGTH_LONG).show();
+                                }
+                            })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
@@ -379,24 +388,62 @@ public class HomeFragment extends UtilFragment {
         }
 
         if (requestCode == IMG_Header && resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            Glide.with(context)
-                    .load(uri)
-                    .into(imgHeader);
-            StorageReference filePath = mStorage.child("fotosHeader").child(uri.getLastPathSegment());
-            filePath.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+            Toast.makeText(getContext(), "Subiendo imagen, no cierre la app", Toast.LENGTH_LONG).show();
+            if (portada) {
+                Uri uri = data.getData();
+                StorageReference filePath = mStorage.child("fotosHeader").child(uri.getLastPathSegment());
+                filePath.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                    Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uiriTask.isSuccessful()) ;
+                    Uri dowloadUri = uiriTask.getResult();
+                    Map<String, Object> fotoPerfil = new HashMap<>();
+                    fotoPerfil.put("multimedia", dowloadUri.toString());
+                    fotoPerfil.put("usuario", id);
+                    FirebaseFirestore.getInstance().collection("fotosHeader").document(id).update(fotoPerfil).addOnSuccessListener(unused -> {
+                                Toast.makeText(getContext(), "Imagen subida", Toast.LENGTH_LONG).show();
+                                RequestOptions requestOptions = new RequestOptions();
+                                requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
+                                Glide.with(context)
+                                        .load(dowloadUri.toString())
+                                        .apply(requestOptions)
+                                        .into(imgHeader);
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            });
 
-                Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!uiriTask.isSuccessful()) ;
-                Uri dowloadUri = uiriTask.getResult();
-                FotoPerfil fotoPerfil = new FotoPerfil();
-                fotoPerfil.setMultimedia(dowloadUri.toString());
-                fotoPerfil.setUsuario(id);
-                FirebaseFirestore.getInstance().collection("fotosHeader").add(fotoPerfil);
-            }).addOnFailureListener(e -> Log.e("FileManager", "Error en uploadImg ==>" + e));
+                }).addOnFailureListener(e -> Log.e("FileManager", "Error en uploadImg ==>" + e));
+            } else {
+                Uri uri = data.getData();
+                StorageReference filePath = mStorage.child("fotosHeader").child(uri.getLastPathSegment());
+                filePath.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                    Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uiriTask.isSuccessful()) ;
+                    Uri dowloadUri = uiriTask.getResult();
+                    FotoPerfil fotoPerfil = new FotoPerfil();
+                    fotoPerfil.setMultimedia(dowloadUri.toString());
+                    fotoPerfil.setUsuario(id);
+                    FirebaseFirestore.getInstance().collection("fotosHeader").add(fotoPerfil).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            RequestOptions requestOptions = new RequestOptions();
+                            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
+                            Glide.with(context)
+                                    .load(dowloadUri.toString())
+                                    .apply(requestOptions)
+                                    .into(imgHeader);
+                            Toast.makeText(getContext(), "Imagen subida", Toast.LENGTH_LONG).show();
+                            portada = true;
+                        }
+                    });
+                }).addOnFailureListener(e -> Log.e("FileManager", "Error en uploadImg ==>" + e));
+            }
+
+
         }
 
         if (requestCode == GALLERY_PICKER && resultCode == RESULT_OK) {
+            Toast.makeText(getContext(), "Subiendo imagen, no cierre la app", Toast.LENGTH_LONG).show();
             Uri uri = data.getData();
             RequestOptions requestOptions = new RequestOptions();
             requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
@@ -416,9 +463,10 @@ public class HomeFragment extends UtilFragment {
                 Map<String, Object> fotoPerfil = new HashMap<>();
                 fotoPerfil.put("multimedia", dowloadUri.toString());
                 fotoPerfil.put("usuario", id);
-                db2.collection("fotoPerfil").document(id).update(fotoPerfil).addOnSuccessListener(unused -> Toast.makeText(getContext(), "se subio el archivo", Toast.LENGTH_LONG).show())
-                        .addOnFailureListener(e ->{
-                             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                db2.collection("fotoPerfil").document(id).update(fotoPerfil).addOnSuccessListener(unused ->
+                                Toast.makeText(getContext(), "Imagen subida", Toast.LENGTH_LONG).show())
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                         });
                 etMensaje.setText("");
 
@@ -431,8 +479,8 @@ public class HomeFragment extends UtilFragment {
         }
 
         if (requestCode == ACTION_POST && resultCode == RESULT_OK) {
+            Toast.makeText(getContext(), "Subiendo imagen, no cierre la app", Toast.LENGTH_LONG).show();
             Uri uri = data.getData();
-
             StorageReference filePath = mStorage.child("redSocial").child(uri.getLastPathSegment());
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -458,6 +506,7 @@ public class HomeFragment extends UtilFragment {
                             .addOnSuccessListener(aVoid -> {
                                 Log.d(TAG, "DocumentSnapshot successfully written!");
                                 adapterPublicacion.notifyDataSetChanged();
+                                Toast.makeText(getContext(), "Imagen subida", Toast.LENGTH_LONG).show();
                             })
                             .addOnFailureListener(e -> {
                                 Log.w(TAG, "Error writing document", e);
