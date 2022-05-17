@@ -67,7 +67,7 @@
                 android:id="@+id/textView13"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:text="Amistades Sugeridas"
                 android:textAlignment="center"
                 android:textColor="@color/common_google_signin_btn_text_light_pressed"
@@ -76,6 +76,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerAmistad"
+                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

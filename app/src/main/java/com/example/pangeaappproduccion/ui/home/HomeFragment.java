@@ -29,6 +29,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.pangeaappproduccion.Adapters.AdapterPublicacion;
 import com.example.pangeaappproduccion.Buscador;
 import com.example.pangeaappproduccion.FotoPerfil;
+import com.example.pangeaappproduccion.Model.Registro.Language;
+import com.example.pangeaappproduccion.Model.Registro.RegistroRedesSociales;
 import com.example.pangeaappproduccion.Publicaciones;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.Util.UtilFragment;
@@ -98,74 +100,6 @@ public class HomeFragment extends UtilFragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String email_perfil;
-        SharedPreferences prefs = requireActivity().getSharedPreferences("correo", MODE_PRIVATE);
-        email_perfil = prefs.getString("correo", "");
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            email = user.getEmail();
-            id = user.getUid();
-            DocumentReference docRef = db.collection("users").document(id);
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                            username = document.get("userName").toString();
-                            SharedPreferences.Editor editor = requireActivity().getSharedPreferences("usuarioRegistroNormal", MODE_PRIVATE).edit();
-                            editor.putString("email", email);
-                            editor.putString("firstName", document.get("firstName").toString());
-                            editor.putString("lastName", document.get("lastName").toString());
-                            editor.putString("userName", username);
-                            editor.putString("id", id);
-                            nombreUsuario.setText(username);
-
-
-                            FirebaseMessaging.getInstance().getToken()
-                                    .addOnCompleteListener(task1 -> {
-                                        if (!task1.isSuccessful()) {
-                                            Log.w("holi", "Fetching FCM registration token failed", task1.getException());
-                                            return;
-                                        }
-                                        String token = task1.getResult();
-                                        editor.putString("tokenCFM", token);
-                                        editor.apply();
-
-                                        DocumentReference userRef = db.collection("users").document(id);
-                                        userRef.update("tokenFCM", token)
-                                                .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully updated!"))
-                                                .addOnFailureListener(e -> Log.w(TAG, "Error updating document", e));
-                                        FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario", username).addSnapshotListener((value, error) -> {
-                                            if (error != null) {
-                                                Log.d(TAG, "Error:" + error.getMessage());
-                                            } else {
-                                                for (DocumentChange documentChange : value.getDocumentChanges()) {
-                                                    if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                                                        listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
-                                                        adapterPublicacion.notifyDataSetChanged();
-                                                    }
-                                                }
-                                            }
-                                        });
-
-                                    });
-
-                        } else {
-                            Log.d(TAG, "No such document");
-                        }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                }
-            });
-        } else {
-            // No user is signed in
-        }
-
         recyclerViewPublicaciones = view.findViewById(R.id.recyclerViewChat);
         etMensaje = view.findViewById(R.id.pregunta);
         buttonChat = view.findViewById(R.id.publicar);
@@ -193,6 +127,61 @@ public class HomeFragment extends UtilFragment {
         recyclerViewPublicaciones.setHasFixedSize(true);
 
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            email = user.getEmail();
+            id = user.getUid();
+            DocumentReference docRef = db.collection("users").document(id);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            username = document.get("userName").toString();
+                            SharedPreferences.Editor editor = requireActivity().getSharedPreferences("usuarioRegistroNormal", MODE_PRIVATE).edit();
+                            editor.putString("email", email);
+                            editor.putString("firstName", document.get("firstName").toString());
+                            editor.putString("lastName", document.get("lastName").toString());
+                            editor.putString("userName", username);
+                            RegistroRedesSociales interes = document.toObject(RegistroRedesSociales.class);
+                            assert interes != null;
+                            String language=interes.getLanguage().getGoalLearning();
+                            editor.putString("languageInterest", language);
+                            editor.putString("id", id);
+                            nombreUsuario.setText(username);
+                            FirebaseMessaging.getInstance().getToken()
+                                    .addOnCompleteListener(task1 -> {
+                                        String token = task1.getResult();
+                                        editor.putString("tokenCFM", token);
+                                        editor.apply();
+                                        DocumentReference userRef = db.collection("users").document(id);
+                                        userRef.update("tokenFCM", token)
+                                                .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully updated!"))
+                                                .addOnFailureListener(e -> Log.w(TAG, "Error updating document", e));
+                                        FirebaseFirestore.getInstance().collection("redSocial").whereEqualTo("usuario", username).addSnapshotListener((value, error) -> {
+                                            if (error != null) {
+                                                Log.d(TAG, "Error:" + error.getMessage());
+                                            } else {
+                                                for (DocumentChange documentChange : value.getDocumentChanges()) {
+                                                    if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                                                        listPublicaciones.add(documentChange.getDocument().toObject(listPublicaciones.class));
+                                                        adapterPublicacion.notifyDataSetChanged();
+                                                    }
+                                                }
+                                            }
+                                        });
+
+                                    });
+
+                        }
+                    }
+                }
+            });
+        }
         db.collection("fotoPerfil").whereEqualTo("usuario", id).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -226,40 +215,11 @@ public class HomeFragment extends UtilFragment {
                     }
                 });
 
-        /*
-        FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("users").whereEqualTo("email", email_perfil).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                userPerfil.setText(documentSnapshot.getString("usuario"));
-                                PaisPerfil.setText(documentSnapshot.getString("ciudad"));
-                                nivelPerfil.setText(documentSnapshot.getString("nivel"));
-                                CursoPerfil.setText(documentSnapshot.getString("idioma_interes"));
-                                String usuarioFinal = userPerfil.getText().toString();
-                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE).edit();
-                                editor.putString("usuario_post", usuarioFinal);
-                                editor.apply();
-                            }
-                        }
-                    }
-                });
+        imgPerfil.setOnClickListener(view12 -> {
+            Intent intentImagen = new Intent(Intent.ACTION_PICK);
+            intentImagen.setType("image/*");
+            startActivityForResult(intentImagen, GALLERY_PICKER);
 
-         */
-        SharedPreferences preferences1 = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
-        String usuario_post_final = preferences1.getString("usuario_post", "No name defined");
-
-
-        imgPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentImagen = new Intent(Intent.ACTION_PICK);
-                intentImagen.setType("image/*");
-                startActivityForResult(intentImagen, GALLERY_PICKER);
-
-            }
         });
 
         imgHeader.setOnClickListener(new View.OnClickListener() {
@@ -329,28 +289,22 @@ public class HomeFragment extends UtilFragment {
         buttonTraducir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 translate_api translate = new translate_api();
                 translate.setOnTranslationCompleteListener(new translate_api.OnTranslationCompleteListener() {
                     @Override
                     public void onStartTranslation() {
-
                     }
 
                     @Override
                     public void onCompleted(String text) {
-
                         etMensaje.setText(text);
                     }
 
                     @Override
                     public void onError(Exception e) {
-
                     }
                 });
                 translate.execute(etMensaje.getText().toString(), "es", "en");
-
-
             }
         });
 
@@ -373,12 +327,6 @@ public class HomeFragment extends UtilFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        SharedPreferences preferences = getActivity().getSharedPreferences("accesos", MODE_PRIVATE);
-        String email_perfil = preferences.getString("email", "No name defined");
-
-        SharedPreferences preferences1 = getActivity().getSharedPreferences("usuario_post", MODE_PRIVATE);
-        String usuario_post_final = preferences1.getString("usuario_post", "No name defined");
 
         if (requestCode == AudioSend && resultCode == RESULT_OK) {
             urlAudio = data.getData();
@@ -429,42 +377,25 @@ public class HomeFragment extends UtilFragment {
             etMensaje.setText("");
         }
 
-
         if (requestCode == IMG_Header && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             Glide.with(context)
                     .load(uri)
                     .into(imgHeader);
-
-
             StorageReference filePath = mStorage.child("fotosHeader").child(uri.getLastPathSegment());
-            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            filePath.putFile(uri).addOnSuccessListener(taskSnapshot -> {
 
-                    Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!uiriTask.isSuccessful()) ;
-                    Uri dowloadUri = uiriTask.getResult();
-
-
-                    FotoPerfil fotoPerfil = new FotoPerfil();
-                    fotoPerfil.setMultimedia(dowloadUri.toString());
-                    fotoPerfil.setUsuario(id);
-                    FirebaseFirestore.getInstance().collection("fotosHeader").add(fotoPerfil);
-
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e("FileManager", "Error en uploadImg ==>" + e);
-                }
-            });
+                Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!uiriTask.isSuccessful()) ;
+                Uri dowloadUri = uiriTask.getResult();
+                FotoPerfil fotoPerfil = new FotoPerfil();
+                fotoPerfil.setMultimedia(dowloadUri.toString());
+                fotoPerfil.setUsuario(id);
+                FirebaseFirestore.getInstance().collection("fotosHeader").add(fotoPerfil);
+            }).addOnFailureListener(e -> Log.e("FileManager", "Error en uploadImg ==>" + e));
         }
 
         if (requestCode == GALLERY_PICKER && resultCode == RESULT_OK) {
-
-
             Uri uri = data.getData();
             RequestOptions requestOptions = new RequestOptions();
             requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
@@ -473,38 +404,20 @@ public class HomeFragment extends UtilFragment {
                     .apply(requestOptions)
                     .circleCrop()
                     .into(imgPerfil);
-
             StorageReference filePath = mStorage.child("fotoPerfil").child(uri.getLastPathSegment());
-            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!uiriTask.isSuccessful()) ;
-                    Uri dowloadUri = uiriTask.getResult();
+            filePath.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                Task<Uri> uiriTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!uiriTask.isSuccessful()) ;
+                Uri dowloadUri = uiriTask.getResult();
 
-                    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
 
-                    Map<String, Object> fotoPerfil = new HashMap<>();
-                    fotoPerfil.put("multimedia", dowloadUri.toString());
-                    fotoPerfil.put("usuario", id);
-                    db2.collection("fotoPerfil").document(id).update(fotoPerfil).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(getContext(), "se subio el archivo", Toast.LENGTH_LONG).show();
+                Map<String, Object> fotoPerfil = new HashMap<>();
+                fotoPerfil.put("multimedia", dowloadUri.toString());
+                fotoPerfil.put("usuario", id);
+                db2.collection("fotoPerfil").document(id).update(fotoPerfil).addOnSuccessListener(unused -> Toast.makeText(getContext(), "se subio el archivo", Toast.LENGTH_LONG).show()).addOnFailureListener(e -> Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
+                etMensaje.setText("");
 
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull @NotNull Exception e) {
-                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-
-                        }
-                    });
-
-
-                    etMensaje.setText("");
-
-                }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
@@ -512,7 +425,6 @@ public class HomeFragment extends UtilFragment {
                 }
             });
         }
-
 
         if (requestCode == ACTION_POST && resultCode == RESULT_OK) {
             Uri uri = data.getData();
@@ -539,27 +451,16 @@ public class HomeFragment extends UtilFragment {
                     PublicacionesImagenes.setStatus("1");
 
                     FirebaseFirestore.getInstance().collection("redSocial").document(clave).set(PublicacionesImagenes)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "DocumentSnapshot successfully written!");
-                                    adapterPublicacion.notifyDataSetChanged();
-                                }
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                                adapterPublicacion.notifyDataSetChanged();
                             })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error writing document", e);
-                                    adapterPublicacion.notifyDataSetChanged();
-                                }
+                            .addOnFailureListener(e -> {
+                                Log.w(TAG, "Error writing document", e);
+                                adapterPublicacion.notifyDataSetChanged();
                             });
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e("FileManager", "Error en uploadImg ==>" + e);
-                }
-            });
+            }).addOnFailureListener(e -> Log.e("FileManager", "Error en uploadImg ==>" + e));
             etMensaje.setText("");
         }
     }
@@ -570,59 +471,4 @@ public class HomeFragment extends UtilFragment {
         binding = null;
     }
 
-    public class AdapterPublicaciones extends RecyclerView.Adapter<AdapterPublicaciones.PublicacionesHolder> {
-
-
-        FirebaseUser fuser;
-        private List<com.example.pangeaappproduccion.Model.listPublicaciones> listPublicaciones;
-
-        public AdapterPublicaciones(List<listPublicaciones> listPublicaciones) {
-            this.listPublicaciones = listPublicaciones;
-        }
-
-
-        @NonNull
-        @NotNull
-        @Override
-        public PublicacionesHolder onCreateViewHolder(@NonNull @NotNull ViewGroup viewGroup, int i) {
-
-
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_publicaciones, viewGroup, false);
-
-            return new PublicacionesHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull @NotNull PublicacionesHolder publicacionesHolder, int i) {
-
-            publicacionesHolder.Publicacion.setText(listPublicaciones.get(i).getMensaje());
-            publicacionesHolder.Nombre.setText(listPublicaciones.get(i).getUsuario());
-            // Uri uri = Uri.parse(listPublicaciones.get(i).getMultimedia());
-            // publicacionesHolder.imgPublicacion.setImageURI(uri);
-            Glide.with(getActivity()).load(listPublicaciones.get(i).getMultimedia()).into(publicacionesHolder.imgPublicacion);
-
-
-        }
-
-        @Override
-        public int getItemCount() {
-
-            return listPublicaciones.size();
-        }
-
-        public class PublicacionesHolder extends RecyclerView.ViewHolder {
-
-            private TextView Publicacion;
-            private TextView Nombre;
-            private ImageView imgPublicacion;
-
-            public PublicacionesHolder(@NonNull @NotNull View itemView) {
-                super(itemView);
-                Publicacion = itemView.findViewById(R.id.pregunta);
-                Nombre = itemView.findViewById(R.id.usuarioForo);
-                imgPublicacion = itemView.findViewById(R.id.imgPublicacion);
-            }
-        }
-
-    }
 }

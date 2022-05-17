@@ -8,7 +8,7 @@ public class Language {
     private String[] other;
     private String[]  pretendToLearn;
 
-    public Language(String s) {
+    public Language() {
     }
 
     public Language(String goalLearning, String nativee) {

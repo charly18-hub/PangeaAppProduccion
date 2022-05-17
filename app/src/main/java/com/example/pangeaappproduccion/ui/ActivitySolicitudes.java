@@ -26,6 +26,8 @@ import com.example.pangeaappproduccion.Util.UtilActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -47,118 +49,55 @@ public class ActivitySolicitudes extends UtilActivity {
     private AdapterSolicitudes adapterSolicitudes;
     private RecyclerView recyclerViewSolicitudes;
     private Button Amistad, Solicitudes;
+    private String idiomaInteres;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solicitudes);
-
-
-        SharedPreferences preferences = getSharedPreferences("accesos", Context.MODE_PRIVATE);
-        String email_perfil = preferences.getString("email", "No name defined");
-
-
-
-
         establecerIdioma();
         recyclerViewSolicitudes = findViewById(R.id.recyclerAmistad);
         listSolicitudes = new ArrayList<>();
-        adapterSolicitudes = new AdapterSolicitudes(listSolicitudes, new AdapterSolicitudes.ItemClickListener() {
-            @Override
-            public void onItemClick(SolicitudesList listSolicitudes) {
-                Toast.makeText(getApplicationContext(),listSolicitudes.getUserName(),Toast.LENGTH_LONG).show();
-
-                Intent intent = new Intent(getApplicationContext(), EnviarSolicitud.class);
-                intent.putExtra("perfil_a_enviar", listSolicitudes.getUserName());
-                startActivity(intent);
-
-
-
-            }
-
+        adapterSolicitudes = new AdapterSolicitudes(listSolicitudes, listSolicitudes -> {
+            Intent intent = new Intent(getApplicationContext(), EnviarSolicitud.class);
+            intent.putExtra("perfil_a_enviar", listSolicitudes.getUserName());
+            startActivity(intent);
         });
+
+        Solicitudes = findViewById(R.id.solicitudes);
+        Amistad = findViewById(R.id.amistades);
+
+        Solicitudes.setOnClickListener(view -> {
+            Intent  intent = new Intent(getApplicationContext(),ActivitySolicitudesRegistradas.class);
+            startActivity(intent);
+        });
+
+
+        Amistad.setOnClickListener(view -> {
+            Intent  intent = new Intent(getApplicationContext(), ActivityAmistad.class);
+            startActivity(intent);
+        });
+
         recyclerViewSolicitudes.setAdapter(adapterSolicitudes);
         recyclerViewSolicitudes.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerViewSolicitudes.setHasFixedSize(true);
 
-
-
-
-
-        FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-        dbDataPerfil.collection("users").whereEqualTo("emailAddress",email_perfil).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-
-                                Lenguages idiomaInteres = documentSnapshot.toObject(Lenguages.class);
-
-
-
-                                if (idiomaInteres != null){
-
-
-                                    String idioma = idiomaInteres.getGoalLearning();
-
-                                    SharedPreferences.Editor editor = getSharedPreferences("idiomaInteres", MODE_PRIVATE).edit();
-                                    editor.putString("idioma_interes", idioma);
-                                    editor.apply();
-                                }
-
-
-                            }
-                        }
-                    }
-                });
-
-
-        SharedPreferences preferencesIdioma = getSharedPreferences("idiomaInteres", Context.MODE_PRIVATE);
-        String idiomaObtenidoInteres = preferencesIdioma.getString("idioma_interes", "No existe idioma");
-
-
-
-        FirebaseFirestore.getInstance().collection("users").whereEqualTo("language.goalLearning",idiomaObtenidoInteres).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.d(TAG, "Error:" + error.getMessage());
-                } else {
-                    for (DocumentChange documentChange : value.getDocumentChanges()) {
-                        if (documentChange.getType() == DocumentChange.Type.ADDED) {
-
-
-                            listSolicitudes.add(documentChange.getDocument().toObject(SolicitudesList.class));
-                            adapterSolicitudes.notifyDataSetChanged();
-                            recyclerViewSolicitudes.smoothScrollToPosition(listSolicitudes.size());
-
-
-                        }
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("usuarioRegistroNormal", Context.MODE_PRIVATE);
+        idiomaInteres = pref.getString("languageInterest", "");
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("language.goalLearning",idiomaInteres).addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.d(TAG, "Error:" + error.getMessage());
+            } else {
+                for (DocumentChange documentChange : value.getDocumentChanges()) {
+                    if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                        listSolicitudes.add(documentChange.getDocument().toObject(SolicitudesList.class));
+                        adapterSolicitudes.notifyDataSetChanged();
+                        recyclerViewSolicitudes.smoothScrollToPosition(listSolicitudes.size());
                     }
                 }
             }
         });
 
-        Solicitudes = (Button)findViewById(R.id.solicitudes);
-
-        Solicitudes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent  intent = new Intent(getApplicationContext(),ActivitySolicitudesRegistradas.class);
-                startActivity(intent);
-            }
-        });
-
-        Amistad = (Button)findViewById(R.id.amistades);
-
-        Amistad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent  intent = new Intent(getApplicationContext(), ActivityAmistad.class);
-                startActivity(intent);
-            }
-        });
 
     }
 }

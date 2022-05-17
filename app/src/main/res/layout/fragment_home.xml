@@ -191,7 +191,7 @@
 
                     <TextView
                         android:id="@+id/PaisPerfil"
-                        android:layout_width="match_parent"
+                        android:layout_width="369dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:textColor="#1B1A1A"

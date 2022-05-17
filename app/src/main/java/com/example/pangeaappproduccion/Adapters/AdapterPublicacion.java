@@ -49,9 +49,9 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull PublicacionHolder publicacionHolder, int i) {
-        if(listPublicaciones.get(i).getUsuarioPublico()==null){
+        if (listPublicaciones.get(i).getUsuarioPublico() == null) {
             publicacionHolder.nombre2.setText(listPublicaciones.get(i).getUsuario());
-        }else{
+        } else {
             publicacionHolder.nombre2.setText(listPublicaciones.get(i).getUsuarioPublico());
         }
         publicacionHolder.publicacion2.setText(listPublicaciones.get(i).getMensaje());
@@ -97,9 +97,26 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
                         });
             });
         } else if (listPublicaciones.get(i).getStatus().equals("2")) {
+            publicacionHolder.btnComentarioAudio.setOnClickListener(view -> {
+                FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
+                dbDataPerfil.collection("redSocial").document(listPublicaciones.get(i).getClave()).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
+                                        intent.putExtra("clave", document.getId());
+                                        intent.putExtra("multimedia", 2);
+                                        publicacionHolder.imgPublicacion.getContext().startActivity(intent);
+                                    }
+                                }
+                            }
+                        });
+            });
             publicacionHolder.audioLayout.setVisibility(View.VISIBLE);
             publicacionHolder.publicacionLayout.setVisibility(View.GONE);
-            publicacionHolder.imgPublicacion.setImageResource(R.drawable.audio);
             Glide.with(publicacionHolder.itemView.getContext())
                     .load("https://www.nicepng.com/png/detail/7-75606_play-button-png-image-instagram.png")
                     .into(publicacionHolder.imgPublicacion);
@@ -108,7 +125,6 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
                 Uri myUri = Uri.parse(listPublicaciones.get(i).getMultimedia());
                 mediaPlayer = new MediaPlayer();
                 try {
-                    // mediaPlayer.setDataSource(String.valueOf(myUri));
                     mediaPlayer.setDataSource(publicacionHolder.imgPublicacion.getContext(), myUri);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -120,26 +136,6 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
                 }
                 mediaPlayer.start();
             });
-            publicacionHolder.btnComentario.setOnClickListener(view -> {
-                FirebaseFirestore dbDataPerfil = FirebaseFirestore.getInstance();
-                dbDataPerfil.collection("redSocial").document(listPublicaciones.get(i).getClave()).get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        Intent intent = new Intent(publicacionHolder.imgPublicacion.getContext().getApplicationContext(), ActivityComentarios.class);
-
-                                        intent.putExtra("clave", document.getId());
-
-                                        intent.putExtra("multimedia", 2);
-                                        publicacionHolder.imgPublicacion.getContext().startActivity(intent);
-                                    }
-                                }
-                            }
-                        });
-            });
         }
     }
 
@@ -147,8 +143,6 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
     @Override
     public int getItemCount() {
         return listPublicaciones.size();
-
-
     }
 
     class PublicacionHolder extends RecyclerView.ViewHolder {
@@ -158,12 +152,10 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
         private ImageView imgPublicacion;
         private LinearLayout audioLayout, publicacionLayout;
         private Button reproducir;
-        private Button btnComentario;
-
+        private Button btnComentario,btnComentarioAudio;
 
         public PublicacionHolder(@NonNull View itemView) {
             super(itemView);
-
             nombre2 = itemView.findViewById(R.id.usuarioForo);
             publicacion2 = itemView.findViewById(R.id.pregunta);
             imgPublicacion = itemView.findViewById(R.id.imgPublicacion);
@@ -171,9 +163,9 @@ public class AdapterPublicacion extends RecyclerView.Adapter<AdapterPublicacion.
             publicacionLayout = itemView.findViewById(R.id.publicacionLayout);
             reproducir = itemView.findViewById(R.id.button77);
             btnComentario = itemView.findViewById(R.id.btnComentario);
-
-
+            btnComentarioAudio = itemView.findViewById(R.id.button66);
         }
+
     }
 
 }

@@ -103,14 +103,11 @@ public class ActivityComentarios extends UtilActivity {
 
         //obtenemos la url de la foto del que esta comentando
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("fotoPerfil").whereEqualTo("usuario", email_perfil).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                                urlFotoPerfil = Objects.requireNonNull(documentSnapshot.get("multimedia")).toString();
-                            }
+        db.collection("fotoPerfil").whereEqualTo("usuario", id).get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                            urlFotoPerfil = documentSnapshot.get("multimedia").toString();
                         }
                     }
                 });

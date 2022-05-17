@@ -46,15 +46,11 @@ public class Buscador extends UtilActivity {
         establecerIdioma();
         recyclerViewbusquedas = findViewById(R.id.recyclerBuscador);
         listBuscador = new ArrayList<>();
-        adapterBusqueda = new AdapterBusqueda(listBuscador, new AdapterBusqueda.ItemClickListener() {
-            @Override
-            public void onItemClick(BuscadorList buscadorList) {
-                Toast.makeText(getApplicationContext(),buscadorList.getUsuario(),Toast.LENGTH_LONG).show();
-
-                Intent intent = new Intent(getApplicationContext(),PerfilBuscado.class);
-                intent.putExtra("perfil", buscadorList.getUsuario());
-                startActivity(intent);
-            }
+        adapterBusqueda = new AdapterBusqueda(listBuscador, buscadorList -> {
+            Toast.makeText(getApplicationContext(),buscadorList.getUsuario(),Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getApplicationContext(),PerfilBuscado.class);
+            intent.putExtra("perfil", buscadorList.getUsuario());
+            startActivity(intent);
         });
         recyclerViewbusquedas.setAdapter(adapterBusqueda);
         recyclerViewbusquedas.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -64,38 +60,25 @@ public class Buscador extends UtilActivity {
 
 
         BusquedaBtn = (ImageButton)findViewById(R.id.btnFind);
-        BusquedaBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseFirestore.getInstance().collection("fotoPerfil").whereEqualTo("usuario",Perfil.getText().toString()).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.d(TAG, "Error:" + error.getMessage());
-                        } else {
-                            for (DocumentChange documentChange : value.getDocumentChanges()) {
-                                if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                                    listBuscador.add(documentChange.getDocument().toObject(BuscadorList.class));
-                                    adapterBusqueda.notifyDataSetChanged();
-                                    recyclerViewbusquedas.smoothScrollToPosition(listBuscador.size());
-
-
-                                }
+        BusquedaBtn.setOnClickListener(view -> FirebaseFirestore.getInstance().collection("fotoPerfil")
+                .whereEqualTo("usuario",Perfil.getText().toString()).addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.d(TAG, "Error:" + error.getMessage());
+                    } else {
+                        for (DocumentChange documentChange : value.getDocumentChanges()) {
+                            if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                                listBuscador.add(documentChange.getDocument().toObject(BuscadorList.class));
+                                adapterBusqueda.notifyDataSetChanged();
+                                recyclerViewbusquedas.smoothScrollToPosition(listBuscador.size());
                             }
                         }
                     }
-                });
-
-            }
-        });
+                }));
 
         SolicitudesBtn = (ImageButton)findViewById(R.id.btnSolicitudes);
-        SolicitudesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent inten = new Intent(getApplicationContext(), ActivitySolicitudes.class);
-                startActivity(inten);
-            }
+        SolicitudesBtn.setOnClickListener(view -> {
+            Intent inten = new Intent(getApplicationContext(), ActivitySolicitudes.class);
+            startActivity(inten);
         });
 
 

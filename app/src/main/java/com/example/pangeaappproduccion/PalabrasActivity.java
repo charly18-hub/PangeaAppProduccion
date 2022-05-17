@@ -22,40 +22,13 @@ public class PalabrasActivity extends AppCompatActivity {
         binding = ActivityPalabrasBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
         numeros.add(0);
 
-        String str = "Hi how are you welcome to Tutorialspoint";
-        String[] words = str.split(" ");
+        String palabraObtenida = "Hi how are you welcome to Tutorialspoint";
+        String[] words = palabraObtenida.split(" ");
         int i=0;
-
         for(String palabra : words) {
             i++;
-            /*
-
-            if(i==1){
-                binding.palabra6.setText(palabra);
-            }else if(i==2){
-                binding.palabra4.setText(palabra);
-            }else if(i==3){
-                binding.palabra3.setText(palabra);
-            }else if(i==4){
-                binding.palabra2.setText(palabra);
-            }else if(i==5){
-                binding.palabra10.setText(palabra);
-            }else if(i==6){
-                binding.palabra1.setText(palabra);
-            }else if(i==7){
-                binding.palabra7.setText(palabra);
-            }else if(i==8){
-                binding.palabra9.setText(palabra);
-            }else if(i==9){
-                binding.palabra8.setText(palabra);
-            }else if(i==10){
-                binding.palabra5.setText(palabra);
-            }
-
-             */
             obtenerLugarAleatorio(palabra);
         }
         binding.palabra1.setOnClickListener(view1->{
@@ -89,6 +62,9 @@ public class PalabrasActivity extends AppCompatActivity {
             binding.oracionCompleta.setText(binding.oracionCompleta.getText() +" "+binding.palabra10.getText());
         });
         binding.btnReiniciar.setOnClickListener(view11-> binding.oracionCompleta.setText(""));
+        binding.btnTerminar.setOnClickListener(view12->{
+            if(binding.oracionCompleta.getText().toString().equals(palabraObtenida));
+        });
     }
 
     public void obtenerLugarAleatorio(String palabra){
@@ -130,6 +106,7 @@ public class PalabrasActivity extends AppCompatActivity {
             }
         }
         if(huboNumero){
+            numeroAleatorio=0;
             obtenerNumeroAleatorio();
         }else{
             numeros.add(numeroAleatorio);
