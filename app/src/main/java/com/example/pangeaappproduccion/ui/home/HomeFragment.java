@@ -31,6 +31,7 @@ import com.example.pangeaappproduccion.Buscador;
 import com.example.pangeaappproduccion.FotoPerfil;
 import com.example.pangeaappproduccion.Model.Registro.Language;
 import com.example.pangeaappproduccion.Model.Registro.RegistroRedesSociales;
+import com.example.pangeaappproduccion.PalabrasActivity;
 import com.example.pangeaappproduccion.Publicaciones;
 import com.example.pangeaappproduccion.R;
 import com.example.pangeaappproduccion.Util.UtilFragment;
@@ -74,7 +75,7 @@ public class HomeFragment extends UtilFragment {
     TextView traducidoTexto;
 
     private TextView etMensaje, userPerfil, PaisPerfil, CursoPerfil, nivelPerfil, nombreUsuario;
-    private Button buttonChat, buttonImagen, buttonAudio, buttonReproAudio, buttonTraducir;
+    private Button buttonChat, buttonImagen, buttonAudio, buttonReproAudio, buttonTraducir, btnAcomodar;
     private ImageView imgPerfil, imgHeader;
     private List<listPublicaciones> listPublicaciones;
     private AdapterPublicacion adapterPublicacion;
@@ -101,7 +102,8 @@ public class HomeFragment extends UtilFragment {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-
+        btnAcomodar = view.findViewById(R.id.btnAcomodar);
+        recyclerViewPublicaciones = view.findViewById(R.id.recyclerViewChat);
         recyclerViewPublicaciones = view.findViewById(R.id.recyclerViewChat);
         etMensaje = view.findViewById(R.id.pregunta);
         buttonChat = view.findViewById(R.id.publicar);
@@ -224,7 +226,10 @@ public class HomeFragment extends UtilFragment {
             startActivityForResult(intentImagen, GALLERY_PICKER);
 
         });
-
+        btnAcomodar.setOnClickListener(view30->{
+            Intent myIntent = new Intent(getActivity(), PalabrasActivity.class);
+            startActivity(myIntent);
+        });
         imgHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
